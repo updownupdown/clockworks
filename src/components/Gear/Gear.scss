@@ -1,0 +1,82 @@
+.gear-wrap {
+  position: absolute;
+  pointer-events: none;
+
+  &--selected {
+    z-index: 999;
+  }
+}
+
+.gear {
+  transition: 2s ease transform;
+  display: block;
+
+  animation-name: spin;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  .canvas--paused & {
+    animation-play-state: paused;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .gear-shape {
+    cursor: pointer;
+    pointer-events: all;
+    transition: 0.1s ease fill;
+    fill: rgba(var(--B400-rgb), 0.8);
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-linejoin: round;
+    stroke-width: 1;
+
+    &:hover {
+      fill: rgba(var(--white-rgb), 0.2);
+    }
+  }
+
+  // selected
+  &--selected .gear-shape {
+    stroke-width: 2;
+    stroke: white;
+    fill: rgba(var(--white-rgb), 0.3);
+  }
+
+  .gear-center {
+    pointer-events: none;
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-linejoin: round;
+    stroke-width: 1;
+  }
+
+  .gear-indicator {
+    pointer-events: none;
+    fill: rgba(255, 255, 255, 0.8);
+    stroke-linejoin: round;
+    stroke-width: 1;
+  }
+
+  .gear-textpath {
+    pointer-events: none;
+    fill: none;
+  }
+  .gear-text {
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(90deg);
+    transform-origin: center center;
+    font-family: var(--font);
+    font-weight: 300;
+    fill: rgba(255, 255, 255, 0.3);
+  }
+
+  .gear-pitch {
+    pointer-events: none;
+    stroke: rgba(0, 0, 0, 0.2);
+  }
+}
