@@ -61,57 +61,6 @@ body {
 
   background-size: $gridUnit $gridUnit, $gridUnit $gridUnit,
     $gridUnit * 10 $gridUnit * 10, $gridUnit * 10 $gridUnit * 10;
-
-  svg {
-    display: block;
-
-    .gear-shape {
-      cursor: pointer;
-      transition: 0.1s ease fill;
-      fill: rgba(var(--B400-rgb), 0.7);
-      stroke: rgba(255, 255, 255, 0.6);
-      stroke-linejoin: round;
-      stroke-width: 1;
-
-      &:hover {
-        fill: rgba(var(--white-rgb), 0.08);
-      }
-    }
-
-    .gear-center {
-      pointer-events: none;
-      fill: none;
-      stroke: rgba(0, 0, 0, 0.2);
-      stroke-linejoin: round;
-      stroke-width: 1;
-    }
-
-    .gear-indicator {
-      pointer-events: none;
-      fill: rgba(255, 255, 255, 0.8);
-      stroke-linejoin: round;
-      stroke-width: 1;
-    }
-
-    .gear-textpath {
-      pointer-events: none;
-      fill: none;
-    }
-    .gear-text {
-      user-select: none;
-      pointer-events: none;
-      transform: rotate(90deg);
-      transform-origin: center center;
-      font-family: var(--font);
-      font-weight: 300;
-      fill: rgba(255, 255, 255, 0.3);
-    }
-
-    .gear-pitch {
-      pointer-events: none;
-      stroke: rgba(0, 0, 0, 0.2);
-    }
-  }
 }
 
 body,
@@ -119,20 +68,81 @@ button {
   font-family: var(--font);
 }
 
-.paper {
+.gear-wrap {
+  position: absolute;
+}
+
+.gear {
+  transition: 2s ease transform;
+  display: block;
+
+  animation-name: spin;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
+  .canvas--paused & {
+    animation-play-state: paused;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .gear-shape {
+    cursor: pointer;
+    transition: 0.1s ease fill;
+    fill: rgba(var(--B400-rgb), 0.7);
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-linejoin: round;
+    stroke-width: 1;
+
+    &:hover {
+      fill: rgba(var(--white-rgb), 0.08);
+    }
+  }
+
+  .gear-center {
+    pointer-events: none;
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-linejoin: round;
+    stroke-width: 1;
+  }
+
+  .gear-indicator {
+    pointer-events: none;
+    fill: rgba(255, 255, 255, 0.8);
+    stroke-linejoin: round;
+    stroke-width: 1;
+  }
+
+  .gear-textpath {
+    pointer-events: none;
+    fill: none;
+  }
+  .gear-text {
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(90deg);
+    transform-origin: center center;
+    font-family: var(--font);
+    font-weight: 300;
+    fill: rgba(255, 255, 255, 0.3);
+  }
+
+  .gear-pitch {
+    pointer-events: none;
+    stroke: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.canvas {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-}
-
-.gear {
-  position: absolute;
-}
-
-.gear0 {
-  top: 0;
-  left: 0;
 }
 
 .button {
@@ -267,8 +277,4 @@ input[type="range"] {
 }
 .slider:disabled::-moz-slider-thumb {
   display: none;
-}
-
-#animate-me {
-  background: white;
 }

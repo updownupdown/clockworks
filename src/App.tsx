@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   GearSvg,
   GearProps,
@@ -39,9 +39,13 @@ function App() {
       rotateBy = gear.angleOffset;
       rotateBy = rotateBy % 360;
       gear.rotationOffset = rotateBy;
+      gear.clockwise = true;
     } else {
       // center/origin offset
-      if (!gear.fixed) {
+      if (gear.fixed) {
+        rotateBy = prevGear.rotationOffset!;
+        gear.clockwise = prevGear.clockwise;
+      } else {
         const r = gear.p + prevGear.p!;
         offsetBy.x = r * Math.sin(degrees_to_radians(gear.angleOffset!));
         offsetBy.y = r * Math.cos(degrees_to_radians(gear.angleOffset!));
@@ -57,12 +61,11 @@ function App() {
         rotateBy += 360 / gear.teeth / 2;
 
         rotateBy = rotateBy;
-      } else {
-        rotateBy = prevGear.rotationOffset!;
+        gear.clockwise = !prevGear.clockwise;
       }
 
       totalRatio = ratio * prevGear.totalRatio!;
-      if (gear.fixed) totalRatio = totalRatio * -1;
+      // if (gear.fixed) totalRatio = totalRatio * -1;
     }
 
     // set ratios
@@ -75,12 +78,13 @@ function App() {
     // set rotation
     gear.rotationOffset = rotateBy;
 
+    // set RPM
+    gear.rpm = rpm * totalRatio;
+
     return gear;
   }
 
   function calculateGears(theGears: GearProps[]) {
-    // console.log("calc gears");
-    // console.log(theGears);
     let newGears: GearProps[] = [];
 
     for (let i = 0; i < theGears.length; i++) {
@@ -88,24 +92,24 @@ function App() {
 
       newGears.push(gear);
     }
-
-    setGears(newGears);
   }
 
   useEffect(() => {
-    calculateGears(defaultGears);
+    setGears(defaultGears);
   }, []);
 
   function addGear(gear: GearProps) {
-    calculateGears([...gears, gear]);
+    setGears([...gears, gear]);
   }
 
   function removeGear(gear: number) {
     const newGears = gears.filter((element, index) => index !== gear);
-    calculateGears(newGears);
+    setGears(newGears);
   }
 
-  const DrawGears = (animate: number) => {
+  const DrawGears = (animate: number, rpm: number) => {
+    calculateGears(gears);
+
     let tempOrigin = origin;
 
     return gears.map((gear, index) => {
@@ -121,15 +125,16 @@ function App() {
       return (
         <span
           key={index}
-          className={`gear gear-${index}`}
+          className={`gear-wrap gear-wrap-${index}`}
           style={{
             left: `${newOrigin.x}px`,
             top: `${newOrigin.y}px`,
-            transform: `translateX(-50%) translateY(-50%) rotate(${
+            /*transform: `translateX(-50%) translateY(-50%) rotate(${
               (gear.rotationOffset +
                 animate * gear.totalRatio * (index % 2 ? 1 : -1)) %
                 360 ?? 0
-            }deg)`,
+            }deg)`,*/
+            transform: `translateX(-50%) translateY(-50%) rotate(${gear.rotationOffset}deg)`,
           }}
         >
           {GearSvg(gear, index)}
@@ -138,22 +143,29 @@ function App() {
     });
   };
 
+  const [rpm, setRpm] = React.useState(5);
+
+  const [count, setCount] = React.useState(0);
+  const [isPaused, setIsPaused] = React.useState(false);
+
+  const memoedGears = useMemo(() => DrawGears(count, rpm), [gears, rpm]);
+
   const handleTeethChange = (index: number, value: number) => {
-    const newGears = gears;
+    const newGears = [...gears];
     newGears[index].teeth = value;
-    calculateGears(newGears);
+    setGears(newGears);
   };
 
   const handleOffsetChange = (index: number, value: number) => {
     const newGears = [...gears];
     newGears[index].angleOffset = value;
-    calculateGears(newGears);
+    setGears(newGears);
   };
 
   function handleFixChange(index: number, fixed: boolean) {
     const newGears = [...gears];
     newGears[index].fixed = !fixed;
-    calculateGears(newGears);
+    setGears(newGears);
   }
 
   const DrawSliders = () => {
@@ -198,34 +210,25 @@ function App() {
     });
   };
 
-  const [count, setCount] = React.useState(0);
-
-  const requestRef = React.useRef();
-  const previousTimeRef = React.useRef();
-
-  const animate = (time: any) => {
-    if (previousTimeRef.current != undefined) {
-      const deltaTime = time - previousTimeRef.current;
-
-      setCount((prevCount) => prevCount + deltaTime * 0.02);
-    }
-    previousTimeRef.current = time;
-    // @ts-ignore
-    requestRef.current = requestAnimationFrame(animate);
-  };
-
-  useEffect(() => {
-    // @ts-ignore
-    requestRef.current = requestAnimationFrame(animate);
-    // @ts-ignore
-    return () => cancelAnimationFrame(requestRef.current);
-  }, []); // Make sure the effect runs only once
-
   return (
-    <div className="paper">
-      {DrawGears(count)}
+    <div className={clsx("canvas", isPaused && "canvas--paused")}>
+      {memoedGears}
 
       <div className="menu">
+        <input
+          type="range"
+          min="1"
+          max="20"
+          step="1"
+          value={rpm}
+          onChange={(e) => {
+            setRpm(Number(e.target.value));
+          }}
+        />
+        <button className="button" onClick={() => setIsPaused(!isPaused)}>
+          {isPaused ? "Play" : "Pause"}
+        </button>
+
         {DrawSliders()}
 
         <button

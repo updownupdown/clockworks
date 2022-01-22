@@ -43,17 +43,17 @@ function rotate(points_array: any, angle: number) {
 export const defaultGears: GearProps[] = [
   {
     parent: undefined,
-    teeth: 32,
+    teeth: 40,
     angleOffset: 27,
   },
   {
     parent: 0,
-    teeth: 24,
+    teeth: 20,
     angleOffset: 118,
   },
   {
     parent: 1,
-    teeth: 8,
+    teeth: 10,
     angleOffset: 10,
     fixed: true,
   },
@@ -106,6 +106,10 @@ export interface GearProps {
   ratio?: number;
   /** fixed to parent gear **/
   totalRatio?: number;
+  /** rotation per minute **/
+  rpm?: number;
+  /** rotation direction **/
+  clockwise?: boolean;
   /** radius of pitch circle **/
   p?: number;
   /** radius of outer circle **/
@@ -126,10 +130,12 @@ export interface Coordinates {
 }
 
 export const GearSvg = (
-  { teeth, p, c, b, r, t, k, ratio }: GearProps,
+  { teeth, p, c, b, r, t, k, ratio, rpm, clockwise }: GearProps,
   index: number
 ) => {
   if (
+    rpm === undefined ||
+    ratio === undefined ||
     p === undefined ||
     c === undefined ||
     b === undefined ||
@@ -138,6 +144,8 @@ export const GearSvg = (
     k === undefined
   )
     return <span />;
+
+  console.log("DRAWING SVG");
 
   // set of [x,y] points to create a single gear tooth
   const points = [
@@ -172,16 +180,20 @@ export const GearSvg = (
   const textRad = r * (holeFactor + 1) * 0.5 - textSize / 2;
 
   const ratioDisplay =
-    ratio &&
-    (ratio < 1
+    ratio < 1
       ? "1:" + Number(Math.round((1 / ratio) * 10) / 10)
-      : Math.round(ratio * 10) / 10 + ":1");
+      : Math.round(ratio * 10) / 10 + ":1";
 
   return (
     <svg
+      className="gear"
       height={c * 2}
       width={c * 2}
       viewBox={`-1 -1 ${c * 2 + 2} ${c * 2 + 2}`}
+      style={{
+        animationDuration: `${Math.abs(60 / rpm)}s`,
+        animationDirection: clockwise ? "normal" : "reverse",
+      }}
     >
       <polygon
         className="gear-shape"
@@ -219,7 +231,8 @@ export const GearSvg = (
       />
       <text className="gear-text">
         <textPath fontSize={`${textSize}px`} href={`#textpath-${r}`}>
-          #{index + 1}: {teeth} - {ratioDisplay}
+          #{index + 1}: {teeth} - {ratioDisplay} - RPM:{" "}
+          {Math.round(rpm * 10) / 10}
         </textPath>
       </text>
     </svg>
