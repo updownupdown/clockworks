@@ -48,18 +48,35 @@ export const defaultGears: GearProps[] = [
   },
   {
     parent: 0,
-    teeth: 16,
-    angleOffset: 38,
+    teeth: 24,
+    angleOffset: 118,
   },
   {
     parent: 1,
-    teeth: 9,
+    teeth: 8,
     angleOffset: 10,
+    fixed: true,
+  },
+  {
+    parent: 2,
+    teeth: 19,
+    angleOffset: 20,
+  },
+  {
+    parent: 2,
+    teeth: 11,
+    angleOffset: 20,
+  },
+  {
+    parent: 2,
+    teeth: 29,
+    angleOffset: 120,
+    fixed: true,
   },
   {
     parent: 2,
     teeth: 24,
-    angleOffset: 80,
+    angleOffset: -20,
   },
 ];
 
@@ -83,6 +100,12 @@ export interface GearProps {
   rotationOffset?: number;
   /** number of rotations **/
   numRotations?: number;
+  /** fixed to parent gear **/
+  fixed?: boolean;
+  /** fixed to parent gear **/
+  ratio?: number;
+  /** fixed to parent gear **/
+  totalRatio?: number;
   /** radius of pitch circle **/
   p?: number;
   /** radius of outer circle **/
@@ -102,7 +125,10 @@ export interface Coordinates {
   y: number;
 }
 
-export const GearSvg = ({ teeth, p, c, b, r, t, k }: GearProps) => {
+export const GearSvg = (
+  { teeth, p, c, b, r, t, k, ratio }: GearProps,
+  index: number
+) => {
   if (
     p === undefined ||
     c === undefined ||
@@ -140,6 +166,17 @@ export const GearSvg = ({ teeth, p, c, b, r, t, k }: GearProps) => {
     svgPoints = svgPoints.concat(rotate(points, (-i * 2 * Math.PI) / teeth));
   }
 
+  const holeFactor = 0.5;
+  const textSize = r * 0.2;
+  const holeSize = r * holeFactor;
+  const textRad = r * (holeFactor + 1) * 0.5 - textSize / 2;
+
+  const ratioDisplay =
+    ratio &&
+    (ratio < 1
+      ? "1:" + Number(Math.round((1 / ratio) * 10) / 10)
+      : Math.round(ratio * 10) / 10 + ":1");
+
   return (
     <svg
       height={c * 2}
@@ -148,22 +185,43 @@ export const GearSvg = ({ teeth, p, c, b, r, t, k }: GearProps) => {
     >
       <polygon
         className="gear-shape"
-        fill="none"
+        mask={`url(#rmvRct-${index})`}
         transform={`translate(${c}, ${c})`}
         points={svgPoints.toString()}
       ></polygon>
+
       <circle
         className="gear-center"
-        r="5"
-        fill="none"
+        r={holeSize}
         transform={`translate(${c}, ${c})`}
       ></circle>
+
       <circle
         className="gear-indicator"
         r="6"
         fill="none"
         transform={`translate(${c}, ${p * 2})`}
       ></circle>
+
+      <circle
+        className="gear-pitch"
+        r={p}
+        fill="none"
+        transform={`translate(${c}, ${c})`}
+      ></circle>
+
+      <path
+        className="gear-textpath"
+        id={`textpath-${r}`}
+        d={`M ${textRad},0 A ${textRad},${textRad} 0 0 1 -${textRad},0 A ${textRad},${textRad} 0 0 1 ${textRad},0`}
+        transform={`translate(${c},${c})`}
+        // stroke="blue"
+      />
+      <text className="gear-text">
+        <textPath fontSize={`${textSize}px`} href={`#textpath-${r}`}>
+          #{index + 1}: {teeth} - {ratioDisplay}
+        </textPath>
+      </text>
     </svg>
   );
 };
