@@ -16,9 +16,13 @@ interface Props {
   setIsPaused: (value: boolean) => void;
   globalRpm: number;
   setGlobalRpm: (value: number) => void;
+  globalHertz: number;
+  setGlobalHertz: (value: number) => void;
   setGears: (gears: GearProps[]) => void;
   selectedGear: number;
   setSelectedGear: (value: number) => void;
+  isSmooth: boolean;
+  setIsSmooth: (value: boolean) => void;
 }
 
 export const Menu = ({
@@ -30,6 +34,10 @@ export const Menu = ({
   setGears,
   selectedGear,
   setSelectedGear,
+  isSmooth,
+  setIsSmooth,
+  globalHertz,
+  setGlobalHertz,
 }: Props) => {
   const handleTeethChange = (index: number, value: number) => {
     const newGears = [...gears];
@@ -159,14 +167,22 @@ export const Menu = ({
             min="1"
             max="20"
             step="1"
-            value={globalRpm}
+            value={isSmooth ? globalRpm : globalHertz}
             onChange={(e) => {
-              setGlobalRpm(Number(e.target.value));
+              if (isSmooth) {
+                setGlobalRpm(Number(e.target.value));
+              } else {
+                setGlobalHertz(Number(e.target.value));
+              }
             }}
           />
-          <span>RPM</span>
+          <span>{isSmooth ? "RPM" : "Hz"}</span>
         </div>
       </div>
+
+      <button className="smooth-button" onClick={() => setIsSmooth(!isSmooth)}>
+        {isSmooth ? "Pendulum Movement" : "Smooth Movement"}
+      </button>
 
       <table className="gear-list">
         <thead>
@@ -181,11 +197,14 @@ export const Menu = ({
         <tbody>{GearList(gears)}</tbody>
       </table>
 
-      {GearMenu(gears, selectedGear)}
-
-      <button className="menu-button" onClick={() => addGear(defaultNewGear)}>
+      <button
+        className="add-gear-button"
+        onClick={() => addGear(defaultNewGear)}
+      >
         Add Gear
       </button>
+
+      {GearMenu(gears, selectedGear)}
     </div>
   );
 };

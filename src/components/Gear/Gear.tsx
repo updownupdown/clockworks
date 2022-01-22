@@ -22,6 +22,8 @@ export interface GearProps {
   rpm?: number;
   /** rotation direction **/
   clockwise?: boolean;
+  /** pendulum rotation angle increment **/
+  pendulumAngleIncrement?: number;
   /** radius of pitch circle **/
   p?: number;
   /** radius of outer circle **/
@@ -122,6 +124,23 @@ export function calculateGear(
       360 / gear.teeth / 2;
   }
   gear.rotationOffset = rotateBy % 360;
+
+  // Pendulum increment
+  let pendulumAngleIncrement = 0;
+  if (isFirstGear) {
+    pendulumAngleIncrement = 360 / gear.teeth;
+  } else if (gear.fixed) {
+    pendulumAngleIncrement = prevGear!.pendulumAngleIncrement!;
+  } else {
+    const prevGearTeethTurn =
+      (prevGear!.pendulumAngleIncrement! * prevGear.teeth) / 360;
+    pendulumAngleIncrement = (360 / gear.teeth) * Math.abs(prevGearTeethTurn);
+
+    if (!gear.clockwise) {
+      pendulumAngleIncrement = pendulumAngleIncrement * -1;
+    }
+  }
+  gear.pendulumAngleIncrement = pendulumAngleIncrement;
 
   return gear;
 }

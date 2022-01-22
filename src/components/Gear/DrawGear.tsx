@@ -56,6 +56,7 @@ export const DrawGear = (
 
   return (
     <svg
+      id={`gear-${index}`}
       className={clsx("gear", isSelected && "gear--selected")}
       height={c * 2}
       width={c * 2}
@@ -67,7 +68,6 @@ export const DrawGear = (
     >
       <polygon
         className="gear-shape"
-        mask={`url(#rmvRct-${index})`}
         transform={`translate(${c}, ${c})`}
         points={svgPoints.toString()}
       ></polygon>

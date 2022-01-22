@@ -7,9 +7,13 @@ import { Menu } from "./components/Menu/Menu";
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
-  const [globalRpm, setGlobalRpm] = React.useState(5);
+  const [globalRpm, setGlobalRpm] = React.useState(3);
+  const [globalHertz, setGlobalHertz] = React.useState(1);
   const [isPaused, setIsPaused] = React.useState(false);
   const [selectedGear, setSelectedGear] = useState(0);
+  const [isSmooth, setIsSmooth] = useState(false);
+  const pendulumTime = 1000;
+  const [pendulumIncrement, setPendulumIncrement] = useState(0);
 
   useEffect(() => {
     setGears(defaultGears);
@@ -38,6 +42,9 @@ function App() {
 
     return gears.map((gear, index) => {
       const isSelected = index === selectedGear;
+
+      const pendulumAngleIncrement = isSmooth ? 0 : gear.pendulumAngleIncrement;
+
       return (
         <span
           key={index}
@@ -48,7 +55,9 @@ function App() {
           style={{
             left: `${gear.positionOffset.x}px`,
             top: `${gear.positionOffset.y}px`,
-            transform: `translateX(-50%) translateY(-50%) rotate(${gear.rotationOffset}deg)`,
+            transform: `translateX(-50%) translateY(-50%) rotate(${
+              gear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
+            }deg)`,
           }}
           onClick={() => {
             handleGearClick(index);
@@ -60,13 +69,29 @@ function App() {
     });
   };
 
+  useEffect(() => {
+    if (!isSmooth && !isPaused) {
+      const tick = setInterval(() => {
+        setPendulumIncrement(pendulumIncrement + 1);
+      }, 1000 / globalHertz);
+
+      return () => clearInterval(tick);
+    }
+  }, [DrawGears, isSmooth, globalRpm]);
+
   const memoedGears = useMemo(
     () => DrawGears(globalRpm),
-    [gears, globalRpm, selectedGear]
+    [gears, globalRpm, selectedGear, pendulumIncrement]
   );
 
   return (
-    <div className={clsx("canvas", isPaused && "canvas--paused")}>
+    <div
+      className={clsx(
+        "canvas",
+        isPaused && "canvas--paused",
+        isSmooth ? "canvas--smooth" : "canvas--pendulum"
+      )}
+    >
       {memoedGears}
 
       <Menu
@@ -75,9 +100,13 @@ function App() {
         setIsPaused={setIsPaused}
         globalRpm={globalRpm}
         setGlobalRpm={setGlobalRpm}
+        globalHertz={globalHertz}
+        setGlobalHertz={setGlobalHertz}
         setGears={setGears}
         selectedGear={selectedGear}
         setSelectedGear={setSelectedGear}
+        isSmooth={isSmooth}
+        setIsSmooth={setIsSmooth}
       />
     </div>
   );
