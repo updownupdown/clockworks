@@ -47,20 +47,7 @@ body {
   margin: 0;
   line-height: 1;
 
-  $gridUnit: 10px;
-  $lines: rgba(255, 255, 255, 0.08);
-  $linesLarge: rgba(255, 255, 255, 0.11);
-
-  background-color: var(--B300);
-
-  // vertical lines, horizontal lines; large vertical lines, large horizontal lines
-  background-image: linear-gradient(to right, $lines 1px, transparent 1px),
-    linear-gradient(to bottom, $lines 1px, transparent 1px),
-    linear-gradient(to right, $linesLarge 1px, transparent 1px),
-    linear-gradient(to bottom, $linesLarge 1px, transparent 1px);
-
-  background-size: $gridUnit $gridUnit, $gridUnit $gridUnit,
-    $gridUnit * 10 $gridUnit * 10, $gridUnit * 10 $gridUnit * 10;
+  background: var(--B400);
 }
 
 body,
@@ -82,8 +69,21 @@ button {
 }
 
 .canvas {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  // border: 2px solid white;
+  box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.1), 2px 4px 30px rgba(0, 0, 0, 0.1);
+
+  $gridUnit: 10px;
+  $lines: rgba(255, 255, 255, 0.08);
+  $linesLarge: rgba(255, 255, 255, 0.11);
+
+  background-color: var(--B300);
+
+  // vertical lines, horizontal lines; large vertical lines, large horizontal lines
+  background-image: linear-gradient(to right, $lines 1px, transparent 1px),
+    linear-gradient(to bottom, $lines 1px, transparent 1px),
+    linear-gradient(to right, $linesLarge 1px, transparent 1px),
+    linear-gradient(to bottom, $linesLarge 1px, transparent 1px);
+
+  background-size: $gridUnit $gridUnit, $gridUnit $gridUnit,
+    $gridUnit * 10 $gridUnit * 10, $gridUnit * 10 $gridUnit * 10;
 }

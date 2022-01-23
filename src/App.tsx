@@ -1,12 +1,15 @@
-import clsx from "clsx";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { Component, useState, useEffect, useMemo } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
 import { defaultGears } from "./components/Gear/defaultGears";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
+import clsx from "clsx";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-export const firstGearOrigin = { x: 300, y: 300 };
+const canvasSize = 2000;
+
+export const firstGearOrigin = { x: canvasSize / 2, y: canvasSize / 2 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
@@ -132,22 +135,32 @@ function App() {
     );
   };
 
-  // useEffect(() => {
-  //   if (!isSmooth && !isPaused) {
-  //   console.log("Update pendulum");
-  //   }
-  // }, [pendulumIncrement, isSmooth, globalHertz]);
-
   return (
-    <div
-      className={clsx(
-        "canvas",
-        isPaused && "canvas--paused",
-        isSmooth ? "canvas--smooth" : "canvas--pendulum"
-      )}
-    >
-      {memoedGears}
-      {!isSmooth && DrawPendulum()}
+    <>
+      <TransformWrapper
+        // initialScale={1}
+        minScale={0.2}
+        // initialPositionX={0}
+        // initialPositionY={0}
+        limitToBounds={false}
+      >
+        <TransformComponent>
+          <div
+            className={clsx(
+              "canvas",
+              isPaused && "canvas--paused",
+              isSmooth ? "canvas--smooth" : "canvas--pendulum"
+            )}
+            style={{
+              width: `${canvasSize}px`,
+              height: `${canvasSize}px`,
+            }}
+          >
+            {memoedGears}
+            {!isSmooth && DrawPendulum()}
+          </div>
+        </TransformComponent>
+      </TransformWrapper>
 
       <Menu
         gears={gears}
@@ -163,7 +176,7 @@ function App() {
         isSmooth={isSmooth}
         setIsSmooth={setIsSmooth}
       />
-    </div>
+    </>
   );
 }
 
