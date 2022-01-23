@@ -77,8 +77,8 @@ button {
 }
 
 .canvas {
-  // border: 2px solid white;
-  box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.1), 2px 4px 30px rgba(0, 0, 0, 0.1);
+  border: 30px solid var(--B300);
+  box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.15), 2px 4px 40px rgba(0, 0, 0, 0.15);
 
   $gridUnit: 10px;
   $lines: rgba(255, 255, 255, 0.08);

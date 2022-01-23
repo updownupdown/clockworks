@@ -1,9 +1,13 @@
 .menu {
+  $menuPadding: 12px;
+
+  overflow-y: auto;
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: $menuPadding;
+  right: $menuPadding;
   width: 300px;
   padding: 12px;
+  max-height: calc(100vh - #{$menuPadding * 2});
 
   display: flex;
   flex-direction: column;
@@ -11,6 +15,17 @@
   border-radius: 8px;
   background: rgba(var(--B600-rgb), 0.7);
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.1);
+
+  .toggle-menu-button {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &--hide {
+    height: 40px;
+    overflow: hidden;
+  }
 
   // Speed controls
   &__speed {

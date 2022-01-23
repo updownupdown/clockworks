@@ -7,9 +7,11 @@ import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
-const canvasSize = 2000;
+const canvasWidth = 4000;
+const canvasRatio = 0.75;
+const canvasHeight = canvasWidth * canvasRatio;
 
-export const firstGearOrigin = { x: canvasSize / 2, y: canvasSize / 2 };
+export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 2 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
@@ -140,9 +142,10 @@ function App() {
       <TransformWrapper
         initialScale={1}
         minScale={0.2}
-        // initialPositionX={0}
-        // initialPositionY={0}
+        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
+        initialPositionY={-canvasHeight / 2 + window.innerHeight / 2}
         limitToBounds={false}
+        panning={{ excluded: ["gear-wrap", "gear"] }}
       >
         <TransformComponent>
           <div
@@ -152,8 +155,8 @@ function App() {
               isSmooth ? "canvas--smooth" : "canvas--pendulum"
             )}
             style={{
-              width: `${canvasSize}px`,
-              height: `${canvasSize}px`,
+              width: `${canvasWidth}px`,
+              height: `${canvasHeight}px`,
             }}
           >
             {memoedGears}

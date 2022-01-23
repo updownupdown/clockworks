@@ -79,7 +79,6 @@ export const DrawGear = (
 
   return (
     <svg
-      id={`gear-${index}`}
       className={clsx(
         "gear",
         isSelected && "gear--selected",

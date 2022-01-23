@@ -39,6 +39,10 @@ export const Menu = ({
   globalHertz,
   setGlobalHertz,
 }: Props) => {
+  const [showMenu, setShowMenu] = useState(
+    window.innerWidth > 600 ? true : false
+  );
+
   const handleTeethChange = (index: number, value: number) => {
     const newGears = [...gears];
     newGears[index].teeth = value;
@@ -160,7 +164,13 @@ export const Menu = ({
   };
 
   return (
-    <div className="menu">
+    <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
+      <button
+        className="toggle-menu-button"
+        onClick={() => setShowMenu(!showMenu)}
+      >
+        {showMenu ? "Hide Menu" : "Show Menu"}
+      </button>
       <div className="menu__speed">
         <button
           className="play-pause-button"
