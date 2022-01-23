@@ -1,12 +1,14 @@
 import clsx from "clsx";
 import React from "react";
+import { BooleanLiteral } from "typescript";
 import { GearProps } from "./Gear";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
 
 export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise }: GearProps,
   index: number,
-  isSelected: boolean
+  isSelected: boolean,
+  isSmooth: boolean
 ) => {
   if (
     rpm === undefined ||
@@ -20,25 +22,40 @@ export const DrawGear = (
   )
     return <span />;
 
-  // set of [x,y] points to create a single gear tooth
-  const points = [
-    polar(r, -3.142 / teeth),
-    polar(r, r < b ? k : -Math.PI / teeth),
-    q7(0 / 5, r, b, c, k, 1),
-    q7(1 / 5, r, b, c, k, 1),
-    q7(2 / 5, r, b, c, k, 1),
-    q7(3 / 5, r, b, c, k, 1),
-    q7(4 / 5, r, b, c, k, 1),
-    q7(5 / 5, r, b, c, k, 1),
-    q7(5 / 5, r, b, c, k, -1),
-    q7(4 / 5, r, b, c, k, -1),
-    q7(3 / 5, r, b, c, k, -1),
-    q7(2 / 5, r, b, c, k, -1),
-    q7(1 / 5, r, b, c, k, -1),
-    q7(0 / 5, r, b, c, k, -1),
-    polar(r, r < b ? -k : Math.PI / teeth),
-    polar(r, 3.142 / teeth),
-  ];
+  let points = [];
+  let isEscapementGear = !isSmooth && index === 0;
+
+  if (isEscapementGear) {
+    // single tooth, escapement gear
+    const inset = r * 0.9;
+    const lean = -5;
+
+    points = [
+      polar(inset, -3.142 / teeth),
+      polar(c, lean / teeth),
+      polar(inset, 3.142 / teeth),
+    ];
+  } else {
+    // single tooth, regular gear
+    points = [
+      polar(r, -3.142 / teeth),
+      polar(r, r < b ? k : -Math.PI / teeth),
+      q7(0 / 5, r, b, c, k, 1),
+      q7(1 / 5, r, b, c, k, 1),
+      q7(2 / 5, r, b, c, k, 1),
+      q7(3 / 5, r, b, c, k, 1),
+      q7(4 / 5, r, b, c, k, 1),
+      q7(5 / 5, r, b, c, k, 1),
+      q7(5 / 5, r, b, c, k, -1),
+      q7(4 / 5, r, b, c, k, -1),
+      q7(3 / 5, r, b, c, k, -1),
+      q7(2 / 5, r, b, c, k, -1),
+      q7(1 / 5, r, b, c, k, -1),
+      q7(0 / 5, r, b, c, k, -1),
+      polar(r, r < b ? -k : Math.PI / teeth),
+      polar(r, 3.142 / teeth),
+    ];
+  }
 
   let svgPoints: any = [];
 
@@ -57,7 +74,11 @@ export const DrawGear = (
   return (
     <svg
       id={`gear-${index}`}
-      className={clsx("gear", isSelected && "gear--selected")}
+      className={clsx(
+        "gear",
+        isSelected && "gear--selected",
+        isEscapementGear && "gear--escapement"
+      )}
       height={c * 2}
       width={c * 2}
       viewBox={`-1 -1 ${c * 2 + 2} ${c * 2 + 2}`}

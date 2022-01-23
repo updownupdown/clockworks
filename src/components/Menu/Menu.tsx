@@ -19,8 +19,8 @@ interface Props {
   globalHertz: number;
   setGlobalHertz: (value: number) => void;
   setGears: (gears: GearProps[]) => void;
-  selectedGear: number;
-  setSelectedGear: (value: number) => void;
+  selectedGear: number | undefined;
+  setSelectedGear: (value: number | undefined) => void;
   isSmooth: boolean;
   setIsSmooth: (value: boolean) => void;
 }
@@ -64,6 +64,7 @@ export const Menu = ({
   function removeGear(gear: number) {
     const newGears = gears.filter((element, index) => index !== gear);
     setGears(newGears);
+    setSelectedGear(undefined);
   }
 
   const GearList = (gears: GearProps[]) => {
@@ -94,9 +95,11 @@ export const Menu = ({
     });
   };
 
-  const GearMenu = (gears: GearProps[], selectedGear: number) => {
+  const GearMenu = (gears: GearProps[], selectedGear: number | undefined) => {
+    if (selectedGear === undefined || gears.length === 0) return <span />;
+
     const gear = gears[selectedGear];
-    if (gears.length === 0) return <span />;
+    const isEscapementGear = !isSmooth && selectedGear == 1;
 
     return (
       <div className="gear-menu">
@@ -104,7 +107,7 @@ export const Menu = ({
           <span className="gear-menu__header__title">
             Gear {selectedGear + 1}
           </span>
-          {selectedGear !== 0 && (
+          {selectedGear !== 0 && !isEscapementGear && (
             <button
               className={clsx(
                 "gear-menu-button",

@@ -31,18 +31,12 @@
     }
   }
 
-  @keyframes pendulum {
-    to {
-      transform: rotate(60deg);
-    }
-  }
-
   .gear-shape {
     cursor: pointer;
     pointer-events: all;
     transition: 0.1s ease fill;
     fill: rgba(var(--B400-rgb), 0.8);
-    stroke: rgba(255, 255, 255, 0.6);
+    stroke: rgba(var(--white-rgb), 0.6);
     stroke-linejoin: round;
     stroke-width: 1;
 
@@ -90,5 +84,70 @@
   .gear-pitch {
     pointer-events: none;
     stroke: rgba(0, 0, 0, 0.2);
+  }
+  &--escapement {
+    .gear-pitch,
+    .gear-center {
+      display: none;
+    }
+  }
+}
+
+.escapement {
+  position: absolute;
+  $width: 594px;
+  $height: 300px;
+  $aspectRatio: $width/$height;
+
+  width: 100px;
+  aspect-ratio: $aspectRatio;
+
+  transform: translateX(-50%);
+
+  &__drawing {
+    transform-origin: 50% 21%;
+    // transition: 1s ease-in-out transform;
+
+    animation-name: rock;
+    animation-iteration-count: infinite;
+
+    .canvas--paused & {
+      animation-play-state: paused;
+    }
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    aspect-ratio: $aspectRatio;
+
+    stroke-linejoin: round;
+    stroke-width: 2;
+    stroke: white;
+    fill: rgba(var(--white-rgb), 0.3);
+  }
+
+  // transform: translateX(-$width/2) translateY(-200px);
+}
+
+@keyframes rock {
+  0% {
+    transform: rotate(-5.5deg);
+    animation-timing-function: ease-in;
+  }
+  25% {
+    transform: rotate(0deg);
+    animation-timing-function: ease-out;
+  }
+  50% {
+    transform: rotate(5.5deg);
+    animation-timing-function: ease-in;
+  }
+  75% {
+    transform: rotate(0);
+    animation-timing-function: ease-out;
+  }
+  100% {
+    transform: rotate(-5.5deg);
   }
 }

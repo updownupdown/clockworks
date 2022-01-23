@@ -1,6 +1,7 @@
 import { features } from "process";
 import React from "react";
 import { degrees_to_radians, iang } from "./utils";
+import { firstGearOrigin } from "../../App";
 import "./Gear.scss";
 
 export interface GearProps {
@@ -38,25 +39,37 @@ export interface GearProps {
   k?: number;
 }
 
-export function calculateGears(theGears: GearProps[], rpm: number) {
+export function calculateGears(
+  theGears: GearProps[],
+  globalRpm: number,
+  isSmooth: boolean
+) {
   let newGears: GearProps[] = [];
 
   for (let i = 0; i < theGears.length; i++) {
-    const gear = calculateGear(i, theGears[i], newGears[i - 1], rpm);
+    const gear = calculateGear(
+      i,
+      theGears[i],
+      newGears[i - 1],
+      globalRpm,
+      isSmooth
+    );
 
     newGears.push(gear);
   }
 }
 
-const firstGearOrigin = { x: 450, y: 450 };
-
 export function calculateGear(
   index: number,
   gear: GearProps,
   prevGear: GearProps | undefined,
-  globalRpm: number
+  globalRpm: number,
+  isSmooth: boolean
 ) {
   const isFirstGear = prevGear === undefined;
+
+  // Fixed
+  if (!isSmooth && index === 1) gear.fixed = true;
 
   // Shape parameters
   const toothSize = 40;

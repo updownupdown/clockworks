@@ -3,16 +3,20 @@ import React, { useState, useEffect, useMemo } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
 import { defaultGears } from "./components/Gear/defaultGears";
+import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
+
+export const firstGearOrigin = { x: 450, y: 450 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
   const [globalRpm, setGlobalRpm] = React.useState(3);
   const [globalHertz, setGlobalHertz] = React.useState(1);
   const [isPaused, setIsPaused] = React.useState(false);
-  const [selectedGear, setSelectedGear] = useState(0);
+  const [selectedGear, setSelectedGear] = useState<number | undefined>(
+    undefined
+  );
   const [isSmooth, setIsSmooth] = useState(false);
-  const pendulumTime = 1000;
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
 
   useEffect(() => {
@@ -38,7 +42,7 @@ function App() {
   };
 
   const DrawGears = (globalRpm: number) => {
-    calculateGears(gears, globalRpm);
+    calculateGears(gears, globalRpm, isSmooth);
 
     return gears.map((gear, index) => {
       const isSelected = index === selectedGear;
@@ -63,7 +67,7 @@ function App() {
             handleGearClick(index);
           }}
         >
-          {DrawGear(gear, index, isSelected)}
+          {DrawGear(gear, index, isSelected, isSmooth)}
         </span>
       );
     });
@@ -84,6 +88,33 @@ function App() {
     [gears, globalRpm, selectedGear, pendulumIncrement]
   );
 
+  const EscapementDrawing = () => {
+    if (gears[0] === undefined) return <span />;
+
+    const firstGear = gears[0];
+
+    return (
+      <div
+        className="escapement"
+        style={{
+          left: `${firstGearOrigin.x}px`,
+          top: `${firstGearOrigin.y - firstGear.r * 1.8}px`,
+          width: `${firstGear.r * 2}px`,
+        }}
+      >
+        <div
+          className="escapement__drawing"
+          style={{
+            animationDuration: `${globalHertz}s`,
+            animationDelay: `${globalHertz * 0.8}s`,
+          }}
+        >
+          <Escapement />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className={clsx(
@@ -93,6 +124,7 @@ function App() {
       )}
     >
       {memoedGears}
+      {!isSmooth && EscapementDrawing()}
 
       <Menu
         gears={gears}
