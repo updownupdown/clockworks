@@ -48,6 +48,7 @@ body {
   line-height: 1;
 
   background: var(--B400);
+  overflow: hidden;
 }
 
 body,
@@ -66,6 +67,13 @@ button {
   &:focus {
     outline: none;
   }
+}
+
+#root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .canvas {

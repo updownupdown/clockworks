@@ -138,7 +138,7 @@ function App() {
   return (
     <>
       <TransformWrapper
-        // initialScale={1}
+        initialScale={1}
         minScale={0.2}
         // initialPositionX={0}
         // initialPositionY={0}
