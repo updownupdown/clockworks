@@ -69,6 +69,9 @@ export const Menu = ({
 
   const GearList = (gears: GearProps[]) => {
     return gears.map((gear, index) => {
+      const displayRatio =
+        index === 0 || gear.fixed ? "-" : ratioDisplay(gear.ratio!);
+
       return (
         <tr
           key={index}
@@ -85,8 +88,9 @@ export const Menu = ({
             {gear.fixed ? <Locked /> : <Unlocked />}
           </td>
           <td className="cell-gear-num">{index + 1}</td>
-          <td className="cell-gear-ratio">{ratioDisplay(gear.ratio!)}</td>
-          <td className="cell-gear-rpm">{Math.round(gear.rpm! * 10) / 10}</td>
+          <td className="cell-gear-teeth">{gear.teeth}</td>
+          <td className="cell-gear-ratio">{displayRatio}</td>
+          <td className="cell-gear-speed">{Math.round(gear.rpm! * 10) / 10}</td>
           <td className="cell-gear-angle">
             {Math.round(gear.parentOffset! * 10) / 10}°
           </td>
@@ -136,6 +140,7 @@ export const Menu = ({
           onChange={(e) =>
             handleTeethChange(selectedGear, Number(e.target.value))
           }
+          disabled={!isSmooth && selectedGear === 0}
         />
 
         <input
@@ -167,9 +172,9 @@ export const Menu = ({
         <div className="menu__speed__rpm">
           <input
             type="number"
-            min="1"
-            max="20"
-            step="1"
+            min={isSmooth ? 1 : 0.25}
+            max={isSmooth ? 20 : 5}
+            step={isSmooth ? 1 : 0.25}
             value={isSmooth ? globalRpm : globalHertz}
             onChange={(e) => {
               if (isSmooth) {
@@ -192,8 +197,9 @@ export const Menu = ({
           <tr>
             <th className="cell-gear-fixed">&nbsp;</th>
             <th className="cell-gear-num">#</th>
+            <th className="cell-gear-teeth">Teeth</th>
             <th className="cell-gear-ratio">Ratio</th>
-            <th className="cell-gear-rpm">RPM</th>
+            <th className="cell-gear-speed">RPM</th>
             <th className="cell-gear-angle">Offset</th>
           </tr>
         </thead>

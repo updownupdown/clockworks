@@ -2,7 +2,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 260px;
+  width: 300px;
   padding: 12px;
 
   display: flex;
@@ -108,7 +108,7 @@
     .cell-gear-ratio {
       text-align: center;
     }
-    .cell-gear-rpm,
+    .cell-gear-speed,
     .cell-gear-angle {
       text-align: right;
     }

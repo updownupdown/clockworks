@@ -1,11 +1,9 @@
-import clsx from "clsx";
-import React from "react";
-import { BooleanLiteral } from "typescript";
 import { GearProps } from "./Gear";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
+import clsx from "clsx";
 
 export const DrawGear = (
-  { teeth, p, c, b, r, t, k, ratio, rpm, clockwise }: GearProps,
+  { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
   isSelected: boolean,
   isSmooth: boolean
@@ -23,11 +21,11 @@ export const DrawGear = (
     return <span />;
 
   let points = [];
-  let isEscapementGear = !isSmooth && index === 0;
+  const isEscapementGear = !isSmooth && index === 0;
 
   if (isEscapementGear) {
     // single tooth, escapement gear
-    const inset = r * 0.9;
+    const inset = r * 0.85;
     const lean = -5;
 
     points = [
@@ -70,6 +68,14 @@ export const DrawGear = (
   const textRad = r * (holeFactor + 1) * 0.5 - textSize / 2;
 
   const displayRatio = ratioDisplay(ratio);
+
+  let displayText = "";
+
+  if (!isEscapementGear) {
+    displayText += `#${index + 1}: ${teeth} - ${displayRatio}`;
+    displayText += `- RPM: ${Math.round(rpm * 10) / 10}`;
+    displayText += `- P: ${parent}`;
+  }
 
   return (
     <svg
@@ -121,8 +127,7 @@ export const DrawGear = (
       />
       <text className="gear-text">
         <textPath fontSize={`${textSize}px`} href={`#textpath-${r}`}>
-          #{index + 1}: {teeth} - {displayRatio} - RPM:{" "}
-          {Math.round(rpm * 10) / 10}
+          {displayText}
         </textPath>
       </text>
     </svg>

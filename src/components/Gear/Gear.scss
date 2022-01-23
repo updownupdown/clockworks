@@ -1,5 +1,6 @@
 .gear-wrap {
   position: absolute;
+  z-index: 2;
   pointer-events: none;
 
   &--selected {
@@ -7,8 +8,8 @@
   }
 
   .canvas--pendulum & {
-    transition: 1s ease-in-out transform;
-    transition-timing-function: cubic-bezier(0.07, 1.71, 0.56, 0.86);
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
   }
 }
 
@@ -17,12 +18,12 @@
 
   animation-iteration-count: infinite;
 
-  .canvas--paused & {
-    animation-play-state: paused;
-  }
   .canvas--smooth & {
     animation-name: spin;
     animation-timing-function: linear;
+  }
+  .canvas--paused.canvas--smooth & {
+    animation-play-state: paused;
   }
 
   @keyframes spin {
@@ -93,61 +94,67 @@
   }
 }
 
-.escapement {
+.pendulum {
   position: absolute;
-  $width: 594px;
+  z-index: 1;
+  $width: 600px;
   $height: 300px;
   $aspectRatio: $width/$height;
+  $weightSize: 20%;
+
+  $barWidth: 4%;
+  $pendulumHeight: 500%;
+
+  $partFill: var(--B600);
+  $partBorderColor: rgba(var(--white-rgb), 0.5);
+  $partBorderWidth: 1;
 
   width: 100px;
   aspect-ratio: $aspectRatio;
 
   transform: translateX(-50%);
 
-  &__drawing {
+  &__assembly {
     transform-origin: 50% 21%;
-    // transition: 1s ease-in-out transform;
+    transition-timing-function: ease-in-out;
 
-    animation-name: rock;
-    animation-iteration-count: infinite;
-
-    .canvas--paused & {
-      animation-play-state: paused;
+    &__bar {
+      position: absolute;
+      z-index: 1;
+      width: $barWidth;
+      height: $pendulumHeight;
+      top: 0;
+      left: 50% - $barWidth / 2;
     }
-  }
 
-  svg {
-    width: 100%;
-    height: auto;
-    aspect-ratio: $aspectRatio;
+    &__weight {
+      position: absolute;
+      z-index: 2;
+      top: $pendulumHeight - $weightSize;
+      left: 50% - $weightSize/2;
+      width: $weightSize;
+      aspect-ratio: 1;
 
-    stroke-linejoin: round;
-    stroke-width: 2;
-    stroke: white;
-    fill: rgba(var(--white-rgb), 0.3);
-  }
+      border-radius: 50%;
+    }
 
-  // transform: translateX(-$width/2) translateY(-200px);
-}
+    &__bar,
+    &__weight {
+      border: #{$partBorderWidth}px solid $partBorderColor;
+      background: $partFill;
+    }
 
-@keyframes rock {
-  0% {
-    transform: rotate(-5.5deg);
-    animation-timing-function: ease-in;
-  }
-  25% {
-    transform: rotate(0deg);
-    animation-timing-function: ease-out;
-  }
-  50% {
-    transform: rotate(5.5deg);
-    animation-timing-function: ease-in;
-  }
-  75% {
-    transform: rotate(0);
-    animation-timing-function: ease-out;
-  }
-  100% {
-    transform: rotate(-5.5deg);
+    svg {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      height: auto;
+      aspect-ratio: $aspectRatio;
+
+      stroke-linejoin: round;
+      stroke: $partBorderColor;
+      stroke-width: $partBorderWidth * 2;
+      fill: $partFill;
+    }
   }
 }

@@ -6,17 +6,17 @@ import { defaultGears } from "./components/Gear/defaultGears";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 
-export const firstGearOrigin = { x: 450, y: 450 };
+export const firstGearOrigin = { x: 300, y: 300 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
   const [globalRpm, setGlobalRpm] = React.useState(3);
-  const [globalHertz, setGlobalHertz] = React.useState(1);
+  const [globalHertz, setGlobalHertz] = React.useState(0.5);
   const [isPaused, setIsPaused] = React.useState(false);
   const [selectedGear, setSelectedGear] = useState<number | undefined>(
     undefined
   );
-  const [isSmooth, setIsSmooth] = useState(false);
+  const [isSmooth, setIsSmooth] = useState(true);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
   };
 
   const DrawGears = (globalRpm: number) => {
-    calculateGears(gears, globalRpm, isSmooth);
+    calculateGears(gears, globalRpm, globalHertz, isSmooth);
 
     return gears.map((gear, index) => {
       const isSelected = index === selectedGear;
@@ -62,6 +62,7 @@ function App() {
             transform: `translateX(-50%) translateY(-50%) rotate(${
               gear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
             }deg)`,
+            transitionDuration: `${1 / globalHertz}s`,
           }}
           onClick={() => {
             handleGearClick(index);
@@ -73,47 +74,69 @@ function App() {
     });
   };
 
+  const [halfStep, setHalfStep] = useState(false);
+
   useEffect(() => {
     if (!isSmooth && !isPaused) {
-      const tick = setInterval(() => {
-        setPendulumIncrement(pendulumIncrement + 1);
-      }, 1000 / globalHertz);
+      const intervalDelay = 1000 / globalHertz / 2;
 
-      return () => clearInterval(tick);
+      const tick = setInterval(() => {
+        if (!halfStep) {
+          setPendulumIncrement(pendulumIncrement + 1);
+        } else {
+        }
+
+        setHalfStep(!halfStep);
+      }, intervalDelay);
+
+      return () => {
+        clearInterval(tick);
+      };
     }
-  }, [DrawGears, isSmooth, globalRpm]);
+  }, [DrawGears, isSmooth, globalHertz, isPaused]);
 
   const memoedGears = useMemo(
     () => DrawGears(globalRpm),
-    [gears, globalRpm, selectedGear, pendulumIncrement]
+    [gears, globalRpm, selectedGear, pendulumIncrement, isSmooth]
   );
 
-  const EscapementDrawing = () => {
+  // Pendulum
+  const DrawPendulum = () => {
     if (gears[0] === undefined) return <span />;
 
     const firstGear = gears[0];
+    const rotateTo = (halfStep ? 1 : -1) * 5;
 
     return (
       <div
-        className="escapement"
+        className="pendulum"
         style={{
           left: `${firstGearOrigin.x}px`,
-          top: `${firstGearOrigin.y - firstGear.r * 1.8}px`,
+          top: `${firstGearOrigin.y - firstGear.r * 1.7}px`,
           width: `${firstGear.r * 2}px`,
         }}
       >
         <div
-          className="escapement__drawing"
+          className="pendulum__assembly"
           style={{
-            animationDuration: `${globalHertz}s`,
-            animationDelay: `${globalHertz * 0.8}s`,
+            transform: `rotate(${rotateTo}deg)`,
+            transitionDuration: `${1 / globalHertz / 2}s`,
+            // transitionDelay: `${(1 / globalHertz / 2) * 0.5}s`,
           }}
         >
+          <div className="pendulum__assembly__bar" />
+          <div className="pendulum__assembly__weight" />
           <Escapement />
         </div>
       </div>
     );
   };
+
+  // useEffect(() => {
+  //   if (!isSmooth && !isPaused) {
+  //   console.log("Update pendulum");
+  //   }
+  // }, [pendulumIncrement, isSmooth, globalHertz]);
 
   return (
     <div
@@ -124,7 +147,7 @@ function App() {
       )}
     >
       {memoedGears}
-      {!isSmooth && EscapementDrawing()}
+      {!isSmooth && DrawPendulum()}
 
       <Menu
         gears={gears}

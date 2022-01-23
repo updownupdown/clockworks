@@ -1,10 +1,10 @@
-import { features } from "process";
-import React from "react";
 import { degrees_to_radians, iang } from "./utils";
 import { firstGearOrigin } from "../../App";
 import "./Gear.scss";
 
 export interface GearProps {
+  /** parent gear **/
+  parent?: number;
   /** number of teeth **/
   teeth: number;
   /** angle offset relative to parent gear **/
@@ -39,9 +39,11 @@ export interface GearProps {
   k?: number;
 }
 
+// Calculate all gears
 export function calculateGears(
   theGears: GearProps[],
   globalRpm: number,
+  globalHertz: number,
   isSmooth: boolean
 ) {
   let newGears: GearProps[] = [];
@@ -52,21 +54,33 @@ export function calculateGears(
       theGears[i],
       newGears[i - 1],
       globalRpm,
-      isSmooth
+      globalHertz,
+      isSmooth,
+      theGears
     );
 
     newGears.push(gear);
   }
 }
 
+// Calculate single gear
 export function calculateGear(
   index: number,
   gear: GearProps,
   prevGear: GearProps | undefined,
   globalRpm: number,
-  isSmooth: boolean
+  globalHertz: number,
+  isSmooth: boolean,
+  gears: GearProps[]
 ) {
   const isFirstGear = prevGear === undefined;
+  const isEscapementGear = !isSmooth && index === 0;
+  if (isEscapementGear) gear.teeth = 30;
+
+  // Parent gear
+  if (gear.parent === undefined) gear.parent = index === 0 ? 0 : index - 1;
+
+  const parentGear = gears[gear.parent];
 
   // Fixed
   if (!isSmooth && index === 1) gear.fixed = true;
@@ -88,18 +102,18 @@ export function calculateGear(
   if (isFirstGear) {
     gear.clockwise = true;
   } else {
-    gear.clockwise = gear.fixed ? prevGear.clockwise : !prevGear.clockwise;
+    gear.clockwise = gear.fixed ? parentGear.clockwise : !parentGear.clockwise;
   }
 
   // Position offset
   if (isFirstGear) {
     gear.positionOffset = firstGearOrigin;
   } else {
-    const r = gear.p + prevGear.p!;
+    const r = gear.p + parentGear.p!;
 
     let gearPosition = {
-      x: prevGear.positionOffset!.x,
-      y: prevGear.positionOffset!.y,
+      x: parentGear.positionOffset!.x,
+      y: parentGear.positionOffset!.y,
     };
 
     if (!gear.fixed) {
@@ -114,13 +128,19 @@ export function calculateGear(
   }
 
   // Ratios
-  const ratio = isFirstGear || gear.fixed ? 1 : prevGear.teeth / gear.teeth;
-  const totalRatio = isFirstGear ? 1 : ratio * prevGear.totalRatio!;
+  const ratio = isFirstGear || gear.fixed ? 1 : parentGear.teeth / gear.teeth;
+  const totalRatio = isFirstGear ? 1 : ratio * parentGear.totalRatio!;
   gear.ratio = ratio;
   gear.totalRatio = totalRatio;
 
   // RPM
-  gear.rpm = globalRpm * totalRatio;
+
+  // RPM
+  if (isSmooth) {
+    gear.rpm = globalRpm * totalRatio;
+  } else {
+    gear.rpm = globalHertz * totalRatio * 2;
+  }
 
   // Rotation offset
   let rotateBy = 0;
@@ -128,11 +148,11 @@ export function calculateGear(
   if (isFirstGear) {
     rotateBy = gear.parentOffset;
   } else if (gear.fixed) {
-    rotateBy = prevGear.rotationOffset!;
+    rotateBy = parentGear.rotationOffset!;
   } else {
     rotateBy =
       180 -
-      (prevGear.rotationOffset! + gear.parentOffset) * ratio -
+      (parentGear.rotationOffset! + gear.parentOffset) * ratio -
       gear.parentOffset +
       360 / gear.teeth / 2;
   }
@@ -143,10 +163,10 @@ export function calculateGear(
   if (isFirstGear) {
     pendulumAngleIncrement = 360 / gear.teeth;
   } else if (gear.fixed) {
-    pendulumAngleIncrement = prevGear!.pendulumAngleIncrement!;
+    pendulumAngleIncrement = parentGear!.pendulumAngleIncrement!;
   } else {
     const prevGearTeethTurn =
-      (prevGear!.pendulumAngleIncrement! * prevGear.teeth) / 360;
+      (parentGear!.pendulumAngleIncrement! * parentGear.teeth) / 360;
     pendulumAngleIncrement = (360 / gear.teeth) * Math.abs(prevGearTeethTurn);
 
     if (!gear.clockwise) {
