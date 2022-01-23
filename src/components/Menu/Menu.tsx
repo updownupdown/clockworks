@@ -6,9 +6,17 @@ import Pause from "../Icons/Pause";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
+import Pendulum from "../Icons/Pendulum";
+import Battery from "../Icons/Battery";
+import { ratioDisplay } from "../Gear/utils";
 import clsx from "clsx";
 import "./Menu.scss";
-import { ratioDisplay } from "../Gear/utils";
+
+export interface HandsProps {
+  seconds: number;
+  minutes: number;
+  hours: number;
+}
 
 interface Props {
   gears: GearProps[];
@@ -21,8 +29,14 @@ interface Props {
   setGears: (gears: GearProps[]) => void;
   selectedGear: number | undefined;
   setSelectedGear: (value: number | undefined) => void;
-  isSmooth: boolean;
-  setIsSmooth: (value: boolean) => void;
+  isPendulum: boolean;
+  setIsPendulum: (value: boolean) => void;
+  hands: {
+    seconds: number;
+    minutes: number;
+    hours: number;
+  };
+  setHands: (hands: HandsProps) => void;
 }
 
 export const Menu = ({
@@ -34,8 +48,8 @@ export const Menu = ({
   setGears,
   selectedGear,
   setSelectedGear,
-  isSmooth,
-  setIsSmooth,
+  isPendulum,
+  setIsPendulum,
   globalHertz,
   setGlobalHertz,
 }: Props) => {
@@ -67,8 +81,13 @@ export const Menu = ({
 
   function removeGear(gear: number) {
     const newGears = gears.filter((element, index) => index !== gear);
+    document.body.classList.add("disable-animations");
     setGears(newGears);
     setSelectedGear(undefined);
+
+    setTimeout(() => {
+      document.body.classList.remove("disable-animations");
+    }, 0);
   }
 
   const GearList = (gears: GearProps[]) => {
@@ -107,7 +126,7 @@ export const Menu = ({
     if (selectedGear === undefined || gears.length === 0) return <span />;
 
     const gear = gears[selectedGear];
-    const isEscapementGear = !isSmooth && selectedGear == 1;
+    const isEscapementGear = isPendulum && selectedGear == 1;
 
     return (
       <div className="gear-menu">
@@ -134,31 +153,63 @@ export const Menu = ({
           </button>
         </div>
 
-        <input
-          className="slider"
-          type="range"
-          min="4"
-          max="50"
-          step="1"
-          value={gear.teeth}
-          onChange={(e) =>
-            handleTeethChange(selectedGear, Number(e.target.value))
-          }
-          disabled={!isSmooth && selectedGear === 0}
-        />
+        <div className="gear-menu__setting">
+          <span>Teeth</span>
 
-        <input
-          className="slider"
-          type="range"
-          min="-180"
-          max="180"
-          step="1"
-          value={gear.parentOffset}
-          onChange={(e) =>
-            handleOffsetChange(selectedGear, Number(e.target.value))
-          }
-          disabled={gear.fixed}
-        />
+          <input
+            className="slider"
+            type="range"
+            min="4"
+            max="50"
+            step="1"
+            value={gear.teeth}
+            onChange={(e) =>
+              handleTeethChange(selectedGear, Number(e.target.value))
+            }
+            disabled={isPendulum && selectedGear === 0}
+          />
+
+          <input
+            type="number"
+            min="4"
+            max="50"
+            step="1"
+            value={gear.teeth}
+            onChange={(e) =>
+              handleTeethChange(selectedGear, Number(e.target.value))
+            }
+            disabled={isPendulum && selectedGear === 0}
+          />
+        </div>
+
+        <div className="gear-menu__setting">
+          <span>Angle</span>
+
+          <input
+            className="slider"
+            type="range"
+            min="-180"
+            max="180"
+            step="1"
+            value={gear.parentOffset}
+            onChange={(e) =>
+              handleOffsetChange(selectedGear, Number(e.target.value))
+            }
+            disabled={gear.fixed}
+          />
+
+          <input
+            type="number"
+            min="-180"
+            max="180"
+            step="1"
+            value={gear.parentOffset}
+            onChange={(e) =>
+              handleOffsetChange(selectedGear, Number(e.target.value))
+            }
+            disabled={gear.fixed}
+          />
+        </div>
       </div>
     );
   };
@@ -173,7 +224,7 @@ export const Menu = ({
       </button>
       <div className="menu__speed">
         <button
-          className="play-pause-button"
+          className="movement-button movement-button--pause"
           onClick={() => setIsPaused(!isPaused)}
         >
           {isPaused ? <Play /> : <Pause />}
@@ -182,25 +233,39 @@ export const Menu = ({
         <div className="menu__speed__rpm">
           <input
             type="number"
-            min={isSmooth ? 1 : 0.25}
-            max={isSmooth ? 20 : 5}
-            step={isSmooth ? 1 : 0.25}
-            value={isSmooth ? globalRpm : globalHertz}
+            min={isPendulum ? 0.25 : 1}
+            max={isPendulum ? 5 : 20}
+            step={isPendulum ? 0.25 : 1}
+            value={isPendulum ? globalHertz : globalRpm}
             onChange={(e) => {
-              if (isSmooth) {
-                setGlobalRpm(Number(e.target.value));
-              } else {
+              if (isPendulum) {
                 setGlobalHertz(Number(e.target.value));
+              } else {
+                setGlobalRpm(Number(e.target.value));
               }
             }}
           />
-          <span>{isSmooth ? "RPM" : "Hz"}</span>
+          <span>{isPendulum ? "Hz" : "RPM"}</span>
+        </div>
+
+        <div className="menu__speed__type">
+          <button
+            className="movement-button movement-button--type"
+            onClick={() => setIsPendulum(true)}
+            disabled={isPendulum}
+          >
+            <Pendulum />
+          </button>
+
+          <button
+            className="movement-button movement-button--type"
+            onClick={() => setIsPendulum(false)}
+            disabled={!isPendulum}
+          >
+            <Battery />
+          </button>
         </div>
       </div>
-
-      <button className="smooth-button" onClick={() => setIsSmooth(!isSmooth)}>
-        {isSmooth ? "Pendulum Movement" : "Smooth Movement"}
-      </button>
 
       <table className="gear-list">
         <thead>

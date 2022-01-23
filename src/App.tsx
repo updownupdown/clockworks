@@ -6,12 +6,16 @@ import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import ZoomIn from "./components/Icons/ZoomIn";
+import ZoomOut from "./components/Icons/ZoomOut";
+import ZoomReset from "./components/Icons/ZoomReset";
+import { HandsProps } from "./components/Menu/Menu";
 
 const canvasWidth = 4000;
 const canvasRatio = 0.75;
 const canvasHeight = canvasWidth * canvasRatio;
 
-export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 2 };
+export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
@@ -21,8 +25,13 @@ function App() {
   const [selectedGear, setSelectedGear] = useState<number | undefined>(
     undefined
   );
-  const [isSmooth, setIsSmooth] = useState(true);
+  const [isPendulum, setIsPendulum] = useState(true);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
+  const [hands, setHands] = useState<HandsProps>({
+    seconds: 0,
+    minutes: 0,
+    hours: 0,
+  });
 
   useEffect(() => {
     setGears(defaultGears);
@@ -31,13 +40,15 @@ function App() {
   const handleGearClick = (index: number) => {
     if (selectedGear === index) {
       if (
+        gears[index - 1] !== undefined &&
         Object.entries(gears[index].positionOffset).toString() ===
-        Object.entries(gears[index - 1].positionOffset).toString()
+          Object.entries(gears[index - 1].positionOffset).toString()
       ) {
         setSelectedGear(index - 1);
       } else if (
+        gears[index + 1] !== undefined &&
         Object.entries(gears[index].positionOffset).toString() ===
-        Object.entries(gears[index + 1].positionOffset).toString()
+          Object.entries(gears[index + 1].positionOffset).toString()
       ) {
         setSelectedGear(index + 1);
       }
@@ -47,12 +58,14 @@ function App() {
   };
 
   const DrawGears = (globalRpm: number) => {
-    calculateGears(gears, globalRpm, globalHertz, isSmooth);
+    calculateGears(gears, globalRpm, globalHertz, isPendulum);
 
     return gears.map((gear, index) => {
       const isSelected = index === selectedGear;
 
-      const pendulumAngleIncrement = isSmooth ? 0 : gear.pendulumAngleIncrement;
+      const pendulumAngleIncrement = !isPendulum
+        ? 0
+        : gear.pendulumAngleIncrement;
 
       return (
         <span
@@ -73,7 +86,7 @@ function App() {
             handleGearClick(index);
           }}
         >
-          {DrawGear(gear, index, isSelected, isSmooth)}
+          {DrawGear(gear, index, isSelected, isPendulum)}
         </span>
       );
     });
@@ -82,7 +95,7 @@ function App() {
   const [halfStep, setHalfStep] = useState(false);
 
   useEffect(() => {
-    if (!isSmooth && !isPaused) {
+    if (isPendulum && !isPaused) {
       const intervalDelay = 1000 / globalHertz / 2;
 
       const tick = setInterval(() => {
@@ -98,11 +111,11 @@ function App() {
         clearInterval(tick);
       };
     }
-  }, [DrawGears, isSmooth, globalHertz, isPaused]);
+  }, [DrawGears, isPendulum, globalHertz, isPaused]);
 
   const memoedGears = useMemo(
     () => DrawGears(globalRpm),
-    [gears, globalRpm, selectedGear, pendulumIncrement, isSmooth]
+    [gears, globalRpm, selectedGear, pendulumIncrement, isPendulum]
   );
 
   // Pendulum
@@ -142,27 +155,43 @@ function App() {
       <TransformWrapper
         initialScale={1}
         minScale={0.2}
-        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
-        initialPositionY={-canvasHeight / 2 + window.innerHeight / 2}
+        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2 - 200}
+        initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 300}
         limitToBounds={false}
-        panning={{ excluded: ["gear-wrap", "gear"] }}
       >
-        <TransformComponent>
-          <div
-            className={clsx(
-              "canvas",
-              isPaused && "canvas--paused",
-              isSmooth ? "canvas--smooth" : "canvas--pendulum"
-            )}
-            style={{
-              width: `${canvasWidth}px`,
-              height: `${canvasHeight}px`,
-            }}
-          >
-            {memoedGears}
-            {!isSmooth && DrawPendulum()}
-          </div>
-        </TransformComponent>
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <React.Fragment>
+            <div className="canvas-actions">
+              <button onClick={() => zoomOut()}>
+                <ZoomOut />
+              </button>
+              <button onClick={() => zoomIn()}>
+                <ZoomIn />
+              </button>
+              <button onClick={() => resetTransform()}>
+                <ZoomReset />
+              </button>
+            </div>
+            <TransformComponent>
+              <div className="canvas-wrap">
+                <div
+                  className={clsx(
+                    "canvas",
+                    isPaused && "canvas--paused",
+                    !isPendulum ? "canvas--smooth" : "canvas--pendulum"
+                  )}
+                  style={{
+                    width: `${canvasWidth}px`,
+                    height: `${canvasHeight}px`,
+                  }}
+                >
+                  {memoedGears}
+                  {isPendulum && DrawPendulum()}
+                </div>
+              </div>
+            </TransformComponent>
+          </React.Fragment>
+        )}
       </TransformWrapper>
 
       <Menu
@@ -176,8 +205,10 @@ function App() {
         setGears={setGears}
         selectedGear={selectedGear}
         setSelectedGear={setSelectedGear}
-        isSmooth={isSmooth}
-        setIsSmooth={setIsSmooth}
+        isPendulum={isPendulum}
+        setIsPendulum={setIsPendulum}
+        hands={hands}
+        setHands={setHands}
       />
     </>
   );

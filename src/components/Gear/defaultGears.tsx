@@ -21,8 +21,12 @@ export const defaultGears: GearProps[] = [
   },
   {
     teeth: 10,
-    parentOffset: 90,
-    parent: 2,
+    parentOffset: 0,
+  },
+  {
+    teeth: 10,
+    parentOffset: 0,
+    parent: 4,
   },
   {
     teeth: 10,
@@ -44,7 +48,7 @@ export const defaultGears: GearProps[] = [
   {
     teeth: 20,
     parentOffset: -90,
-    parent: 2,
+    parent: 4,
   },
   {
     teeth: 10,
@@ -61,8 +65,8 @@ export const defaultGears: GearProps[] = [
   },
   {
     teeth: 20,
-    parentOffset: 20,
-    parent: 2,
+    parentOffset: 0,
+    parent: 4,
   },
   {
     teeth: 10,

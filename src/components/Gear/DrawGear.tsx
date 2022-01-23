@@ -6,7 +6,7 @@ export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
   isSelected: boolean,
-  isSmooth: boolean
+  isPendulum: boolean
 ) => {
   if (
     rpm === undefined ||
@@ -21,7 +21,7 @@ export const DrawGear = (
     return <span />;
 
   let points = [];
-  const isEscapementGear = !isSmooth && index === 0;
+  const isEscapementGear = isPendulum && index === 0;
 
   if (isEscapementGear) {
     // single tooth, escapement gear

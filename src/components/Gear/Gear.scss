@@ -11,17 +11,21 @@
     transition-property: transform;
     transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
   }
+
+  .disable-animations & {
+    transition-property: none;
+  }
 }
 
 .gear {
   display: block;
-
   animation-iteration-count: infinite;
 
   .canvas--smooth & {
     animation-name: spin;
     animation-timing-function: linear;
   }
+  .disable-animations &,
   .canvas--paused.canvas--smooth & {
     animation-play-state: paused;
   }

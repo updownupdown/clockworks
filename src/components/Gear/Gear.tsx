@@ -41,22 +41,21 @@ export interface GearProps {
 
 // Calculate all gears
 export function calculateGears(
-  theGears: GearProps[],
+  gears: GearProps[],
   globalRpm: number,
   globalHertz: number,
-  isSmooth: boolean
+  isPendulum: boolean
 ) {
   let newGears: GearProps[] = [];
 
-  for (let i = 0; i < theGears.length; i++) {
+  for (let i = 0; i < gears.length; i++) {
     const gear = calculateGear(
       i,
-      theGears[i],
-      newGears[i - 1],
+      gears,
+      gears[i],
       globalRpm,
       globalHertz,
-      isSmooth,
-      theGears
+      isPendulum
     );
 
     newGears.push(gear);
@@ -66,24 +65,25 @@ export function calculateGears(
 // Calculate single gear
 export function calculateGear(
   index: number,
+  gears: GearProps[],
   gear: GearProps,
-  prevGear: GearProps | undefined,
   globalRpm: number,
   globalHertz: number,
-  isSmooth: boolean,
-  gears: GearProps[]
+  isPendulum: boolean
 ) {
-  const isFirstGear = prevGear === undefined;
-  const isEscapementGear = !isSmooth && index === 0;
+  const isFirstGear = index === 0;
+  const isEscapementGear = isPendulum && isFirstGear;
   if (isEscapementGear) gear.teeth = 30;
 
   // Parent gear
-  if (gear.parent === undefined) gear.parent = index === 0 ? 0 : index - 1;
+  if (gear.parent === undefined || gear.parent === index) {
+    gear.parent = index === 0 ? 0 : index - 1;
+  }
 
   const parentGear = gears[gear.parent];
 
   // Fixed
-  if (!isSmooth && index === 1) gear.fixed = true;
+  if (isPendulum && index === 1) gear.fixed = true;
 
   // Shape parameters
   const toothSize = 40;
@@ -136,10 +136,10 @@ export function calculateGear(
   // RPM
 
   // RPM
-  if (isSmooth) {
-    gear.rpm = globalRpm * totalRatio;
-  } else {
+  if (isPendulum) {
     gear.rpm = globalHertz * totalRatio * 2;
+  } else {
+    gear.rpm = globalRpm * totalRatio;
   }
 
   // Rotation offset
