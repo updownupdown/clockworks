@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
 import { defaultGears } from "./components/Gear/defaultGears";
@@ -19,18 +19,18 @@ export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
-  const [globalRpm, setGlobalRpm] = React.useState(3);
+  const [globalRpm, setGlobalRpm] = React.useState(1);
   const [globalHertz, setGlobalHertz] = React.useState(0.5);
   const [isPaused, setIsPaused] = React.useState(false);
   const [selectedGear, setSelectedGear] = useState<number | undefined>(
     undefined
   );
-  const [isPendulum, setIsPendulum] = useState(true);
+  const [isPendulum, setIsPendulum] = useState(false);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
   const [hands, setHands] = useState<HandsProps>({
-    seconds: 0,
-    minutes: 0,
-    hours: 0,
+    hours: 12,
+    minutes: 6,
+    seconds: 1,
   });
 
   useEffect(() => {
@@ -86,7 +86,7 @@ function App() {
             handleGearClick(index);
           }}
         >
-          {DrawGear(gear, index, isSelected, isPendulum)}
+          {DrawGear(gear, index, isSelected, isPendulum, hands)}
         </span>
       );
     });
@@ -115,7 +115,7 @@ function App() {
 
   const memoedGears = useMemo(
     () => DrawGears(globalRpm),
-    [gears, globalRpm, selectedGear, pendulumIncrement, isPendulum]
+    [gears, globalRpm, selectedGear, pendulumIncrement, isPendulum, hands]
   );
 
   // Pendulum
@@ -172,6 +172,7 @@ function App() {
                 <ZoomReset />
               </button>
             </div>
+
             <TransformComponent>
               <div className="canvas-wrap">
                 <div

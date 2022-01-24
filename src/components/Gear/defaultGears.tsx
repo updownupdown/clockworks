@@ -8,73 +8,60 @@ export const defaultNewGear: GearProps = {
 
 export const defaultGears: GearProps[] = [
   {
-    teeth: 20,
+    teeth: 30,
     parentOffset: 0,
   },
   {
     teeth: 10,
     parentOffset: 0,
+    fixed: true,
+  },
+  {
+    teeth: 40,
+    parentOffset: 120,
   },
   {
     teeth: 10,
+    parentOffset: 120,
+    fixed: true,
+  },
+  {
+    teeth: 40,
+    parentOffset: 30,
+  },
+  {
+    teeth: 11,
+    parentOffset: 0,
+    fixed: true,
+  },
+  {
+    teeth: 40,
     parentOffset: 0,
   },
   {
-    teeth: 10,
+    teeth: 8,
+    parentOffset: -90,
+  },
+  {
+    teeth: 40,
+    parentOffset: -75,
+  },
+  {
+    teeth: 6,
     parentOffset: 0,
+    fixed: true,
   },
   {
-    teeth: 10,
-    parentOffset: 0,
-    parent: 4,
+    teeth: 38,
+    parentOffset: -130,
   },
   {
-    teeth: 10,
-    parentOffset: 90,
-  },
-  {
-    teeth: 20,
-    parentOffset: 90,
-  },
-  {
-    teeth: 10,
+    teeth: 6,
     parentOffset: 90,
     fixed: true,
   },
   {
     teeth: 12,
     parentOffset: 90,
-  },
-  {
-    teeth: 20,
-    parentOffset: -90,
-    parent: 4,
-  },
-  {
-    teeth: 10,
-    parentOffset: -90,
-    fixed: true,
-  },
-  {
-    teeth: 10,
-    parentOffset: -40,
-  },
-  {
-    teeth: 10,
-    parentOffset: -90,
-  },
-  {
-    teeth: 20,
-    parentOffset: 0,
-    parent: 4,
-  },
-  {
-    teeth: 10,
-    fixed: true,
-    parentOffset: 0,
-  },
-  {
-    teeth: 10,
-    parentOffset: 0,
   },
 ];

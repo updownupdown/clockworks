@@ -5,7 +5,7 @@
   position: fixed;
   top: $menuPadding;
   right: $menuPadding;
-  width: 300px;
+  width: 400px;
   padding: 12px;
   max-height: calc(100vh - #{$menuPadding * 2} - 72px);
 
@@ -25,6 +25,34 @@
   &--hide {
     height: 40px;
     overflow: hidden;
+  }
+
+  // Hands
+  &__hands {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
+
+    &__section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      gap: 8px;
+
+      span {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--white);
+      }
+
+      select {
+        width: 70px;
+        padding: 6px;
+        font-size: 18px;
+      }
+    }
   }
 
   // Speed controls
@@ -101,155 +129,6 @@
       }
     }
   }
-
-  // Gear List
-  .gear-list {
-    border-collapse: collapse;
-
-    td,
-    th {
-      padding: 6px;
-      font-size: 14px;
-      color: white;
-
-      &:first-child {
-        padding-left: 12px;
-      }
-      &:last-child {
-        padding-right: 12px;
-      }
-    }
-
-    th {
-      font-weight: 700;
-    }
-
-    .cell-gear-num {
-      font-weight: 700;
-    }
-    .cell-gear-num,
-    .cell-gear-ratio {
-      text-align: center;
-    }
-    .cell-gear-speed,
-    .cell-gear-angle {
-      text-align: right;
-    }
-
-    &__row {
-      cursor: pointer;
-      border-radius: 4px;
-
-      &--current {
-        box-shadow: 0 0 0 1px rgba(var(--white-rgb), 0.7);
-      }
-
-      &--current,
-      &:hover {
-        background: rgba(var(--white-rgb), 0.12);
-      }
-
-      svg {
-        width: 16px;
-        height: 16px;
-
-        path {
-          fill: white;
-        }
-      }
-
-      &--unlocked {
-        svg {
-          opacity: 0.2;
-        }
-      }
-    }
-  }
-
-  // Gear menu
-  .gear-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 20px 12px;
-
-    &__header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 20px;
-
-      &__title {
-        margin-right: auto;
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--white);
-      }
-    }
-
-    // Fixed button
-    .gear-menu-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.25s ease background;
-      padding: 8px;
-
-      border-radius: 6px;
-
-      $icon-size: 20px;
-      svg {
-        transition: 0.25s ease opacity;
-        width: $icon-size;
-        height: $icon-size;
-
-        path {
-          fill: white;
-        }
-      }
-
-      &--off svg {
-        opacity: 0.2;
-      }
-
-      &--on {
-        background: rgba(var(--white-rgb), 1);
-
-        svg path {
-          fill: var(--B600);
-        }
-      }
-
-      &:hover {
-        background: rgba(var(--white-rgb), 0.3);
-      }
-      &--off:hover svg {
-        opacity: 1;
-      }
-    }
-
-    &__setting {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      span {
-        width: 48px;
-        color: white;
-        font-weight: 600;
-      }
-
-      input[type="number"] {
-        width: 70px;
-
-        font-size: 16px;
-      }
-      input[type="range"] {
-        flex: 1;
-        min-width: 50px;
-      }
-    }
-  }
 }
 
 .add-gear-button {
@@ -268,54 +147,4 @@
   &:hover {
     background: rgba(var(--white-rgb), 0.3);
   }
-}
-
-input[type="range"] {
-  appearance: none;
-  outline: none;
-
-  transition: 0.2s ease background;
-  height: 6px;
-  margin: 14px 0;
-
-  border-radius: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: rgba(0, 0, 0, 0.2);
-
-  &:not(:disabled) {
-    cursor: pointer;
-
-    &:hover {
-      border-color: rgba(0, 0, 0, 0.3);
-      background: rgba(0, 0, 0, 0.4);
-    }
-  }
-}
-
-@mixin slider-thumb {
-  $size: 14px;
-  cursor: grab;
-
-  appearance: none;
-  transition: 0.2s ease all;
-  width: $size;
-  height: $size;
-
-  border-radius: 50%;
-  background: var(--white);
-  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.slider::-webkit-slider-thumb {
-  @include slider-thumb;
-}
-
-.slider::-moz-range-thumb {
-  @include slider-thumb;
-}
-.slider:disabled::-webkit-slider-thumb {
-  display: none;
-}
-.slider:disabled::-moz-slider-thumb {
-  display: none;
 }

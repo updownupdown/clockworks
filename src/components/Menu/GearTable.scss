@@ -1,0 +1,64 @@
+// Gear List
+.gear-table {
+  border-collapse: collapse;
+
+  td,
+  th {
+    padding: 6px;
+    font-size: 14px;
+    color: white;
+
+    &:first-child {
+      padding-left: 12px;
+    }
+    &:last-child {
+      padding-right: 12px;
+    }
+  }
+
+  th {
+    font-weight: 700;
+  }
+
+  .cell-gear-num {
+    font-weight: 700;
+  }
+  .cell-gear-num,
+  .cell-gear-teeth,
+  .cell-gear-ratio {
+    text-align: center;
+  }
+  .cell-gear-speed,
+  .cell-gear-angle {
+    text-align: right;
+  }
+
+  &__row {
+    cursor: pointer;
+    border-radius: 4px;
+
+    &--current {
+      box-shadow: 0 0 0 1px rgba(var(--white-rgb), 0.7);
+    }
+
+    &--current,
+    &:hover {
+      background: rgba(var(--white-rgb), 0.12);
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+
+      path {
+        fill: white;
+      }
+    }
+
+    &--unlocked {
+      svg {
+        opacity: 0.2;
+      }
+    }
+  }
+}

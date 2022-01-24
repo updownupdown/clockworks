@@ -1,12 +1,17 @@
 import { GearProps } from "./Gear";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
+import { HandsProps } from "../Menu/Menu";
+import HandHours from "../Hands/HandHours";
+import HandMinutes from "../Hands/HandMinutes";
+import HandSeconds from "../Hands/HandSeconds";
 import clsx from "clsx";
 
 export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
   isSelected: boolean,
-  isPendulum: boolean
+  isPendulum: boolean,
+  hands: HandsProps
 ) => {
   if (
     rpm === undefined ||
@@ -78,57 +83,66 @@ export const DrawGear = (
   }
 
   return (
-    <svg
+    <div
       className={clsx(
         "gear",
         isSelected && "gear--selected",
         isEscapementGear && "gear--escapement"
       )}
-      height={c * 2}
-      width={c * 2}
-      viewBox={`-1 -1 ${c * 2 + 2} ${c * 2 + 2}`}
       style={{
         animationDuration: `${Math.abs(60 / rpm)}s`,
         animationDirection: clockwise ? "normal" : "reverse",
       }}
     >
-      <polygon
-        className="gear-shape"
-        transform={`translate(${c}, ${c})`}
-        points={svgPoints.toString()}
-      ></polygon>
+      <div className="clock-hand">
+        {hands.hours === index && <HandHours />}
+        {hands.minutes === index && <HandMinutes />}
+        {hands.seconds === index && <HandSeconds />}
+      </div>
 
-      <circle
-        className="gear-center"
-        r={holeSize}
-        transform={`translate(${c}, ${c})`}
-      ></circle>
+      <svg
+        height={c * 2}
+        width={c * 2}
+        viewBox={`-1 -1 ${c * 2 + 2} ${c * 2 + 2}`}
+      >
+        <polygon
+          className="gear-shape"
+          transform={`translate(${c}, ${c})`}
+          points={svgPoints.toString()}
+        ></polygon>
 
-      <circle
-        className="gear-indicator"
-        r="6"
-        fill="none"
-        transform={`translate(${c}, ${p * 2})`}
-      ></circle>
+        <circle
+          className="gear-center"
+          r={holeSize}
+          transform={`translate(${c}, ${c})`}
+        ></circle>
 
-      <circle
-        className="gear-pitch"
-        r={p}
-        fill="none"
-        transform={`translate(${c}, ${c})`}
-      ></circle>
+        <circle
+          className="gear-indicator"
+          r="6"
+          fill="none"
+          transform={`translate(${c}, ${p * 2})`}
+        ></circle>
 
-      <path
-        className="gear-textpath"
-        id={`textpath-${r}`}
-        d={`M ${textRad},0 A ${textRad},${textRad} 0 0 1 -${textRad},0 A ${textRad},${textRad} 0 0 1 ${textRad},0`}
-        transform={`translate(${c},${c})`}
-      />
-      <text className="gear-text">
-        <textPath fontSize={`${textSize}px`} href={`#textpath-${r}`}>
-          {displayText}
-        </textPath>
-      </text>
-    </svg>
+        <circle
+          className="gear-pitch"
+          r={p}
+          fill="none"
+          transform={`translate(${c}, ${c})`}
+        ></circle>
+
+        <path
+          className="gear-textpath"
+          id={`textpath-${r}`}
+          d={`M ${textRad},0 A ${textRad},${textRad} 0 0 1 -${textRad},0 A ${textRad},${textRad} 0 0 1 ${textRad},0`}
+          transform={`translate(${c},${c})`}
+        />
+        <text className="gear-text">
+          <textPath fontSize={`${textSize}px`} href={`#textpath-${r}`}>
+            {displayText}
+          </textPath>
+        </text>
+      </svg>
+    </div>
   );
 };

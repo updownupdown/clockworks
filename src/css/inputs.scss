@@ -1,0 +1,73 @@
+// Number
+input[type="number"] {
+  transition: 0.25s ease border;
+  height: 38px;
+
+  border-radius: 2px;
+  border: 1px solid rgba(var(--black-rgb), 0.2);
+  background: rgba(var(--black-rgb), 0.2);
+
+  font-weight: 700;
+  color: white;
+  text-align: center;
+
+  &:hover {
+    border-color: rgba(var(--white-rgb), 0.6);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(var(--white-rgb), 0.9);
+  }
+}
+
+// Range Slider
+input[type="range"] {
+  appearance: none;
+  outline: none;
+
+  transition: 0.2s ease background;
+  height: 6px;
+  margin: 14px 0;
+
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      border-color: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+    }
+  }
+}
+
+@mixin slider-thumb {
+  $size: 14px;
+  cursor: grab;
+
+  appearance: none;
+  transition: 0.2s ease all;
+  width: $size;
+  height: $size;
+
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-webkit-slider-thumb {
+  @include slider-thumb;
+}
+
+.slider::-moz-range-thumb {
+  @include slider-thumb;
+}
+.slider:disabled::-webkit-slider-thumb {
+  display: none;
+}
+.slider:disabled::-moz-slider-thumb {
+  display: none;
+}
