@@ -5,6 +5,8 @@
   gap: 8px;
   padding: 20px 12px;
 
+  border-top: 1px solid rgba(var(--white-rgb), 0.2);
+
   &__header {
     display: flex;
     align-items: center;
@@ -66,19 +68,13 @@
     gap: 12px;
 
     span {
-      width: 48px;
+      width: 90px;
       color: white;
       font-weight: 600;
     }
 
-    input[type="number"] {
-      width: 70px;
-
-      font-size: 16px;
-    }
     input[type="range"] {
       flex: 1;
-      min-width: 50px;
     }
   }
 }

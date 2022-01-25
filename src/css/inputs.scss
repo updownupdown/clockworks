@@ -1,13 +1,22 @@
+@mixin inputProps {
+  height: 38px;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 0 8px;
+}
+
 // Number
 input[type="number"] {
+  transition: 0.1s ease border;
+  @include inputProps;
+
   transition: 0.25s ease border;
-  height: 38px;
+  width: 70px;
 
   border-radius: 2px;
   border: 1px solid rgba(var(--black-rgb), 0.2);
   background: rgba(var(--black-rgb), 0.2);
 
-  font-weight: 700;
   color: white;
   text-align: center;
 
@@ -21,12 +30,34 @@ input[type="number"] {
   }
 }
 
+// Select
+select {
+  @include inputProps;
+  transition: 0.1s ease border;
+  cursor: pointer;
+
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
+
+  color: var(--white);
+
+  &:hover {
+    border-color: rgba(var(--white-rgb), 0.6);
+  }
+
+  * {
+    background: white;
+    color: black;
+  }
+}
+
 // Range Slider
 input[type="range"] {
-  appearance: none;
-  outline: none;
-
   transition: 0.2s ease background;
+  appearance: none;
+
+  min-width: 50px;
   height: 6px;
   margin: 14px 0;
 
@@ -58,16 +89,16 @@ input[type="range"] {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.slider::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb {
   @include slider-thumb;
 }
 
-.slider::-moz-range-thumb {
+input[type="range"]::-moz-range-thumb {
   @include slider-thumb;
 }
-.slider:disabled::-webkit-slider-thumb {
+input[type="range"]:disabled::-webkit-slider-thumb {
   display: none;
 }
-.slider:disabled::-moz-slider-thumb {
+input[type="range"]:disabled::-moz-slider-thumb {
   display: none;
 }

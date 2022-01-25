@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function Pause(props: React.SVGProps<SVGSVGElement>) {
+function ZoomReset(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width={24}
@@ -15,4 +15,4 @@ function Pause(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export default Pause;
+export default ZoomReset;

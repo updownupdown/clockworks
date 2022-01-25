@@ -1,4 +1,3 @@
-import React from "react";
 import { GearProps } from "./Gear";
 
 export const defaultNewGear: GearProps = {
@@ -52,7 +51,7 @@ export const defaultGears: GearProps[] = [
     fixed: true,
   },
   {
-    teeth: 38,
+    teeth: 37,
     parentOffset: -130,
   },
   {

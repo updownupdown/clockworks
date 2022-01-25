@@ -7,8 +7,8 @@ import Pendulum from "../Icons/Pendulum";
 import Battery from "../Icons/Battery";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
+import { Gauge } from "./Gauge";
 import "./Menu.scss";
-
 export interface HandsProps {
   seconds: number;
   minutes: number;
@@ -55,171 +55,180 @@ export const Menu = ({
   const [showMenu, setShowMenu] = useState(
     window.innerWidth > 600 ? true : false
   );
+  const [tolerance, setTolerance] = useState(10);
 
   function addGear(gear: GearProps) {
     setGears([...gears, gear]);
   }
 
-  const options = (
-    <>
-      {gears.map((val, index) => {
-        return (
-          <option value={index} key={index}>
-            {index}
-          </option>
-        );
-      })}
-    </>
-  );
-
   return (
     <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
-      <button
-        className="toggle-menu-button"
-        onClick={() => setShowMenu(!showMenu)}
-      >
-        {showMenu ? "Hide Menu" : "Show Menu"}
-      </button>
-
-      <div className="menu__hands">
-        <div className="menu__hands__section">
-          <span>Gear</span>
-        </div>
-        <div className="menu__hands__section">
-          <span>Hours</span>
-          <select
-            value={hands.hours}
-            onChange={(e) => {
-              setHands({
-                ...hands,
-                hours: Number(e.target.value),
-              });
-            }}
+      <div className="menu__title">
+        <div className="menu__title__text">
+          <h1>Clockworks</h1>
+          <a
+            href="https://github.com/updownupdown/clockworks"
+            target="_blank"
+            rel="noreferrer"
           >
-            {options}
-          </select>
-
-          <span>
-            RPD:{" "}
-            {gears[hands.hours] !== undefined &&
-            gears[hands.hours].rpm !== undefined
-              ? Math.round(gears[hands.hours].rpm! * 60 * 24 * 100) / 100
-              : "N/A"}
-          </span>
+            About
+          </a>
         </div>
 
-        <div className="menu__hands__section">
-          <span>Minutes</span>
-          <select
-            value={hands.minutes}
-            onChange={(e) => {
-              setHands({
-                ...hands,
-                minutes: Number(e.target.value),
-              });
-            }}
-          >
-            {options}
-          </select>
-
-          <span>
-            RPH:{" "}
-            {gears[hands.minutes] !== undefined &&
-            gears[hands.minutes].rpm !== undefined
-              ? Math.round(gears[hands.minutes].rpm! * 60 * 100) / 100
-              : "N/A"}
-          </span>
-        </div>
-
-        <div className="menu__hands__section">
-          <span>Seconds</span>
-          <select
-            value={hands.seconds}
-            onChange={(e) => {
-              setHands({
-                ...hands,
-                seconds: Number(e.target.value),
-              });
-            }}
-          >
-            {options}
-          </select>
-
-          <span>
-            RPM:{" "}
-            {gears[hands.minutes] !== undefined &&
-            gears[hands.minutes].rpm !== undefined
-              ? Math.round(gears[hands.seconds].rpm! * 100) / 100
-              : "N/A"}
-          </span>
-        </div>
+        <button
+          className="toggle-menu-button"
+          onClick={() => setShowMenu(!showMenu)}
+        >
+          {showMenu ? "Hide Menu" : "Show Menu"}
+        </button>
       </div>
 
-      <div className="menu__speed">
-        <button
-          className="movement-button movement-button--pause"
-          onClick={() => setIsPaused(!isPaused)}
-        >
-          {isPaused ? <Play /> : <Pause />}
-        </button>
+      <div className="menu__section">
+        <div className="menu__gauges">
+          <Gauge
+            assignedGear={hands.hours}
+            gear={gears[hands.hours]}
+            hand="hour"
+            unit="Day"
+            multiplier={60 * 24}
+            tolerance={tolerance}
+            setHands={(value) => {
+              setHands({
+                ...hands,
+                hours: value,
+              });
+            }}
+            numGears={gears.length}
+          />
 
-        <div className="menu__speed__rpm">
+          <Gauge
+            assignedGear={hands.minutes}
+            gear={gears[hands.minutes]}
+            hand="minutes"
+            unit="Minute"
+            multiplier={60}
+            tolerance={tolerance}
+            setHands={(value) => {
+              setHands({
+                ...hands,
+                minutes: value,
+              });
+            }}
+            numGears={gears.length}
+          />
+
+          <Gauge
+            assignedGear={hands.seconds}
+            gear={gears[hands.seconds]}
+            hand="second"
+            unit="Second"
+            multiplier={1}
+            tolerance={tolerance}
+            setHands={(value) => {
+              setHands({
+                ...hands,
+                seconds: value,
+              });
+            }}
+            numGears={gears.length}
+          />
+        </div>
+
+        <div className="menu__tolerance">
+          <span>Tolerance (%)</span>
           <input
-            type="number"
-            min={isPendulum ? 0.25 : 1}
-            max={isPendulum ? 5 : 20}
-            step={isPendulum ? 0.25 : 1}
-            value={isPendulum ? globalHertz : globalRpm}
+            type="range"
+            min="0"
+            max="100"
+            step="1"
+            value={tolerance}
             onChange={(e) => {
-              if (isPendulum) {
-                setGlobalHertz(Number(e.target.value));
-              } else {
-                setGlobalRpm(Number(e.target.value));
-              }
+              setTolerance(Number(e.target.value));
             }}
           />
-          <span>{isPendulum ? "Hz" : "RPM"}</span>
-        </div>
 
-        <div className="menu__speed__type">
-          <button
-            className="movement-button movement-button--type"
-            onClick={() => setIsPendulum(true)}
-            disabled={isPendulum}
-          >
-            <Pendulum />
-          </button>
-
-          <button
-            className="movement-button movement-button--type"
-            onClick={() => setIsPendulum(false)}
-            disabled={!isPendulum}
-          >
-            <Battery />
-          </button>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            step="1"
+            value={tolerance}
+            onChange={(e) => {
+              setTolerance(Number(e.target.value));
+            }}
+          />
         </div>
       </div>
 
-      <GearTable
-        gears={gears}
-        selectedGear={selectedGear}
-        setSelectedGear={setSelectedGear}
-      />
+      <div className="menu__section">
+        <div className="menu__speed">
+          <button
+            className="movement-button movement-button--pause"
+            onClick={() => setIsPaused(!isPaused)}
+          >
+            {isPaused ? <Play /> : <Pause />}
+          </button>
 
-      <button
-        className="add-gear-button"
-        onClick={() => addGear(defaultNewGear)}
-      >
-        Add Gear
-      </button>
+          <div className="menu__speed__rpm">
+            <input
+              type="number"
+              min={isPendulum ? 0.25 : 1}
+              max={isPendulum ? 5 : 20}
+              step={isPendulum ? 0.25 : 1}
+              value={isPendulum ? globalHertz : globalRpm}
+              onChange={(e) => {
+                if (isPendulum) {
+                  setGlobalHertz(Number(e.target.value));
+                } else {
+                  setGlobalRpm(Number(e.target.value));
+                }
+              }}
+            />
+            <span>{isPendulum ? "Hz" : "RPM"}</span>
+          </div>
 
-      <GearMenu
-        gears={gears}
-        setGears={setGears}
-        selectedGear={selectedGear}
-        setSelectedGear={setSelectedGear}
-        isPendulum={isPendulum}
-      />
+          <div className="menu__speed__type">
+            <button
+              className="movement-button movement-button--type"
+              onClick={() => setIsPendulum(true)}
+              disabled={isPendulum}
+            >
+              <Pendulum />
+            </button>
+
+            <button
+              className="movement-button movement-button--type"
+              onClick={() => setIsPendulum(false)}
+              disabled={!isPendulum}
+            >
+              <Battery />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="menu__section">
+        <GearTable
+          gears={gears}
+          selectedGear={selectedGear}
+          setSelectedGear={setSelectedGear}
+        />
+
+        <button
+          className="add-gear-button"
+          onClick={() => addGear(defaultNewGear)}
+        >
+          Add Gear
+        </button>
+
+        <GearMenu
+          gears={gears}
+          setGears={setGears}
+          selectedGear={selectedGear}
+          setSelectedGear={setSelectedGear}
+          isPendulum={isPendulum}
+        />
+      </div>
     </div>
   );
 };

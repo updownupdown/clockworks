@@ -86,7 +86,7 @@ export function calculateGear(
   if (isPendulum && index === 1) gear.fixed = true;
 
   // Shape parameters
-  const toothSize = 40;
+  const toothSize = 28;
   const pressure_angle = 25;
   const backlash = 6;
   const clearance = 4;

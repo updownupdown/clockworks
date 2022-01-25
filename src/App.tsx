@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
 import { defaultGears } from "./components/Gear/defaultGears";
@@ -10,6 +10,7 @@ import ZoomIn from "./components/Icons/ZoomIn";
 import ZoomOut from "./components/Icons/ZoomOut";
 import ZoomReset from "./components/Icons/ZoomReset";
 import { HandsProps } from "./components/Menu/Menu";
+import { useRef } from "react";
 
 const canvasWidth = 4000;
 const canvasRatio = 0.75;
@@ -33,64 +34,89 @@ function App() {
     seconds: 1,
   });
 
+  const pendulumSwing = useRef(0);
+
   useEffect(() => {
     setGears(defaultGears);
   }, []);
 
-  const handleGearClick = (index: number) => {
-    if (selectedGear === index) {
-      if (
-        gears[index - 1] !== undefined &&
-        Object.entries(gears[index].positionOffset).toString() ===
-          Object.entries(gears[index - 1].positionOffset).toString()
-      ) {
-        setSelectedGear(index - 1);
-      } else if (
-        gears[index + 1] !== undefined &&
-        Object.entries(gears[index].positionOffset).toString() ===
-          Object.entries(gears[index + 1].positionOffset).toString()
-      ) {
-        setSelectedGear(index + 1);
+  const handleGearClick = useCallback(
+    (index: number) => {
+      if (selectedGear === index) {
+        if (
+          gears[index - 1] !== undefined &&
+          Object.entries(gears[index].positionOffset).toString() ===
+            Object.entries(gears[index - 1].positionOffset).toString()
+        ) {
+          setSelectedGear(index - 1);
+        } else if (
+          gears[index + 1] !== undefined &&
+          Object.entries(gears[index].positionOffset).toString() ===
+            Object.entries(gears[index + 1].positionOffset).toString()
+        ) {
+          setSelectedGear(index + 1);
+        }
+      } else {
+        setSelectedGear(index);
       }
-    } else {
-      setSelectedGear(index);
-    }
-  };
+    },
+    [gears, selectedGear]
+  );
 
-  const DrawGears = (globalRpm: number) => {
-    calculateGears(gears, globalRpm, globalHertz, isPendulum);
+  const DrawGears = useCallback(
+    (globalRpm: number) => {
+      calculateGears(gears, globalRpm, globalHertz, isPendulum);
 
-    return gears.map((gear, index) => {
-      const isSelected = index === selectedGear;
+      // Prevent transitions when editing gears in smooth mode
+      // Need solution for pendulum mode
+      if (!isPendulum) {
+        document.body.classList.add("disable-animations");
+        setTimeout(() => {
+          document.body.classList.remove("disable-animations");
+        }, 0);
+      }
 
-      const pendulumAngleIncrement = !isPendulum
-        ? 0
-        : gear.pendulumAngleIncrement;
+      return gears.map((gear, index) => {
+        const isSelected = index === selectedGear;
 
-      return (
-        <span
-          key={index}
-          className={clsx(
-            `gear-wrap gear-wrap-${index}`,
-            isSelected && "gear-wrap--selected"
-          )}
-          style={{
-            left: `${gear.positionOffset.x}px`,
-            top: `${gear.positionOffset.y}px`,
-            transform: `translateX(-50%) translateY(-50%) rotate(${
-              gear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
-            }deg)`,
-            transitionDuration: `${1 / globalHertz}s`,
-          }}
-          onClick={() => {
-            handleGearClick(index);
-          }}
-        >
-          {DrawGear(gear, index, isSelected, isPendulum, hands)}
-        </span>
-      );
-    });
-  };
+        const pendulumAngleIncrement = !isPendulum
+          ? 0
+          : gear.pendulumAngleIncrement;
+
+        return (
+          <span
+            key={index}
+            className={clsx(
+              `gear-wrap gear-wrap-${index}`,
+              isSelected && "gear-wrap--selected"
+            )}
+            style={{
+              left: `${gear.positionOffset.x}px`,
+              top: `${gear.positionOffset.y}px`,
+              transform: `translateX(-50%) translateY(-50%) rotate(${
+                gear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
+              }deg)`,
+              transitionDuration: `${1 / globalHertz}s`,
+            }}
+            onClick={() => {
+              handleGearClick(index);
+            }}
+          >
+            {DrawGear(gear, index, isSelected, isPendulum, hands)}
+          </span>
+        );
+      });
+    },
+    [
+      gears,
+      globalHertz,
+      handleGearClick,
+      hands,
+      isPendulum,
+      pendulumIncrement,
+      selectedGear,
+    ]
+  );
 
   const [halfStep, setHalfStep] = useState(false);
 
@@ -101,7 +127,6 @@ function App() {
       const tick = setInterval(() => {
         if (!halfStep) {
           setPendulumIncrement(pendulumIncrement + 1);
-        } else {
         }
 
         setHalfStep(!halfStep);
@@ -111,11 +136,18 @@ function App() {
         clearInterval(tick);
       };
     }
-  }, [DrawGears, isPendulum, globalHertz, isPaused]);
+  }, [
+    DrawGears,
+    isPendulum,
+    globalHertz,
+    isPaused,
+    halfStep,
+    pendulumIncrement,
+  ]);
 
   const memoedGears = useMemo(
     () => DrawGears(globalRpm),
-    [gears, globalRpm, selectedGear, pendulumIncrement, isPendulum, hands]
+    [globalRpm, DrawGears]
   );
 
   // Pendulum
@@ -155,8 +187,8 @@ function App() {
       <TransformWrapper
         initialScale={1}
         minScale={0.2}
-        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2 - 200}
-        initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 300}
+        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
+        initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 200}
         limitToBounds={false}
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (

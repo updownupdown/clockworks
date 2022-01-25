@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { GearProps } from "../Gear/Gear";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
@@ -12,9 +13,18 @@ interface Props {
 }
 
 export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
+  const [showColumn, setShowColumn] = useState("RPM");
+
   const gearList = gears.map((gear, index) => {
     const displayRatio =
       index === 0 || gear.fixed ? "-" : ratioDisplay(gear.ratio!);
+
+    let displaySpeedMultiplier = 1;
+    if (showColumn === "RPH") displaySpeedMultiplier = 60;
+    if (showColumn === "RPD") displaySpeedMultiplier = 60 * 24;
+
+    let displaySpeed =
+      Math.round(gear.rpm! * 100 * displaySpeedMultiplier) / 100;
 
     return (
       <tr
@@ -34,31 +44,46 @@ export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
         <td className="cell-gear-num">{index + 1}</td>
         <td className="cell-gear-teeth">{gear.teeth}</td>
         <td className="cell-gear-ratio">{displayRatio}</td>
-        <td className="cell-gear-speed">{Math.round(gear.rpm! * 100) / 100}</td>
-        <td className="cell-gear-speed">
-          {Math.round(gear.rpm! * 60 * 100) / 100}
-        </td>
-        <td className="cell-gear-speed">
-          {Math.round(gear.rpm! * 60 * 24 * 100) / 100}
-        </td>
+        <td className="cell-gear-speed">{displaySpeed}</td>
       </tr>
     );
   });
 
   return (
-    <table className="gear-table">
-      <thead>
-        <tr>
-          <th className="cell-gear-fixed">&nbsp;</th>
-          <th className="cell-gear-num">#</th>
-          <th className="cell-gear-teeth">Teeth</th>
-          <th className="cell-gear-ratio">Ratio</th>
-          <th className="cell-gear-speed">RPM</th>
-          <th className="cell-gear-speed">RPH</th>
-          <th className="cell-gear-speed">RPD</th>
-        </tr>
-      </thead>
-      <tbody>{gearList}</tbody>
-    </table>
+    <>
+      <div className="table-select">
+        <span>Show rotation per</span>
+        <button
+          onClick={() => setShowColumn("RPM")}
+          disabled={showColumn === "RPM"}
+        >
+          minute
+        </button>
+        <button
+          onClick={() => setShowColumn("RPH")}
+          disabled={showColumn === "RPH"}
+        >
+          hour
+        </button>
+        <button
+          onClick={() => setShowColumn("RPD")}
+          disabled={showColumn === "RPD"}
+        >
+          day
+        </button>
+      </div>
+      <table className="gear-table">
+        <thead>
+          <tr>
+            <th className="cell-gear-fixed">&nbsp;</th>
+            <th className="cell-gear-num">#</th>
+            <th className="cell-gear-teeth">Teeth</th>
+            <th className="cell-gear-ratio">Ratio</th>
+            <th className="cell-gear-speed">{showColumn}</th>
+          </tr>
+        </thead>
+        <tbody>{gearList}</tbody>
+      </table>
+    </>
   );
 };

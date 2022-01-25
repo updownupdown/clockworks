@@ -40,19 +40,14 @@ export const GearMenu = ({
 
   function removeGear(gear: number) {
     const newGears = gears.filter((element, index) => index !== gear);
-    document.body.classList.add("disable-animations");
     setGears(newGears);
     setSelectedGear(undefined);
-
-    setTimeout(() => {
-      document.body.classList.remove("disable-animations");
-    }, 0);
   }
 
   if (selectedGear === undefined || gears.length === 0) return <span />;
 
   const gear = gears[selectedGear];
-  const isEscapementGear = isPendulum && selectedGear == 1;
+  const isEscapementGear = isPendulum && selectedGear === 1;
 
   return (
     <div className="gear-menu">
@@ -83,10 +78,9 @@ export const GearMenu = ({
         <span>Teeth</span>
 
         <input
-          className="slider"
           type="range"
-          min="4"
-          max="80"
+          min="5"
+          max="100"
           step="1"
           value={gear.teeth}
           onChange={(e) =>
@@ -97,8 +91,8 @@ export const GearMenu = ({
 
         <input
           type="number"
-          min="4"
-          max="80"
+          min="5"
+          max="100"
           step="1"
           value={gear.teeth}
           onChange={(e) =>
@@ -109,10 +103,9 @@ export const GearMenu = ({
       </div>
 
       <div className="gear-menu__setting">
-        <span>Angle</span>
+        <span>Orientation</span>
 
         <input
-          className="slider"
           type="range"
           min="-180"
           max="180"

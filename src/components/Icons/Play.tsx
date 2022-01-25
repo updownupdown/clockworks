@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function ArrowDown(props: React.SVGProps<SVGSVGElement>) {
+function Play(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width={24}
@@ -15,4 +15,4 @@ function ArrowDown(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export default ArrowDown;
+export default Play;

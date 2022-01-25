@@ -70,7 +70,7 @@ export const DrawGear = (
   const holeFactor = 0.5;
   const textSize = r * 0.2;
   const holeSize = r * holeFactor;
-  const textRad = r * (holeFactor + 1) * 0.5 - textSize / 2;
+  const textRad = r * (holeFactor + 1) * 0.5 - textSize / 4;
 
   const displayRatio = ratioDisplay(ratio);
 
@@ -119,7 +119,7 @@ export const DrawGear = (
 
         <circle
           className="gear-indicator"
-          r="6"
+          r="4"
           fill="none"
           transform={`translate(${c}, ${p * 2})`}
         ></circle>
