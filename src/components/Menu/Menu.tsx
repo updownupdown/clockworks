@@ -212,7 +212,7 @@ export const Menu = ({
         />
 
         <button
-          className="add-gear-button"
+          className="menu-button menu-button--add-gear"
           onClick={() => addGear(defaultNewGear)}
         >
           Add Gear

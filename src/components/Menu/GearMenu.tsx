@@ -82,9 +82,28 @@ export const GearMenu = ({
 
     // remove gear
     const newGears = gears.filter((element, index) => index !== gear);
+
+    // change selected gear
+    let newSelectedGear = undefined;
+    if (gear + 1 < gears.length) {
+      newSelectedGear = gear;
+    } else if (gear > 1) {
+      newSelectedGear = gear - 1;
+    }
+
     setGears(newGears);
-    setSelectedGear(undefined);
+    setSelectedGear(newSelectedGear);
   }
+
+  const handleShiftGear = (index: number, shiftDown: boolean) => {
+    const newGears = [...gears];
+    const newPos = shiftDown ? index - 1 : index + 1;
+
+    newGears.splice(newPos, 0, newGears.splice(index, 1)[0]);
+
+    setGears(newGears);
+    setSelectedGear(newPos);
+  };
 
   if (selectedGear === undefined || gears.length === 0) return <span />;
 
@@ -108,12 +127,14 @@ export const GearMenu = ({
             {gear.fixed ? <Locked /> : <Unlocked />}
           </button>
         )}
-        <button
-          className="gear-menu-button"
-          onClick={() => removeGear(selectedGear)}
-        >
-          <Delete />
-        </button>
+        {gears.length > 1 && (
+          <button
+            className="gear-menu-button"
+            onClick={() => removeGear(selectedGear)}
+          >
+            <Delete />
+          </button>
+        )}
       </div>
 
       <div className="gear-menu__setting">
@@ -170,6 +191,23 @@ export const GearMenu = ({
           }
           disabled={gear.fixed}
         />
+      </div>
+
+      <div className="gear-menu__shift">
+        <button
+          className="menu-button"
+          onClick={() => handleShiftGear(selectedGear, true)}
+          disabled={selectedGear === 0}
+        >
+          Move Gear Up
+        </button>
+        <button
+          className="menu-button"
+          onClick={() => handleShiftGear(selectedGear, false)}
+          disabled={selectedGear === gears.length - 1}
+        >
+          Move Gear Down
+        </button>
       </div>
     </div>
   );
