@@ -2,14 +2,14 @@ import { GearProps } from "../Gear/Gear";
 import "./Gauge.scss";
 
 interface Props {
-  gear: GearProps;
+  gear: GearProps | undefined;
   unit: string;
   hand: string;
   multiplier: number;
   tolerance: number;
   setHands: (value: number) => void;
   numGears: number;
-  assignedGear: number;
+  assignedGear: number | undefined;
 }
 
 export const Gauge = ({
@@ -22,21 +22,31 @@ export const Gauge = ({
   numGears,
   assignedGear,
 }: Props) => {
-  if (gear === undefined || gear.rpm === undefined) return <span />;
+  const hasAssignedGear = gear !== undefined && gear.rpm !== undefined;
 
-  const speed = Math.round(gear.rpm * multiplier * 100) / 100;
-  const range = hand === "hour" ? 2 : 1;
-  const gaugePosition = speed / range;
+  let isInRange = false;
+  let indicatorPosition = 0;
+  let speed = 0;
 
-  let indicatorPosition = gaugePosition / 2;
-  if (indicatorPosition < 0) indicatorPosition = 0;
-  if (indicatorPosition > 1) indicatorPosition = 1;
+  if (hasAssignedGear) {
+    speed = Math.round(gear.rpm! * multiplier * 100) / 100;
+    const range = hand === "hour" ? 2 : 1;
+    const gaugePosition = speed / range;
 
-  const isInRange =
-    indicatorPosition < 0.5 + tolerance / 100 / 2 &&
-    indicatorPosition > 0.5 - tolerance / 100 / 2;
+    indicatorPosition = gaugePosition / 2;
+    if (indicatorPosition < 0) indicatorPosition = 0;
+    if (indicatorPosition > 1) indicatorPosition = 1;
 
-  const options = [];
+    isInRange =
+      indicatorPosition < 0.5 + tolerance / 100 / 2 &&
+      indicatorPosition > 0.5 - tolerance / 100 / 2;
+  }
+
+  const options = [
+    <option value={undefined} key="undefined">
+      --
+    </option>,
+  ];
   for (let i = 0; i < numGears; i++) {
     options.push(
       <option value={i} key={i}>

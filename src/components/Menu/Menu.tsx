@@ -9,10 +9,11 @@ import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
 import "./Menu.scss";
+
 export interface HandsProps {
-  seconds: number;
-  minutes: number;
-  hours: number;
+  seconds: number | undefined;
+  minutes: number | undefined;
+  hours: number | undefined;
 }
 
 interface Props {
@@ -28,11 +29,7 @@ interface Props {
   setSelectedGear: (value: number | undefined) => void;
   isPendulum: boolean;
   setIsPendulum: (value: boolean) => void;
-  hands: {
-    seconds: number;
-    minutes: number;
-    hours: number;
-  };
+  hands: HandsProps;
   setHands: (hands: HandsProps) => void;
 }
 
@@ -87,7 +84,7 @@ export const Menu = ({
         <div className="menu__gauges">
           <Gauge
             assignedGear={hands.hours}
-            gear={gears[hands.hours]}
+            gear={hands.hours ? gears[hands.hours] : undefined}
             hand="hour"
             unit="Day"
             multiplier={60 * 24}
@@ -103,7 +100,7 @@ export const Menu = ({
 
           <Gauge
             assignedGear={hands.minutes}
-            gear={gears[hands.minutes]}
+            gear={hands.minutes ? gears[hands.minutes] : undefined}
             hand="minutes"
             unit="Minute"
             multiplier={60}
@@ -119,7 +116,7 @@ export const Menu = ({
 
           <Gauge
             assignedGear={hands.seconds}
-            gear={gears[hands.seconds]}
+            gear={hands.seconds ? gears[hands.seconds] : undefined}
             hand="second"
             unit="Second"
             multiplier={1}
@@ -227,6 +224,8 @@ export const Menu = ({
           selectedGear={selectedGear}
           setSelectedGear={setSelectedGear}
           isPendulum={isPendulum}
+          hands={hands}
+          setHands={setHands}
         />
       </div>
     </div>

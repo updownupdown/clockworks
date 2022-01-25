@@ -2,8 +2,10 @@ import { GearProps } from "../Gear/Gear";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
+import { HandsProps } from "./Menu";
 import clsx from "clsx";
 import "./GearMenu.scss";
+import HandSeconds from "../Hands/HandSeconds";
 
 interface Props {
   gears: GearProps[];
@@ -11,6 +13,8 @@ interface Props {
   selectedGear: number | undefined;
   setSelectedGear: (value: number | undefined) => void;
   isPendulum: boolean;
+  hands: HandsProps;
+  setHands: (hands: HandsProps) => void;
 }
 
 export const GearMenu = ({
@@ -19,6 +23,8 @@ export const GearMenu = ({
   setSelectedGear,
   setGears,
   isPendulum,
+  hands,
+  setHands,
 }: Props) => {
   const handleTeethChange = (index: number, value: number) => {
     const newGears = [...gears];
@@ -39,6 +45,42 @@ export const GearMenu = ({
   }
 
   function removeGear(gear: number) {
+    const newHands: HandsProps = { ...hands };
+
+    // unassign hands from gears
+    if (
+      hands.hours === gear ||
+      (hands.hours !== undefined && hands.hours === gears.length - 1)
+    ) {
+      newHands.hours = undefined;
+    }
+    if (
+      hands.minutes === gear ||
+      (hands.minutes !== undefined && hands.minutes === gears.length - 1)
+    ) {
+      newHands.minutes = undefined;
+    }
+    if (
+      hands.seconds === gear ||
+      (hands.seconds !== undefined && hands.seconds === gears.length - 1)
+    ) {
+      newHands.seconds = undefined;
+    }
+
+    // shift gears if needed
+    if (hands.hours !== undefined && gear < hands.hours) {
+      newHands.hours = hands.hours - 1;
+    }
+    if (hands.minutes !== undefined && gear < hands.minutes) {
+      newHands.minutes = hands.minutes - 1;
+    }
+    if (hands.seconds !== undefined && gear < hands.seconds) {
+      newHands.seconds = hands.seconds - 1;
+    }
+
+    setHands(newHands);
+
+    // remove gear
     const newGears = gears.filter((element, index) => index !== gear);
     setGears(newGears);
     setSelectedGear(undefined);

@@ -10,7 +10,6 @@ import ZoomIn from "./components/Icons/ZoomIn";
 import ZoomOut from "./components/Icons/ZoomOut";
 import ZoomReset from "./components/Icons/ZoomReset";
 import { HandsProps } from "./components/Menu/Menu";
-import { useRef } from "react";
 
 const canvasWidth = 4000;
 const canvasRatio = 0.75;
@@ -33,8 +32,6 @@ function App() {
     minutes: 6,
     seconds: 1,
   });
-
-  const pendulumSwing = useRef(0);
 
   useEffect(() => {
     setGears(defaultGears);
