@@ -1,10 +1,8 @@
 import { GearProps } from "./Gear";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
 import { HandsProps } from "../Menu/Menu";
-import HandHours from "../Hands/HandHours";
-import HandMinutes from "../Hands/HandMinutes";
-import HandSeconds from "../Hands/HandSeconds";
 import clsx from "clsx";
+import { getGearStyles } from "./GearUtils";
 
 export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
@@ -89,17 +87,8 @@ export const DrawGear = (
         isSelected && "gear--selected",
         isEscapementGear && "gear--escapement"
       )}
-      style={{
-        animationDuration: `${Math.abs(60 / rpm)}s`,
-        animationDirection: clockwise ? "normal" : "reverse",
-      }}
+      style={getGearStyles(rpm, clockwise)}
     >
-      <div className="clock-hand">
-        {hands.hours === index && <HandHours />}
-        {hands.minutes === index && <HandMinutes />}
-        {hands.seconds === index && <HandSeconds />}
-      </div>
-
       <svg
         height={c * 2}
         width={c * 2}

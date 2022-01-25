@@ -10,6 +10,11 @@ import ZoomIn from "./components/Icons/ZoomIn";
 import ZoomOut from "./components/Icons/ZoomOut";
 import ZoomReset from "./components/Icons/ZoomReset";
 import { HandsProps } from "./components/Menu/Menu";
+import HandHours from "./components/Hands/HandHours";
+import HandMinutes from "./components/Hands/HandMinutes";
+import HandSeconds from "./components/Hands/HandSeconds";
+import { GearProps } from "./components/Gear/Gear";
+import { getGearWrapStyles, getGearStyles } from "./components/Gear/GearUtils";
 
 const canvasWidth = 4000;
 const canvasRatio = 0.75;
@@ -76,10 +81,6 @@ function App() {
       return gears.map((gear, index) => {
         const isSelected = index === selectedGear;
 
-        const pendulumAngleIncrement = !isPendulum
-          ? 0
-          : gear.pendulumAngleIncrement;
-
         return (
           <span
             key={index}
@@ -87,14 +88,12 @@ function App() {
               `gear-wrap gear-wrap-${index}`,
               isSelected && "gear-wrap--selected"
             )}
-            style={{
-              left: `${gear.positionOffset.x}px`,
-              top: `${gear.positionOffset.y}px`,
-              transform: `translateX(-50%) translateY(-50%) rotate(${
-                gear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
-              }deg)`,
-              transitionDuration: `${1 / globalHertz}s`,
-            }}
+            style={getGearWrapStyles(
+              gear,
+              pendulumIncrement,
+              isPendulum,
+              globalHertz
+            )}
             onClick={() => {
               handleGearClick(index);
             }}
@@ -179,68 +178,110 @@ function App() {
     );
   };
 
+  const DrawHands = () => {
+    let handsOutput: HTMLElement | any = [];
+
+    function drawHand(index: number | undefined, hand: React.ReactNode) {
+      if (index === undefined || gears[index] === undefined) return;
+
+      handsOutput.push(
+        <span
+          className="clock-hand"
+          style={getGearWrapStyles(
+            gears[index],
+            pendulumIncrement,
+            isPendulum,
+            globalHertz
+          )}
+        >
+          <div
+            className="hand"
+            style={getGearStyles(gears[index].rpm, gears[index].clockwise)}
+          >
+            {hand}
+          </div>
+        </span>
+      );
+    }
+
+    drawHand(hands.hours, <HandHours />);
+    drawHand(hands.minutes, <HandMinutes />);
+    drawHand(hands.seconds, <HandSeconds />);
+
+    return handsOutput.map((hand: HTMLElement, index: number) => (
+      <span key={index}>{hand}</span>
+    ));
+  };
+
+  const memoedHands = useMemo(() => DrawHands(), [DrawGears]);
+
   return (
-    <>
-      <TransformWrapper
-        initialScale={1}
-        minScale={0.2}
-        initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
-        initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 200}
-        limitToBounds={false}
-      >
-        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-          <React.Fragment>
-            <div className="canvas-actions">
-              <button onClick={() => zoomOut()}>
-                <ZoomOut />
-              </button>
-              <button onClick={() => zoomIn()}>
-                <ZoomIn />
-              </button>
-              <button onClick={() => resetTransform()}>
-                <ZoomReset />
-              </button>
-            </div>
+    <div className="layout">
+      <div className="layout__menu">
+        <Menu
+          gears={gears}
+          isPaused={isPaused}
+          setIsPaused={setIsPaused}
+          globalRpm={globalRpm}
+          setGlobalRpm={setGlobalRpm}
+          globalHertz={globalHertz}
+          setGlobalHertz={setGlobalHertz}
+          setGears={setGears}
+          selectedGear={selectedGear}
+          setSelectedGear={setSelectedGear}
+          isPendulum={isPendulum}
+          setIsPendulum={setIsPendulum}
+          hands={hands}
+          setHands={setHands}
+        />
+      </div>
 
-            <TransformComponent>
-              <div className="canvas-wrap">
-                <div
-                  className={clsx(
-                    "canvas",
-                    isPaused && "canvas--paused",
-                    !isPendulum ? "canvas--smooth" : "canvas--pendulum"
-                  )}
-                  style={{
-                    width: `${canvasWidth}px`,
-                    height: `${canvasHeight}px`,
-                  }}
-                >
-                  {memoedGears}
-                  {isPendulum && DrawPendulum()}
-                </div>
+      <div className="layout__canvas">
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.2}
+          initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
+          initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 200}
+          limitToBounds={false}
+        >
+          {({ zoomIn, zoomOut, resetTransform }) => (
+            <React.Fragment>
+              <div className="canvas-actions">
+                <button onClick={() => zoomOut()}>
+                  <ZoomOut />
+                </button>
+                <button onClick={() => zoomIn()}>
+                  <ZoomIn />
+                </button>
+                <button onClick={() => resetTransform()}>
+                  <ZoomReset />
+                </button>
               </div>
-            </TransformComponent>
-          </React.Fragment>
-        )}
-      </TransformWrapper>
 
-      <Menu
-        gears={gears}
-        isPaused={isPaused}
-        setIsPaused={setIsPaused}
-        globalRpm={globalRpm}
-        setGlobalRpm={setGlobalRpm}
-        globalHertz={globalHertz}
-        setGlobalHertz={setGlobalHertz}
-        setGears={setGears}
-        selectedGear={selectedGear}
-        setSelectedGear={setSelectedGear}
-        isPendulum={isPendulum}
-        setIsPendulum={setIsPendulum}
-        hands={hands}
-        setHands={setHands}
-      />
-    </>
+              <TransformComponent>
+                <div className="canvas-wrap">
+                  <div
+                    className={clsx(
+                      "canvas",
+                      isPaused && "canvas--paused",
+                      !isPendulum ? "canvas--smooth" : "canvas--pendulum"
+                    )}
+                    style={{
+                      width: `${canvasWidth}px`,
+                      height: `${canvasHeight}px`,
+                    }}
+                  >
+                    {memoedGears}
+                    {memoedHands}
+                    {isPendulum && DrawPendulum()}
+                  </div>
+                </div>
+              </TransformComponent>
+            </React.Fragment>
+          )}
+        </TransformWrapper>
+      </div>
+    </div>
   );
 }
 

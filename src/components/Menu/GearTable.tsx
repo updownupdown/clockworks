@@ -35,7 +35,8 @@ export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
           gear.fixed ? "gear-table__row--locked" : "gear-table__row--unlocked"
         )}
         onClick={() => {
-          setSelectedGear(index);
+          const gearToSelect = selectedGear === index ? undefined : index;
+          setSelectedGear(gearToSelect);
         }}
       >
         <td className="cell-gear-fixed">

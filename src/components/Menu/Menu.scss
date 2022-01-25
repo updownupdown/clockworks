@@ -1,24 +1,19 @@
 .menu {
-  overflow-y: auto;
-  position: fixed;
   z-index: 10;
   top: 0;
   left: 0;
-  padding: 12px;
-  width: 360px;
-
-  max-height: calc(100vh);
+  width: 100%;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
 
   // Title
   &__title {
     display: flex;
     align-items: center;
     gap: 20px;
-    padding: 8px 12px;
+    padding: 20px 12px;
 
     &__text {
       flex: 1;
@@ -68,9 +63,10 @@
     flex-direction: column;
     padding: 20px 12px;
 
-    border-radius: 8px;
-    background: rgba(var(--B600-rgb), 0.8);
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), 0 0 24px rgba(0, 0, 0, 0.15);
+    border-top: 1px solid rgba(var(--white-rgb), 0.2);
+    // border-radius: 8px;
+    // background: rgba(var(--B600-rgb), 0.8);
+    // box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), 0 0 24px rgba(0, 0, 0, 0.15);
 
     .menu--hide & {
       display: none;
@@ -109,7 +105,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 0 12px;
+    padding: 0 6px;
 
     &__type {
       display: flex;
@@ -171,25 +167,27 @@
   }
 }
 
-.menu-button {
-  flex: 1;
-  transition: 0.25s ease background;
-  outline: none;
+.gear-actions {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0;
 
-  border-radius: 4px;
-  background: rgba(var(--white-rgb), 0.1);
+  .menu-button {
+    flex: 1;
+    transition: 0.25s ease background;
+    outline: none;
 
-  padding: 12px;
+    border-radius: 4px;
+    background: rgba(var(--white-rgb), 0.1);
 
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--white);
+    padding: 12px;
 
-  &:hover {
-    background: rgba(var(--white-rgb), 0.3);
-  }
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
 
-  &--add-gear {
-    margin: 12px 0;
+    &:hover {
+      background: rgba(var(--white-rgb), 0.3);
+    }
   }
 }

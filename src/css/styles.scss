@@ -82,6 +82,29 @@ button {
   overflow: hidden;
 }
 
+.layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  &__menu {
+    z-index: 2;
+    width: 380px;
+    height: 100%;
+    overflow-y: auto;
+
+    background: var(--B600);
+    box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.15),
+      2px 4px 40px rgba(0, 0, 0, 0.15);
+  }
+  &__canvas {
+    z-index: 1;
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
 .canvas-wrap {
   width: 100vw;
   height: 100vh;
@@ -159,6 +182,71 @@ button {
 
     &:hover {
       background: rgba(var(--white-rgb), 0.2);
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  // border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(var(--B300-rgb), 0.5);
+  // box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.clock-hand {
+  pointer-events: none;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  aspect-ratio: 1;
+  transform: translateX(-50%) translateY(-50%);
+
+  svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    fill: white;
+  }
+
+  .canvas--pendulum & {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
+  }
+
+  .disable-animations & {
+    transition-property: none;
+  }
+
+  .hand {
+    display: block;
+    width: 100%;
+    height: 100%;
+    animation-iteration-count: infinite;
+
+    .canvas--smooth & {
+      animation-name: spin-hand;
+      animation-timing-function: linear;
+    }
+    .disable-animations &,
+    .canvas--paused.canvas--smooth & {
+      animation-play-state: paused;
+    }
+
+    @keyframes spin-hand {
+      to {
+        transform: rotate(360deg);
+      }
     }
   }
 }

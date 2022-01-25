@@ -2,7 +2,7 @@ import { GearProps } from "./Gear";
 
 export const defaultNewGear: GearProps = {
   teeth: 20,
-  parentOffset: 27,
+  parentOffset: 0,
 };
 
 export const defaultGears: GearProps[] = [

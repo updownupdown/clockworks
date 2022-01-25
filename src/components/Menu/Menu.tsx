@@ -58,6 +58,11 @@ export const Menu = ({
     setGears([...gears, gear]);
   }
 
+  function resetGears() {
+    if (window.confirm("Are you sure you want to delete all gears?"))
+      setGears([]);
+  }
+
   return (
     <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
       <div className="menu__title">
@@ -211,12 +216,21 @@ export const Menu = ({
           setSelectedGear={setSelectedGear}
         />
 
-        <button
-          className="menu-button menu-button--add-gear"
-          onClick={() => addGear(defaultNewGear)}
-        >
-          Add Gear
-        </button>
+        <div className="gear-actions">
+          <button
+            className="menu-button menu-button--add-gear"
+            onClick={() => addGear(defaultNewGear)}
+          >
+            Add Gear
+          </button>
+
+          <button
+            className="menu-button menu-button--reset-gears"
+            onClick={() => resetGears()}
+          >
+            Reset Gears
+          </button>
+        </div>
 
         <GearMenu
           gears={gears}
