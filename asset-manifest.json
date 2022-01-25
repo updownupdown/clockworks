@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/clockworks/static/css/main.c01b862c.css",
-    "main.js": "/clockworks/static/js/main.a2518597.js",
+    "main.css": "/clockworks/static/css/main.bf0b84f5.css",
+    "main.js": "/clockworks/static/js/main.d5ef49d2.js",
     "static/js/787.885ec89f.chunk.js": "/clockworks/static/js/787.885ec89f.chunk.js",
     "index.html": "/clockworks/index.html",
-    "main.c01b862c.css.map": "/clockworks/static/css/main.c01b862c.css.map",
-    "main.a2518597.js.map": "/clockworks/static/js/main.a2518597.js.map",
+    "main.bf0b84f5.css.map": "/clockworks/static/css/main.bf0b84f5.css.map",
+    "main.d5ef49d2.js.map": "/clockworks/static/js/main.d5ef49d2.js.map",
     "787.885ec89f.chunk.js.map": "/clockworks/static/js/787.885ec89f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c01b862c.css",
-    "static/js/main.a2518597.js"
+    "static/css/main.bf0b84f5.css",
+    "static/js/main.d5ef49d2.js"
   ]
 }
