@@ -30,7 +30,7 @@ export const Gauge = ({
 
   if (hasAssignedGear) {
     speed = Math.round(gear.rpm! * multiplier * 100) / 100;
-    const range = hand === "hour" ? 2 : 1;
+    const range = hand === "Hours" ? 2 : 1;
     const gaugePosition = speed / range;
 
     indicatorPosition = gaugePosition / 2;

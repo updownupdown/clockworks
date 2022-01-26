@@ -24,8 +24,6 @@ export function calculateGears(
 
     newGears.push(gear);
   }
-
-  console.log(gears);
 }
 
 // Calculate single gear

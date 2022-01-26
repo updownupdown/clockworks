@@ -1,3 +1,5 @@
+import { HandsProps } from "../Menu/Menu";
+
 export interface GearProps {
   /** parent gear **/
   parent?: number | undefined;
@@ -38,6 +40,7 @@ export interface GearProps {
 interface GearSet {
   name: string;
   gearset: GearProps[];
+  hands?: HandsProps;
 }
 
 export const newGearSettings: GearProps = {
@@ -56,46 +59,58 @@ export const gearSets: GearSet[] = [
         orientation: 0,
       },
       {
-        teeth: 30,
-        orientation: 0,
+        teeth: 10,
+        orientation: 45,
       },
       {
-        teeth: 30,
+        teeth: 20,
         orientation: 0,
-      },
-      {
-        teeth: 30,
-        orientation: 0,
+        fixed: true,
       },
     ],
   },
   {
     name: "Medium Set",
+    hands: {
+      hours: undefined,
+      minutes: 5,
+      seconds: 0,
+    },
     gearset: [
       {
         teeth: 30,
         orientation: 0,
       },
       {
-        teeth: 30,
+        teeth: 10,
         orientation: 0,
       },
       {
-        teeth: 30,
+        teeth: 10,
+        orientation: 45,
+      },
+      {
+        teeth: 20,
         orientation: 0,
+        fixed: true,
       },
       {
         teeth: 30,
-        orientation: 0,
+        orientation: -70,
       },
       {
-        teeth: 30,
-        orientation: 0,
+        teeth: 20,
+        orientation: 20,
       },
     ],
   },
   {
     name: "Large Set",
+    hands: {
+      hours: 12,
+      minutes: 6,
+      seconds: 1,
+    },
     gearset: [
       {
         teeth: 30,
@@ -158,8 +173,22 @@ export const gearSets: GearSet[] = [
   },
 ];
 
+export const defaultHandsSettings = {
+  hours: undefined,
+  minutes: undefined,
+  seconds: undefined,
+};
+
 export function getGearset(gearsetName: string) {
   const set = gearSets.find(({ name }) => name === gearsetName);
 
   return set === undefined ? [] : set.gearset;
+}
+
+export function getHandsSettings(gearsetName: string) {
+  const handsSettings = gearSets.find(({ name }) => name === gearsetName);
+
+  return handsSettings === undefined || handsSettings.hands === undefined
+    ? defaultHandsSettings
+    : handsSettings.hands;
 }

@@ -8,7 +8,6 @@ import Battery from "../Icons/Battery";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
-import { defaultHandsSettings } from "../../App";
 import "./Menu.scss";
 
 export interface HandsProps {
@@ -33,6 +32,7 @@ interface Props {
   hands: HandsProps;
   setHands: (hands: HandsProps) => void;
   resetHands: () => void;
+  loadSettings: (name: string) => void;
 }
 
 export const Menu = ({
@@ -51,6 +51,7 @@ export const Menu = ({
   hands,
   setHands,
   resetHands,
+  loadSettings,
 }: Props) => {
   const [showMenu, setShowMenu] = useState(
     window.innerWidth > 600 ? true : false
@@ -156,7 +157,7 @@ export const Menu = ({
                 window.confirm("Are you sure you want to update all gears?")
               ) {
                 resetHands();
-                setGears(getGearset(e.target.value));
+                loadSettings(e.target.value);
               }
             }}
           >

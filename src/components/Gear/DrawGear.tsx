@@ -1,6 +1,5 @@
 import { GearProps } from "./Gearsets";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
-import { HandsProps } from "../Menu/Menu";
 import clsx from "clsx";
 import { getGearStyles } from "./GearUtils";
 
@@ -8,8 +7,7 @@ export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
   isSelected: boolean,
-  isPendulum: boolean,
-  hands: HandsProps
+  isPendulum: boolean
 ) => {
   if (
     rpm === undefined ||
@@ -77,7 +75,7 @@ export const DrawGear = (
   if (!isEscapementGear) {
     displayText += `#${index + 1}: ${teeth} - ${displayRatio}`;
     displayText += `- RPM: ${Math.round(rpm * 10) / 10}`;
-    displayText += `- P: ${parent}`;
+    displayText += `- P: ${parent ?? 0}`;
   }
 
   return (
