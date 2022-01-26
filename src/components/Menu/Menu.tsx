@@ -201,7 +201,7 @@ export const Menu = ({
             assignedGear={hands.minutes}
             gear={hands.minutes ? gears[hands.minutes] : undefined}
             hand="Minutes"
-            unit="min"
+            unit="hr"
             multiplier={60}
             tolerance={tolerance}
             setHands={(value) => {
@@ -217,7 +217,7 @@ export const Menu = ({
             assignedGear={hands.seconds}
             gear={hands.seconds ? gears[hands.seconds] : undefined}
             hand="Seconds"
-            unit="sec"
+            unit="min"
             multiplier={1}
             tolerance={tolerance}
             setHands={(value) => {
