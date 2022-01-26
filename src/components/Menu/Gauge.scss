@@ -5,15 +5,15 @@
   align-items: center;
   gap: 12px;
 
-  color: var(--white);
+  color: var(--K800);
 
   select {
     width: 70px;
   }
 
   &__unit {
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 16px;
+    font-weight: 700;
   }
 
   &__speed {
@@ -38,7 +38,7 @@
       height: 100%;
 
       border-radius: 4px;
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--K200);
     }
 
     &__tolerance {
@@ -57,13 +57,12 @@
       z-index: 3;
       bottom: 0;
 
-      transform: translateX(-50%) translateY(50%);
+      transform: translateX(-50%) translateY(70%);
 
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
 
-      border-bottom: 10px solid var(--white);
-      box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+      border-bottom: 10px solid var(--K800);
     }
   }
 

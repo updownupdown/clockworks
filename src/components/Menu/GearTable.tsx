@@ -50,20 +50,32 @@ export const GearTable = () => {
   return (
     <div className="gear-table-wrap">
       <div className="table-select">
-        <span>Show rotation per</span>
+        <span>Show rot. per: </span>
         <button
+          className={clsx(
+            "ci-button ci-button--small",
+            showColumn === "RPM" && "ci-button--selected"
+          )}
           onClick={() => setShowColumn("RPM")}
           disabled={showColumn === "RPM"}
         >
           minute
         </button>
         <button
+          className={clsx(
+            "ci-button ci-button--small",
+            showColumn === "RPH" && "ci-button--selected"
+          )}
           onClick={() => setShowColumn("RPH")}
           disabled={showColumn === "RPH"}
         >
           hour
         </button>
         <button
+          className={clsx(
+            "ci-button ci-button--small",
+            showColumn === "RPD" && "ci-button--selected"
+          )}
           onClick={() => setShowColumn("RPD")}
           disabled={showColumn === "RPD"}
         >

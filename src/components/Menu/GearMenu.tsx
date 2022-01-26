@@ -105,28 +105,25 @@ export const GearMenu = () => {
   return (
     <div className="gear-menu">
       <div className="gear-menu__header">
+        <button
+          className={clsx("ci-button", gear.fixed && "ci-button--selected")}
+          onClick={() => handleFixChange(selectedGear, gear.fixed!)}
+          disabled={selectedGear === 0 || isEscapementGear}
+        >
+          {gear.fixed ? <Locked /> : <Unlocked />}
+        </button>
+
         <span className="gear-menu__header__title">
           Gear {selectedGear + 1}
         </span>
-        {selectedGear !== 0 && !isEscapementGear && (
-          <button
-            className={clsx(
-              "gear-menu-button",
-              gear.fixed ? "gear-menu-button--on" : "gear-menu-button--off"
-            )}
-            onClick={() => handleFixChange(selectedGear, gear.fixed!)}
-          >
-            {gear.fixed ? <Locked /> : <Unlocked />}
-          </button>
-        )}
-        {gears.length > 1 && (
-          <button
-            className="gear-menu-button"
-            onClick={() => removeGear(selectedGear)}
-          >
-            <Delete />
-          </button>
-        )}
+
+        <button
+          className="ci-button"
+          onClick={() => removeGear(selectedGear)}
+          disabled={gears.length === 1}
+        >
+          <Delete />
+        </button>
       </div>
 
       <div className="gear-menu__setting">
@@ -187,14 +184,14 @@ export const GearMenu = () => {
 
       <div className="gear-menu__shift">
         <button
-          className="menu-button"
+          className="ci-button"
           onClick={() => handleShiftGear(selectedGear, true)}
           disabled={selectedGear === 0}
         >
           Move Up
         </button>
         <button
-          className="menu-button"
+          className="ci-button"
           onClick={() => handleShiftGear(selectedGear, false)}
           disabled={selectedGear === gears.length - 1}
         >

@@ -10,6 +10,7 @@ import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
 import "./Menu.scss";
 import { exportGearset } from "../utils/utils";
+import clsx from "clsx";
 
 export interface HandsProps {
   seconds: number | undefined;
@@ -65,27 +66,29 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
 
   return (
     <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
-      <div className="menu__title">
-        <div className="menu__title__text">
-          <h1>Clockworks</h1>
-          <a
-            href="https://github.com/updownupdown/clockworks"
-            target="_blank"
-            rel="noreferrer"
-          >
-            About
-          </a>
-        </div>
+      <div className="menu__section">
+        <div className="menu-title">
+          <div className="menu-title__text">
+            <h1>Clockworks</h1>
+            <a
+              href="https://github.com/updownupdown/clockworks"
+              target="_blank"
+              rel="noreferrer"
+            >
+              About
+            </a>
+          </div>
 
-        <button
-          className="toggle-menu-button"
-          onClick={() => setShowMenu(!showMenu)}
-        >
-          {showMenu ? "Hide Menu" : "Show Menu"}
-        </button>
+          {/* <button
+            className="toggle-menu-button"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            {showMenu ? "Hide Menu" : "Show Menu"}
+          </button> */}
+        </div>
       </div>
 
-      <div className="menu__section ">
+      <div className="menu__section">
         <div className="save-load">
           <select
             onChange={(e) => {
@@ -102,7 +105,7 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
 
           <div className="save-load__buttons">
             <button
-              className="menu-button"
+              className="ci-button"
               onClick={() =>
                 exportGearset(
                   isPendulum,
@@ -117,10 +120,7 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
               Export Gears
             </button>
 
-            <button
-              className="menu-button menu-button--reset-gears"
-              onClick={() => resetGears()}
-            >
+            <button className="ci-button" onClick={() => resetGears()}>
               Reset Gears
             </button>
           </div>
@@ -207,7 +207,7 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
       <div className="menu__section">
         <div className="menu__speed">
           <button
-            className="movement-button movement-button--pause"
+            className="ci-button ci-button--icon"
             onClick={() => setIsPaused(!isPaused)}
           >
             {isPaused ? <Play /> : <Pause />}
@@ -233,7 +233,10 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
 
           <div className="menu__speed__type">
             <button
-              className="movement-button movement-button--type"
+              className={clsx(
+                "ci-button ci-button--icon",
+                isPendulum && "ci-button--selected"
+              )}
               onClick={() => setIsPendulum(true)}
               disabled={isPendulum}
             >
@@ -241,7 +244,10 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
             </button>
 
             <button
-              className="movement-button movement-button--type"
+              className={clsx(
+                "ci-button ci-button--icon",
+                !isPendulum && "ci-button--selected"
+              )}
               onClick={() => setIsPendulum(false)}
               disabled={!isPendulum}
             >
@@ -252,15 +258,14 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
       </div>
 
       <div className="menu__section">
-        <button
-          className="menu-button menu-button--add-gear"
-          onClick={() => addGear()}
-        >
+        <button className="ci-button add-gear-button" onClick={() => addGear()}>
           Add Gear
         </button>
 
         <GearTable />
+      </div>
 
+      <div className="menu__section">
         <GearMenu />
       </div>
     </div>

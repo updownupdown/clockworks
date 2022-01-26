@@ -3,62 +3,18 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px 12px 0;
-
-  border-top: 1px solid rgba(var(--white-rgb), 0.2);
 
   &__header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    // gap: 8px;
     padding-bottom: 20px;
 
     &__title {
-      margin-right: auto;
       font-size: 20px;
       font-weight: 700;
-      color: var(--white);
-    }
-  }
-
-  // Fixed button
-  .gear-menu-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.25s ease background;
-    padding: 8px;
-
-    border-radius: 6px;
-
-    $icon-size: 20px;
-    svg {
-      transition: 0.25s ease opacity;
-      width: $icon-size;
-      height: $icon-size;
-
-      path {
-        fill: white;
-      }
-    }
-
-    &--off svg {
-      opacity: 0.2;
-    }
-
-    &--on {
-      background: rgba(var(--white-rgb), 1);
-
-      svg path {
-        fill: var(--B600);
-      }
-    }
-
-    &:hover {
-      background: rgba(var(--white-rgb), 0.3);
-    }
-    &--off:hover svg {
-      opacity: 1;
+      color: var(--K800);
     }
   }
 
@@ -69,7 +25,7 @@
 
     span {
       width: 90px;
-      color: white;
+      color: K800;
       font-weight: 600;
     }
 
@@ -82,5 +38,9 @@
     display: flex;
     gap: 12px;
     margin-top: 20px;
+
+    button {
+      flex: 1;
+    }
   }
 }
