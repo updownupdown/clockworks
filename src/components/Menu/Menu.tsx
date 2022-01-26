@@ -54,8 +54,9 @@ export const Menu = ({
   );
   const [tolerance, setTolerance] = useState(10);
 
-  function addGear(gear: GearProps) {
-    setGears([...gears, gear]);
+  function addGear() {
+    const newGear = { ...defaultNewGear };
+    setGears([...gears, newGear]);
   }
 
   function resetGears() {
@@ -209,17 +210,11 @@ export const Menu = ({
         </div>
       </div>
 
-      <div className="menu__section">
-        <GearTable
-          gears={gears}
-          selectedGear={selectedGear}
-          setSelectedGear={setSelectedGear}
-        />
-
+      <div className="menu__section menu__section--expand">
         <div className="gear-actions">
           <button
             className="menu-button menu-button--add-gear"
-            onClick={() => addGear(defaultNewGear)}
+            onClick={() => addGear()}
           >
             Add Gear
           </button>
@@ -231,6 +226,12 @@ export const Menu = ({
             Reset Gears
           </button>
         </div>
+
+        <GearTable
+          gears={gears}
+          selectedGear={selectedGear}
+          setSelectedGear={setSelectedGear}
+        />
 
         <GearMenu
           gears={gears}

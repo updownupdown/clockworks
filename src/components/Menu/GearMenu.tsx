@@ -199,14 +199,14 @@ export const GearMenu = ({
           onClick={() => handleShiftGear(selectedGear, true)}
           disabled={selectedGear === 0}
         >
-          Move Gear Up
+          Move Up
         </button>
         <button
           className="menu-button"
           onClick={() => handleShiftGear(selectedGear, false)}
           disabled={selectedGear === gears.length - 1}
         >
-          Move Gear Down
+          Move Down
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ import "./Gear.scss";
 
 export interface GearProps {
   /** parent gear **/
-  parent?: number;
+  parent?: number | undefined;
   /** number of teeth **/
   teeth: number;
   /** angle offset relative to parent gear **/
@@ -76,11 +76,17 @@ export function calculateGear(
   if (isEscapementGear) gear.teeth = 30;
 
   // Parent gear
-  if (gear.parent === undefined || gear.parent === index) {
-    gear.parent = index === 0 ? 0 : index - 1;
+  if (gear.parent === undefined) {
+    if (index === 0) {
+      gear.parent = undefined;
+    } else {
+      gear.parent = index - 1;
+    }
   }
 
-  const parentGear = gears[gear.parent];
+  console.log(gear.parent);
+
+  const parentGear = gears[gear.parent ?? 0];
 
   // Fixed
   if (isPendulum && index === 1) gear.fixed = true;

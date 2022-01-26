@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -64,9 +64,11 @@
     padding: 20px 12px;
 
     border-top: 1px solid rgba(var(--white-rgb), 0.2);
-    // border-radius: 8px;
-    // background: rgba(var(--B600-rgb), 0.8);
-    // box-shadow: 0 0 6px rgba(0, 0, 0, 0.15), 0 0 24px rgba(0, 0, 0, 0.15);
+
+    &--expand {
+      flex: 1;
+      overflow-y: auto;
+    }
 
     .menu--hide & {
       display: none;
@@ -170,24 +172,24 @@
 .gear-actions {
   display: flex;
   gap: 12px;
-  margin: 12px 0;
+  margin: 0 0 20px;
+}
 
-  .menu-button {
-    flex: 1;
-    transition: 0.25s ease background;
-    outline: none;
+.menu-button {
+  flex: 1;
+  transition: 0.25s ease background;
+  outline: none;
 
-    border-radius: 4px;
-    background: rgba(var(--white-rgb), 0.1);
+  border-radius: 4px;
+  background: rgba(var(--white-rgb), 0.1);
 
-    padding: 12px;
+  padding: 12px;
 
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--white);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
 
-    &:hover {
-      background: rgba(var(--white-rgb), 0.3);
-    }
+  &:hover {
+    background: rgba(var(--white-rgb), 0.3);
   }
 }

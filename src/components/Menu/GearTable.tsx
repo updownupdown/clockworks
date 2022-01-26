@@ -51,7 +51,7 @@ export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
   });
 
   return (
-    <>
+    <div className="gear-table-wrap">
       <div className="table-select">
         <span>Show rotation per</span>
         <button
@@ -85,6 +85,6 @@ export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
         </thead>
         <tbody>{gearList}</tbody>
       </table>
-    </>
+    </div>
   );
 };
