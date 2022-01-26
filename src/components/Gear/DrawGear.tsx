@@ -1,4 +1,4 @@
-import { GearProps } from "./Gear";
+import { GearProps } from "./Gearsets";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
 import { HandsProps } from "../Menu/Menu";
 import clsx from "clsx";

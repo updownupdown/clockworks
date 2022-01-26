@@ -1,4 +1,4 @@
-import { GearProps } from "../Gear/Gear";
+import { GearProps } from "../Gear/Gearsets";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
@@ -34,7 +34,7 @@ export const GearMenu = ({
 
   const handleOffsetChange = (index: number, value: number) => {
     const newGears = [...gears];
-    newGears[index].parentOffset = value;
+    newGears[index].orientation = value;
     setGears(newGears);
   };
 
@@ -173,7 +173,7 @@ export const GearMenu = ({
           min="-180"
           max="180"
           step="1"
-          value={gear.parentOffset}
+          value={gear.orientation}
           onChange={(e) =>
             handleOffsetChange(selectedGear, Number(e.target.value))
           }
@@ -185,7 +185,7 @@ export const GearMenu = ({
           min="-180"
           max="180"
           step="1"
-          value={gear.parentOffset}
+          value={gear.orientation}
           onChange={(e) =>
             handleOffsetChange(selectedGear, Number(e.target.value))
           }

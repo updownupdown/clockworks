@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { GearProps } from "../Gear/Gear";
-import { defaultNewGear } from "../Gear/defaultGears";
+import { GearProps } from "../Gear/Gearsets";
+import { gearSets, getGearset, newGearSettings } from "../Gear/Gearsets";
 import Play from "../Icons/Play";
 import Pause from "../Icons/Pause";
 import Pendulum from "../Icons/Pendulum";
@@ -9,6 +9,7 @@ import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
 import "./Menu.scss";
+import { defaultHandsSettings } from "../../App";
 
 export interface HandsProps {
   seconds: number | undefined;
@@ -55,7 +56,7 @@ export const Menu = ({
   const [tolerance, setTolerance] = useState(10);
 
   function addGear() {
-    const newGear = { ...defaultNewGear };
+    const newGear = { ...newGearSettings };
     setGears([...gears, newGear]);
   }
 
@@ -63,6 +64,67 @@ export const Menu = ({
     if (window.confirm("Are you sure you want to delete all gears?"))
       setGears([]);
   }
+
+  const gearsetList = () => {
+    return gearSets.map((gearset) => {
+      return (
+        <option key={gearset.name} value={gearset.name}>
+          {gearset.name}
+        </option>
+      );
+    });
+  };
+
+  function datetimestamp() {
+    var now = new Date();
+
+    return (
+      now.getFullYear() +
+      "-" +
+      ("0" + (now.getMonth() + 1)).slice(-2) +
+      "-" +
+      ("0" + now.getDate()).slice(-2)
+    );
+  }
+
+  const exportGearset = async () => {
+    const exportGears = gears.map((gear) => {
+      return {
+        teeth: gear.teeth,
+        orientation: gear.orientation,
+        fixed: gear.fixed ? true : undefined,
+        parent: gear.parent,
+      };
+    });
+
+    const exportSettings = {
+      isPendulum,
+      globalRpm,
+      globalHertz,
+      hands,
+      tolerance,
+    };
+
+    const exportData = {
+      gears: exportGears,
+      settings: exportSettings,
+    };
+
+    console.log(datetimestamp());
+
+    const myData = exportData;
+    const fileName = "gearset-" + datetimestamp();
+
+    const json = JSON.stringify(myData);
+    const blob = new Blob([json], { type: "application/json" });
+    const href = await URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = fileName + ".json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
@@ -84,6 +146,36 @@ export const Menu = ({
         >
           {showMenu ? "Hide Menu" : "Show Menu"}
         </button>
+      </div>
+
+      <div className="menu__section ">
+        <div className="save-load">
+          <select
+            onChange={(e) => {
+              if (
+                window.confirm("Are you sure you want to update all gears?")
+              ) {
+                setGears(getGearset(e.target.value));
+                setHands(defaultHandsSettings);
+              }
+            }}
+          >
+            {gearsetList()}
+          </select>
+
+          <div className="save-load__buttons">
+            <button className="menu-button" onClick={exportGearset}>
+              Export Gears
+            </button>
+
+            <button
+              className="menu-button menu-button--reset-gears"
+              onClick={() => resetGears()}
+            >
+              Reset Gears
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="menu__section">
@@ -210,22 +302,13 @@ export const Menu = ({
         </div>
       </div>
 
-      <div className="menu__section menu__section--expand">
-        <div className="gear-actions">
-          <button
-            className="menu-button menu-button--add-gear"
-            onClick={() => addGear()}
-          >
-            Add Gear
-          </button>
-
-          <button
-            className="menu-button menu-button--reset-gears"
-            onClick={() => resetGears()}
-          >
-            Reset Gears
-          </button>
-        </div>
+      <div className="menu__section">
+        <button
+          className="menu-button menu-button--add-gear"
+          onClick={() => addGear()}
+        >
+          Add Gear
+        </button>
 
         <GearTable
           gears={gears}

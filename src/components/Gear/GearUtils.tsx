@@ -1,5 +1,5 @@
 import React from "react";
-import { GearProps } from "./Gear";
+import { GearProps } from "./Gearsets";
 
 export function getGearWrapStyles(
   currentGear: GearProps,

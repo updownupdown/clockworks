@@ -1,4 +1,5 @@
 .menu {
+  overflow-y: auto;
   z-index: 10;
   top: 0;
   left: 0;
@@ -65,13 +66,23 @@
 
     border-top: 1px solid rgba(var(--white-rgb), 0.2);
 
-    &--expand {
-      flex: 1;
-      overflow-y: auto;
-    }
-
     .menu--hide & {
       display: none;
+    }
+  }
+
+  .save-load {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &__buttons {
+      display: flex;
+      gap: 12px;
+
+      button {
+        flex: 1;
+      }
     }
   }
 
@@ -176,7 +187,6 @@
 }
 
 .menu-button {
-  flex: 1;
   transition: 0.25s ease background;
   outline: none;
 
@@ -191,5 +201,9 @@
 
   &:hover {
     background: rgba(var(--white-rgb), 0.3);
+  }
+
+  &--add-gear {
+    margin-bottom: 20px;
   }
 }

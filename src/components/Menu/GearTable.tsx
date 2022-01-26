@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { GearProps } from "../Gear/Gear";
+import { GearProps } from "../Gear/Gearsets";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import { ratioDisplay } from "../Gear/utils";

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
-import { defaultGears } from "./components/Gear/defaultGears";
+import { getGearset } from "./components/Gear/Gearsets";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
@@ -13,7 +13,6 @@ import { HandsProps } from "./components/Menu/Menu";
 import HandHours from "./components/Hands/HandHours";
 import HandMinutes from "./components/Hands/HandMinutes";
 import HandSeconds from "./components/Hands/HandSeconds";
-import { GearProps } from "./components/Gear/Gear";
 import { getGearWrapStyles, getGearStyles } from "./components/Gear/GearUtils";
 
 const canvasWidth = 4000;
@@ -21,6 +20,12 @@ const canvasRatio = 0.75;
 const canvasHeight = canvasWidth * canvasRatio;
 
 export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
+
+export const defaultHandsSettings = {
+  hours: undefined,
+  minutes: undefined,
+  seconds: undefined,
+};
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
@@ -32,14 +37,10 @@ function App() {
   );
   const [isPendulum, setIsPendulum] = useState(false);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
-  const [hands, setHands] = useState<HandsProps>({
-    hours: 12,
-    minutes: 6,
-    seconds: 1,
-  });
+  const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
 
   useEffect(() => {
-    setGears(defaultGears);
+    setGears(getGearset("Large Set"));
   }, []);
 
   const handleGearClick = useCallback(

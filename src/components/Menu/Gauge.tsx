@@ -1,4 +1,4 @@
-import { GearProps } from "../Gear/Gear";
+import { GearProps } from "../Gear/Gearsets";
 import "./Gauge.scss";
 
 interface Props {

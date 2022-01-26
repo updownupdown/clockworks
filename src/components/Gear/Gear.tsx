@@ -1,43 +1,7 @@
 import { degrees_to_radians, iang } from "./utils";
 import { firstGearOrigin } from "../../App";
+import { GearProps } from "./Gearsets";
 import "./Gear.scss";
-
-export interface GearProps {
-  /** parent gear **/
-  parent?: number | undefined;
-  /** number of teeth **/
-  teeth: number;
-  /** angle offset relative to parent gear **/
-  parentOffset: number;
-  /** center position **/
-  positionOffset?: { x: number; y: number };
-  /** rotation position **/
-  rotationOffset?: number;
-  /** fixed to parent gear **/
-  fixed?: boolean;
-  /** ratio relative to parent gear **/
-  ratio?: number;
-  /** ratio relative to first gear **/
-  totalRatio?: number;
-  /** rotation per minute **/
-  rpm?: number;
-  /** rotation direction **/
-  clockwise?: boolean;
-  /** pendulum rotation angle increment **/
-  pendulumAngleIncrement?: number;
-  /** radius of pitch circle **/
-  p?: number;
-  /** radius of outer circle **/
-  c?: number;
-  /** radius of base circle **/
-  b?: number;
-  /** radius of root circle **/
-  r?: number;
-  /** tooth thickness at pitch circle **/
-  t?: number;
-  /** angle where involute meets base circle on side of tooth **/
-  k?: number;
-}
 
 // Calculate all gears
 export function calculateGears(
@@ -84,8 +48,6 @@ export function calculateGear(
     }
   }
 
-  console.log(gear.parent);
-
   const parentGear = gears[gear.parent ?? 0];
 
   // Fixed
@@ -123,8 +85,8 @@ export function calculateGear(
     };
 
     if (!gear.fixed) {
-      gearPosition.x += r * Math.sin(degrees_to_radians(gear.parentOffset!));
-      gearPosition.y += r * Math.cos(degrees_to_radians(gear.parentOffset!));
+      gearPosition.x += r * Math.sin(degrees_to_radians(gear.orientation!));
+      gearPosition.y += r * Math.cos(degrees_to_radians(gear.orientation!));
     }
 
     gear.positionOffset = {
@@ -152,14 +114,14 @@ export function calculateGear(
   let rotateBy = 0;
 
   if (isFirstGear) {
-    rotateBy = gear.parentOffset;
+    rotateBy = gear.orientation;
   } else if (gear.fixed) {
     rotateBy = parentGear.rotationOffset!;
   } else {
     rotateBy =
       180 -
-      (parentGear.rotationOffset! + gear.parentOffset) * ratio -
-      gear.parentOffset +
+      (parentGear.rotationOffset! + gear.orientation) * ratio -
+      gear.orientation +
       360 / gear.teeth / 2;
   }
   gear.rotationOffset = rotateBy % 360;
