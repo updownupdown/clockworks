@@ -1,13 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
-import {
-  defaultGearsetName,
-  defaultHandsSettings,
-  GearProps,
-  getGearset,
-  getHandsSettings,
-} from "./components/Gear/Gearsets";
+import { defaultHandsSettings } from "./components/Gear/Gearsets";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
@@ -20,6 +14,7 @@ import HandHours from "./components/Hands/HandHours";
 import HandMinutes from "./components/Hands/HandMinutes";
 import HandSeconds from "./components/Hands/HandSeconds";
 import { getGearWrapStyles, getGearStyles } from "./components/Gear/GearUtils";
+import { ClockworksContext } from "./components/context/context";
 
 const canvasWidth = 4000;
 const canvasRatio = 0.75;
@@ -33,44 +28,6 @@ const defaultValues = {
   isPaused: false,
   tolerance: 10,
 };
-
-interface ContextProps {
-  gears: GearProps[];
-  setGears: (gears: GearProps[]) => void;
-  selectedGear: number | undefined;
-  setSelectedGear: (value: number | undefined) => void;
-  globalRpm: number;
-  setGlobalRpm: (value: number) => void;
-  globalHertz: number;
-  setGlobalHertz: (value: number) => void;
-  isPaused: boolean;
-  setIsPaused: (value: boolean) => void;
-  isPendulum: boolean;
-  setIsPendulum: (value: boolean) => void;
-  hands: HandsProps;
-  setHands: (value: HandsProps) => void;
-  tolerance: number;
-  setTolerance: (value: number) => void;
-}
-
-export const ClockworksContext = React.createContext<ContextProps>({
-  gears: [],
-  setGears: () => {},
-  selectedGear: undefined,
-  setSelectedGear: () => {},
-  globalRpm: 0,
-  setGlobalRpm: () => {},
-  globalHertz: 0,
-  setGlobalHertz: () => {},
-  isPaused: false,
-  setIsPaused: () => {},
-  isPendulum: false,
-  setIsPendulum: () => {},
-  hands: defaultHandsSettings,
-  setHands: () => {},
-  tolerance: 0,
-  setTolerance: () => {},
-});
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
@@ -87,15 +44,6 @@ function App() {
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
 
   const [tolerance, setTolerance] = useState(defaultValues.tolerance);
-
-  function loadSettings(gearsetName: string) {
-    setGears(getGearset(gearsetName));
-    setHands(getHandsSettings(gearsetName));
-  }
-
-  useEffect(() => {
-    loadSettings(defaultGearsetName);
-  }, []);
 
   const handleGearClick = useCallback(
     (index: number) => {
@@ -268,10 +216,6 @@ function App() {
     ));
   };
 
-  function resetHands() {
-    setHands(defaultHandsSettings);
-  }
-
   const memoedHands = useMemo(() => DrawHands(), [DrawGears, hands]);
 
   return (
@@ -289,6 +233,7 @@ function App() {
         setIsPaused,
         isPendulum,
         setIsPendulum,
+        pendulumIncrement,
         hands,
         setHands,
         tolerance,
@@ -297,7 +242,7 @@ function App() {
     >
       <div className="layout">
         <div className="layout__menu">
-          <Menu resetHands={resetHands} loadSettings={loadSettings} />
+          <Menu />
         </div>
 
         <div className="layout__canvas">

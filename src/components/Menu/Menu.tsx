@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
-import { ClockworksContext } from "../../App";
-import { gearSets, getGearset, newGearSettings } from "../Gear/Gearsets";
+import React, { useContext } from "react";
+import { ClockworksContext } from "../context/context";
+import { newGearSettings } from "../Gear/Gearsets";
 import Play from "../Icons/Play";
 import Pause from "../Icons/Pause";
 import Pendulum from "../Icons/Pendulum";
@@ -8,9 +8,9 @@ import Battery from "../Icons/Battery";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
-import "./Menu.scss";
-import { exportGearset } from "../utils/utils";
+import { SaveLoad } from "./SaveLoad";
 import clsx from "clsx";
+import "./Menu.scss";
 
 export interface HandsProps {
   seconds: number | undefined;
@@ -18,12 +18,15 @@ export interface HandsProps {
   hours: number | undefined;
 }
 
-interface Props {
-  resetHands: () => void;
-  loadSettings: (name: string) => void;
+interface MenuSectionProps {
+  children: React.ReactNode;
 }
 
-export const Menu = ({ resetHands, loadSettings }: Props) => {
+const MenuSection = ({ children }: MenuSectionProps) => {
+  return <div className="menu__section">{children}</div>;
+};
+
+export const Menu = () => {
   const {
     gears,
     setGears,
@@ -35,37 +38,19 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
     setIsPaused,
     isPendulum,
     setIsPendulum,
+    tolerance,
+    setTolerance,
     hands,
     setHands,
   } = useContext(ClockworksContext);
-
-  const [showMenu, setShowMenu] = useState(
-    window.innerWidth > 600 ? true : false
-  );
-  const [tolerance, setTolerance] = useState(10);
 
   function addGear() {
     const newGear = { ...newGearSettings };
     setGears([...gears, newGear]);
   }
 
-  function resetGears() {
-    if (window.confirm("Are you sure you want to delete all gears?"))
-      setGears([]);
-  }
-
-  const gearsetList = () => {
-    return gearSets.map((gearset) => {
-      return (
-        <option key={gearset.name} value={gearset.name}>
-          {gearset.name}
-        </option>
-      );
-    });
-  };
-
   return (
-    <div className={`menu menu--${showMenu ? "show" : "hide"}`}>
+    <div className="menu">
       <div className="menu__section">
         <div className="menu-title">
           <div className="menu-title__text">
@@ -78,56 +63,14 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
               About
             </a>
           </div>
-
-          {/* <button
-            className="toggle-menu-button"
-            onClick={() => setShowMenu(!showMenu)}
-          >
-            {showMenu ? "Hide Menu" : "Show Menu"}
-          </button> */}
         </div>
       </div>
 
-      <div className="menu__section">
-        <div className="save-load">
-          <select
-            onChange={(e) => {
-              if (
-                window.confirm("Are you sure you want to update all gears?")
-              ) {
-                resetHands();
-                loadSettings(e.target.value);
-              }
-            }}
-          >
-            {gearsetList()}
-          </select>
+      <MenuSection>
+        <SaveLoad />
+      </MenuSection>
 
-          <div className="save-load__buttons">
-            <button
-              className="ci-button"
-              onClick={() =>
-                exportGearset(
-                  isPendulum,
-                  globalRpm,
-                  globalHertz,
-                  hands,
-                  tolerance,
-                  gears
-                )
-              }
-            >
-              Export Gears
-            </button>
-
-            <button className="ci-button" onClick={() => resetGears()}>
-              Reset Gears
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="menu__section">
+      <MenuSection>
         <div className="menu__gauges">
           <Gauge
             assignedGear={hands.hours}
@@ -202,9 +145,9 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
             }}
           />
         </div>
-      </div>
+      </MenuSection>
 
-      <div className="menu__section">
+      <MenuSection>
         <div className="menu__speed">
           <button
             className="ci-button ci-button--icon"
@@ -255,19 +198,19 @@ export const Menu = ({ resetHands, loadSettings }: Props) => {
             </button>
           </div>
         </div>
-      </div>
+      </MenuSection>
 
-      <div className="menu__section">
+      <MenuSection>
         <button className="ci-button add-gear-button" onClick={() => addGear()}>
           Add Gear
         </button>
 
         <GearTable />
-      </div>
+      </MenuSection>
 
-      <div className="menu__section">
+      <MenuSection>
         <GearMenu />
-      </div>
+      </MenuSection>
     </div>
   );
 };

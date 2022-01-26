@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ClockworksContext } from "../../App";
+import { ClockworksContext } from "../context/context";
 import { GearProps } from "../Gear/Gearsets";
 import { HandsProps } from "../Menu/Menu";
 

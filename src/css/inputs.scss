@@ -41,6 +41,10 @@ select {
   @include inputStyle;
 
   padding: 0 10px;
+
+  *:disabled {
+    color: var(--K300);
+  }
 }
 
 // Button

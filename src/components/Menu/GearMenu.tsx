@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ClockworksContext } from "../../App";
+import { ClockworksContext } from "../context/context";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";

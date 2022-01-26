@@ -3,8 +3,8 @@ import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import { ratioDisplay } from "../Gear/utils";
 import clsx from "clsx";
+import { ClockworksContext } from "../context/context";
 import "./GearTable.scss";
-import { ClockworksContext } from "../../App";
 
 export const GearTable = () => {
   const { gears, selectedGear, setSelectedGear } =
