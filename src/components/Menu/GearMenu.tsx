@@ -1,31 +1,23 @@
-import { GearProps } from "../Gear/Gearsets";
+import React, { useContext } from "react";
+import { ClockworksContext } from "../../App";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
 import { HandsProps } from "./Menu";
 import clsx from "clsx";
 import "./GearMenu.scss";
-import HandSeconds from "../Hands/HandSeconds";
 
-interface Props {
-  gears: GearProps[];
-  setGears: (gears: GearProps[]) => void;
-  selectedGear: number | undefined;
-  setSelectedGear: (value: number | undefined) => void;
-  isPendulum: boolean;
-  hands: HandsProps;
-  setHands: (hands: HandsProps) => void;
-}
+export const GearMenu = () => {
+  const {
+    gears,
+    setGears,
+    selectedGear,
+    setSelectedGear,
+    isPendulum,
+    hands,
+    setHands,
+  } = useContext(ClockworksContext);
 
-export const GearMenu = ({
-  gears,
-  selectedGear,
-  setSelectedGear,
-  setGears,
-  isPendulum,
-  hands,
-  setHands,
-}: Props) => {
   const handleTeethChange = (index: number, value: number) => {
     const newGears = [...gears];
     newGears[index].teeth = value;

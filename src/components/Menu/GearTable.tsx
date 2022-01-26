@@ -1,18 +1,15 @@
-import React, { useState } from "react";
-import { GearProps } from "../Gear/Gearsets";
+import React, { useState, useContext } from "react";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import { ratioDisplay } from "../Gear/utils";
 import clsx from "clsx";
 import "./GearTable.scss";
+import { ClockworksContext } from "../../App";
 
-interface Props {
-  gears: GearProps[];
-  selectedGear: number | undefined;
-  setSelectedGear: (value: number | undefined) => void;
-}
+export const GearTable = () => {
+  const { gears, selectedGear, setSelectedGear } =
+    useContext(ClockworksContext);
 
-export const GearTable = ({ gears, selectedGear, setSelectedGear }: Props) => {
   const [showColumn, setShowColumn] = useState("RPM");
 
   const gearList = gears.map((gear, index) => {

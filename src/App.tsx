@@ -4,6 +4,7 @@ import { calculateGears } from "./components/Gear/Gear";
 import {
   defaultGearsetName,
   defaultHandsSettings,
+  GearProps,
   getGearset,
   getHandsSettings,
 } from "./components/Gear/Gearsets";
@@ -26,17 +27,66 @@ const canvasHeight = canvasWidth * canvasRatio;
 
 export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
 
+const defaultValues = {
+  globalRpm: 1,
+  globalHertz: 0.5,
+  isPaused: false,
+  tolerance: 10,
+};
+
+interface ContextProps {
+  gears: GearProps[];
+  setGears: (gears: GearProps[]) => void;
+  selectedGear: number | undefined;
+  setSelectedGear: (value: number | undefined) => void;
+  globalRpm: number;
+  setGlobalRpm: (value: number) => void;
+  globalHertz: number;
+  setGlobalHertz: (value: number) => void;
+  isPaused: boolean;
+  setIsPaused: (value: boolean) => void;
+  isPendulum: boolean;
+  setIsPendulum: (value: boolean) => void;
+  hands: HandsProps;
+  setHands: (value: HandsProps) => void;
+  tolerance: number;
+  setTolerance: (value: number) => void;
+}
+
+export const ClockworksContext = React.createContext<ContextProps>({
+  gears: [],
+  setGears: () => {},
+  selectedGear: undefined,
+  setSelectedGear: () => {},
+  globalRpm: 0,
+  setGlobalRpm: () => {},
+  globalHertz: 0,
+  setGlobalHertz: () => {},
+  isPaused: false,
+  setIsPaused: () => {},
+  isPendulum: false,
+  setIsPendulum: () => {},
+  hands: defaultHandsSettings,
+  setHands: () => {},
+  tolerance: 0,
+  setTolerance: () => {},
+});
+
 function App() {
   const [gears, setGears] = useState<any[]>([]);
-  const [globalRpm, setGlobalRpm] = React.useState(1);
-  const [globalHertz, setGlobalHertz] = React.useState(0.5);
-  const [isPaused, setIsPaused] = React.useState(false);
+  const [globalRpm, setGlobalRpm] = React.useState(defaultValues.globalRpm);
+  const [globalHertz, setGlobalHertz] = React.useState(
+    defaultValues.globalHertz
+  );
+  const [isPaused, setIsPaused] = React.useState(defaultValues.isPaused);
   const [selectedGear, setSelectedGear] = useState<number | undefined>(
     undefined
   );
   const [isPendulum, setIsPendulum] = useState(false);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
+
+  const [tolerance, setTolerance] = useState(defaultValues.tolerance);
 
   function loadSettings(gearsetName: string) {
     setGears(getGearset(gearsetName));
@@ -225,74 +275,78 @@ function App() {
   const memoedHands = useMemo(() => DrawHands(), [DrawGears, hands]);
 
   return (
-    <div className="layout">
-      <div className="layout__menu">
-        <Menu
-          gears={gears}
-          isPaused={isPaused}
-          setIsPaused={setIsPaused}
-          globalRpm={globalRpm}
-          setGlobalRpm={setGlobalRpm}
-          globalHertz={globalHertz}
-          setGlobalHertz={setGlobalHertz}
-          setGears={setGears}
-          selectedGear={selectedGear}
-          setSelectedGear={setSelectedGear}
-          isPendulum={isPendulum}
-          setIsPendulum={setIsPendulum}
-          hands={hands}
-          setHands={setHands}
-          resetHands={resetHands}
-          loadSettings={loadSettings}
-        />
-      </div>
+    <ClockworksContext.Provider
+      value={{
+        gears,
+        setGears,
+        selectedGear,
+        setSelectedGear,
+        globalRpm,
+        setGlobalRpm,
+        globalHertz,
+        setGlobalHertz,
+        isPaused,
+        setIsPaused,
+        isPendulum,
+        setIsPendulum,
+        hands,
+        setHands,
+        tolerance,
+        setTolerance,
+      }}
+    >
+      <div className="layout">
+        <div className="layout__menu">
+          <Menu resetHands={resetHands} loadSettings={loadSettings} />
+        </div>
 
-      <div className="layout__canvas">
-        <TransformWrapper
-          initialScale={1}
-          minScale={0.2}
-          initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
-          initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 200}
-          limitToBounds={false}
-        >
-          {({ zoomIn, zoomOut, resetTransform }) => (
-            <React.Fragment>
-              <div className="canvas-actions">
-                <button onClick={() => zoomOut()}>
-                  <ZoomOut />
-                </button>
-                <button onClick={() => zoomIn()}>
-                  <ZoomIn />
-                </button>
-                <button onClick={() => resetTransform()}>
-                  <ZoomReset />
-                </button>
-              </div>
-
-              <TransformComponent>
-                <div className="canvas-wrap">
-                  <div
-                    className={clsx(
-                      "canvas",
-                      isPaused && "canvas--paused",
-                      !isPendulum ? "canvas--smooth" : "canvas--pendulum"
-                    )}
-                    style={{
-                      width: `${canvasWidth}px`,
-                      height: `${canvasHeight}px`,
-                    }}
-                  >
-                    {memoedGears}
-                    {memoedHands}
-                    {isPendulum && DrawPendulum()}
-                  </div>
+        <div className="layout__canvas">
+          <TransformWrapper
+            initialScale={1}
+            minScale={0.2}
+            initialPositionX={-canvasWidth / 2 + window.innerWidth / 2}
+            initialPositionY={-canvasHeight / 3 + window.innerHeight / 2 - 200}
+            limitToBounds={false}
+          >
+            {({ zoomIn, zoomOut, resetTransform }) => (
+              <React.Fragment>
+                <div className="canvas-actions">
+                  <button onClick={() => zoomOut()}>
+                    <ZoomOut />
+                  </button>
+                  <button onClick={() => zoomIn()}>
+                    <ZoomIn />
+                  </button>
+                  <button onClick={() => resetTransform()}>
+                    <ZoomReset />
+                  </button>
                 </div>
-              </TransformComponent>
-            </React.Fragment>
-          )}
-        </TransformWrapper>
+
+                <TransformComponent>
+                  <div className="canvas-wrap">
+                    <div
+                      className={clsx(
+                        "canvas",
+                        isPaused && "canvas--paused",
+                        !isPendulum ? "canvas--smooth" : "canvas--pendulum"
+                      )}
+                      style={{
+                        width: `${canvasWidth}px`,
+                        height: `${canvasHeight}px`,
+                      }}
+                    >
+                      {memoedGears}
+                      {memoedHands}
+                      {isPendulum && DrawPendulum()}
+                    </div>
+                  </div>
+                </TransformComponent>
+              </React.Fragment>
+            )}
+          </TransformWrapper>
+        </div>
       </div>
-    </div>
+    </ClockworksContext.Provider>
   );
 }
 

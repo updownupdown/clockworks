@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { GearProps } from "../Gear/Gearsets";
+import React, { useState, useContext } from "react";
+import { ClockworksContext } from "../../App";
 import { gearSets, getGearset, newGearSettings } from "../Gear/Gearsets";
 import Play from "../Icons/Play";
 import Pause from "../Icons/Pause";
@@ -9,6 +9,7 @@ import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
 import "./Menu.scss";
+import { exportGearset } from "../utils/utils";
 
 export interface HandsProps {
   seconds: number | undefined;
@@ -17,42 +18,26 @@ export interface HandsProps {
 }
 
 interface Props {
-  gears: GearProps[];
-  isPaused: boolean;
-  setIsPaused: (value: boolean) => void;
-  globalRpm: number;
-  setGlobalRpm: (value: number) => void;
-  globalHertz: number;
-  setGlobalHertz: (value: number) => void;
-  setGears: (gears: GearProps[]) => void;
-  selectedGear: number | undefined;
-  setSelectedGear: (value: number | undefined) => void;
-  isPendulum: boolean;
-  setIsPendulum: (value: boolean) => void;
-  hands: HandsProps;
-  setHands: (hands: HandsProps) => void;
   resetHands: () => void;
   loadSettings: (name: string) => void;
 }
 
-export const Menu = ({
-  globalRpm,
-  setIsPaused,
-  setGlobalRpm,
-  isPaused,
-  gears,
-  setGears,
-  selectedGear,
-  setSelectedGear,
-  isPendulum,
-  setIsPendulum,
-  globalHertz,
-  setGlobalHertz,
-  hands,
-  setHands,
-  resetHands,
-  loadSettings,
-}: Props) => {
+export const Menu = ({ resetHands, loadSettings }: Props) => {
+  const {
+    gears,
+    setGears,
+    globalRpm,
+    setGlobalRpm,
+    globalHertz,
+    setGlobalHertz,
+    isPaused,
+    setIsPaused,
+    isPendulum,
+    setIsPendulum,
+    hands,
+    setHands,
+  } = useContext(ClockworksContext);
+
   const [showMenu, setShowMenu] = useState(
     window.innerWidth > 600 ? true : false
   );
@@ -76,55 +61,6 @@ export const Menu = ({
         </option>
       );
     });
-  };
-
-  function datetimestamp() {
-    var now = new Date();
-
-    return (
-      now.getFullYear() +
-      "-" +
-      ("0" + (now.getMonth() + 1)).slice(-2) +
-      "-" +
-      ("0" + now.getDate()).slice(-2)
-    );
-  }
-
-  const exportGearset = async () => {
-    const exportGears = gears.map((gear) => {
-      return {
-        teeth: gear.teeth,
-        orientation: gear.orientation,
-        fixed: gear.fixed ? true : undefined,
-        parent: gear.parent,
-      };
-    });
-
-    const exportSettings = {
-      isPendulum,
-      globalRpm,
-      globalHertz,
-      hands,
-      tolerance,
-    };
-
-    const exportData = {
-      gears: exportGears,
-      settings: exportSettings,
-    };
-
-    const myData = exportData;
-    const fileName = "gearset-" + datetimestamp();
-
-    const json = JSON.stringify(myData);
-    const blob = new Blob([json], { type: "application/json" });
-    const href = await URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = href;
-    link.download = fileName + ".json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   return (
@@ -165,7 +101,19 @@ export const Menu = ({
           </select>
 
           <div className="save-load__buttons">
-            <button className="menu-button" onClick={exportGearset}>
+            <button
+              className="menu-button"
+              onClick={() =>
+                exportGearset(
+                  isPendulum,
+                  globalRpm,
+                  globalHertz,
+                  hands,
+                  tolerance,
+                  gears
+                )
+              }
+            >
               Export Gears
             </button>
 
@@ -311,21 +259,9 @@ export const Menu = ({
           Add Gear
         </button>
 
-        <GearTable
-          gears={gears}
-          selectedGear={selectedGear}
-          setSelectedGear={setSelectedGear}
-        />
+        <GearTable />
 
-        <GearMenu
-          gears={gears}
-          setGears={setGears}
-          selectedGear={selectedGear}
-          setSelectedGear={setSelectedGear}
-          isPendulum={isPendulum}
-          hands={hands}
-          setHands={setHands}
-        />
+        <GearMenu />
       </div>
     </div>
   );
