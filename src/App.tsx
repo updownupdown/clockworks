@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
-import { getGearset } from "./components/Gear/Gearsets";
+import { defaultGearsetName, getGearset } from "./components/Gear/Gearsets";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
@@ -40,7 +40,7 @@ function App() {
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
 
   useEffect(() => {
-    setGears(getGearset("Large Set"));
+    setGears(getGearset(defaultGearsetName));
   }, []);
 
   const handleGearClick = useCallback(
@@ -214,7 +214,11 @@ function App() {
     ));
   };
 
-  const memoedHands = useMemo(() => DrawHands(), [DrawGears]);
+  function resetHands() {
+    setHands(defaultHandsSettings);
+  }
+
+  const memoedHands = useMemo(() => DrawHands(), [DrawGears, hands]);
 
   return (
     <div className="layout">
@@ -234,6 +238,7 @@ function App() {
           setIsPendulum={setIsPendulum}
           hands={hands}
           setHands={setHands}
+          resetHands={resetHands}
         />
       </div>
 

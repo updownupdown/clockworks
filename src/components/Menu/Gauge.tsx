@@ -43,7 +43,7 @@ export const Gauge = ({
   }
 
   const options = [
-    <option value={undefined} key="undefined">
+    <option value={"none"} key="undefined">
       --
     </option>,
   ];
@@ -57,10 +57,10 @@ export const Gauge = ({
 
   return (
     <div className={`gauge gauge--${isInRange ? "in-range" : "out-of-range"}`}>
-      <span className="gauge__unit">{unit}s</span>
+      <span className="gauge__unit">{hand}</span>
 
       <select
-        value={assignedGear}
+        value={assignedGear ?? "none"}
         onChange={(e) => {
           setHands(Number(e.target.value));
         }}
@@ -80,7 +80,7 @@ export const Gauge = ({
         />
       </span>
       <span className="gauge__speed">
-        {speed} / {unit.toLowerCase().substring(0, 3)}
+        {speed} / {unit}
       </span>
     </div>
   );

@@ -24,6 +24,8 @@ export function calculateGears(
 
     newGears.push(gear);
   }
+
+  console.log(gears);
 }
 
 // Calculate single gear
@@ -46,6 +48,8 @@ export function calculateGear(
     } else {
       gear.parent = index - 1;
     }
+  } else if (gear.parent === index) {
+    gear.parent = index - 1;
   }
 
   const parentGear = gears[gear.parent ?? 0];

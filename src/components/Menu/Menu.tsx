@@ -8,8 +8,8 @@ import Battery from "../Icons/Battery";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
-import "./Menu.scss";
 import { defaultHandsSettings } from "../../App";
+import "./Menu.scss";
 
 export interface HandsProps {
   seconds: number | undefined;
@@ -32,6 +32,7 @@ interface Props {
   setIsPendulum: (value: boolean) => void;
   hands: HandsProps;
   setHands: (hands: HandsProps) => void;
+  resetHands: () => void;
 }
 
 export const Menu = ({
@@ -49,6 +50,7 @@ export const Menu = ({
   setGlobalHertz,
   hands,
   setHands,
+  resetHands,
 }: Props) => {
   const [showMenu, setShowMenu] = useState(
     window.innerWidth > 600 ? true : false
@@ -110,8 +112,6 @@ export const Menu = ({
       settings: exportSettings,
     };
 
-    console.log(datetimestamp());
-
     const myData = exportData;
     const fileName = "gearset-" + datetimestamp();
 
@@ -155,8 +155,8 @@ export const Menu = ({
               if (
                 window.confirm("Are you sure you want to update all gears?")
               ) {
+                resetHands();
                 setGears(getGearset(e.target.value));
-                setHands(defaultHandsSettings);
               }
             }}
           >
@@ -183,8 +183,8 @@ export const Menu = ({
           <Gauge
             assignedGear={hands.hours}
             gear={hands.hours ? gears[hands.hours] : undefined}
-            hand="hour"
-            unit="Day"
+            hand="Hours"
+            unit="day"
             multiplier={60 * 24}
             tolerance={tolerance}
             setHands={(value) => {
@@ -199,8 +199,8 @@ export const Menu = ({
           <Gauge
             assignedGear={hands.minutes}
             gear={hands.minutes ? gears[hands.minutes] : undefined}
-            hand="minutes"
-            unit="Minute"
+            hand="Minutes"
+            unit="min"
             multiplier={60}
             tolerance={tolerance}
             setHands={(value) => {
@@ -215,8 +215,8 @@ export const Menu = ({
           <Gauge
             assignedGear={hands.seconds}
             gear={hands.seconds ? gears[hands.seconds] : undefined}
-            hand="second"
-            unit="Second"
+            hand="Seconds"
+            unit="sec"
             multiplier={1}
             tolerance={tolerance}
             setHands={(value) => {

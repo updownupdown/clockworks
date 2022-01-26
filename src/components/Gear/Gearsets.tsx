@@ -45,10 +45,20 @@ export const newGearSettings: GearProps = {
   orientation: 0,
 };
 
+export const defaultGearsetName = "Large Set";
+
 export const gearSets: GearSet[] = [
   {
     name: "Small Set",
     gearset: [
+      {
+        teeth: 30,
+        orientation: 0,
+      },
+      {
+        teeth: 30,
+        orientation: 0,
+      },
       {
         teeth: 30,
         orientation: 0,
