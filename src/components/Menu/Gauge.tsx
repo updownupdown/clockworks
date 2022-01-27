@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { GearProps } from "../Gear/Gearsets";
 import "./Gauge.scss";
 
@@ -56,7 +57,14 @@ export const Gauge = ({
   }
 
   return (
-    <div className={`gauge gauge--${isInRange ? "in-range" : "out-of-range"}`}>
+    <div
+      className={clsx(
+        "gauge",
+        hasAssignedGear && isInRange && "gauge--in-range",
+        hasAssignedGear && !isInRange && "gauge--out-of-range",
+        !hasAssignedGear && "gauge--unassigned"
+      )}
+    >
       <span className="gauge__unit">{hand}</span>
 
       <select
@@ -74,13 +82,15 @@ export const Gauge = ({
           className="gauge__bar__tolerance"
           style={{ width: `${tolerance}%` }}
         />
-        <span
-          className="gauge__bar__current"
-          style={{ left: `${indicatorPosition * 100}%` }}
-        />
+        {hasAssignedGear && (
+          <span
+            className="gauge__bar__current"
+            style={{ left: `${indicatorPosition * 100}%` }}
+          />
+        )}
       </span>
       <span className="gauge__speed">
-        {speed} / {unit}
+        {hasAssignedGear ? `${speed} / ${unit}` : "N/A"}
       </span>
     </div>
   );

@@ -72,6 +72,9 @@
   &--out-of-range .gauge__speed {
     color: var(--status-red);
   }
+  &--unassigned .gauge__speed {
+    color: var(--K300);
+  }
 
   svg {
     width: 24px;
