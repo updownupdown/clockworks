@@ -1,6 +1,6 @@
 import React from "react";
 import { defaultHandsSettings, GearProps } from "../Gear/Gearsets";
-import { HandsProps } from "../Menu/Menu";
+import { HandsProps } from "../Gear/Gearsets";
 
 interface ContextProps {
   gears: GearProps[];

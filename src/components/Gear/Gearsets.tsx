@@ -1,5 +1,4 @@
-import { HandsProps } from "../Menu/Menu";
-
+import React from "react";
 export interface GearProps {
   /** parent gear **/
   parent?: number | undefined;
@@ -37,10 +36,24 @@ export interface GearProps {
   k?: number;
 }
 
-interface GearSet {
+export interface HandsProps {
+  seconds: number | undefined;
+  minutes: number | undefined;
+  hours: number | undefined;
+}
+
+interface SettingsProps {
+  globalRpm?: number;
+  globalHertz?: number;
+  isPaused?: boolean;
+  isPendulum?: boolean;
+  tolerance?: number;
+}
+export interface GearSetProps {
   name: string;
-  gearset: GearProps[];
+  gears: GearProps[];
   hands?: HandsProps;
+  settings?: SettingsProps;
 }
 
 export const newGearSettings: GearProps = {
@@ -50,10 +63,22 @@ export const newGearSettings: GearProps = {
 
 export const defaultGearsetName = "Large Set";
 
-export const gearSets: GearSet[] = [
+export const gearSets: GearSetProps[] = [
   {
-    name: "Small Set",
-    gearset: [
+    name: "Load settings test",
+    hands: {
+      hours: 4,
+      minutes: 3,
+      seconds: 2,
+    },
+    settings: {
+      globalRpm: 5,
+      globalHertz: 2,
+      isPaused: true,
+      isPendulum: true,
+      tolerance: 60,
+    },
+    gears: [
       {
         teeth: 30,
         orientation: 0,
@@ -61,6 +86,21 @@ export const gearSets: GearSet[] = [
       {
         teeth: 10,
         orientation: 45,
+      },
+      {
+        teeth: 20,
+        orientation: 0,
+        fixed: true,
+      },
+      {
+        teeth: 20,
+        orientation: 0,
+        fixed: true,
+      },
+      {
+        teeth: 20,
+        orientation: 0,
+        fixed: true,
       },
       {
         teeth: 20,
@@ -76,7 +116,7 @@ export const gearSets: GearSet[] = [
       minutes: 5,
       seconds: 0,
     },
-    gearset: [
+    gears: [
       {
         teeth: 30,
         orientation: 0,
@@ -111,7 +151,7 @@ export const gearSets: GearSet[] = [
       minutes: 6,
       seconds: 1,
     },
-    gearset: [
+    gears: [
       {
         teeth: 30,
         orientation: 0,
@@ -179,16 +219,28 @@ export const defaultHandsSettings = {
   seconds: undefined,
 };
 
-export function getGearset(gearsetName: string) {
+export const defaultSettings = {
+  globalRpm: 1,
+  globalHertz: 0.5,
+  isPaused: false,
+  tolerance: 10,
+  isPendulum: false,
+};
+
+export function getGearsetGears(gearsetName: string) {
   const set = gearSets.find(({ name }) => name === gearsetName);
 
-  return set === undefined ? [] : set.gearset;
+  return set === undefined ? [] : set.gears;
 }
 
-export function getHandsSettings(gearsetName: string) {
+export function getGearsetHands(gearsetName: string) {
   const handsSettings = gearSets.find(({ name }) => name === gearsetName);
 
   return handsSettings === undefined || handsSettings.hands === undefined
     ? defaultHandsSettings
     : handsSettings.hands;
+}
+
+export function getGearset(gearsetName: string) {
+  return gearSets.find(({ name }) => name === gearsetName);
 }

@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { DrawGear } from "./components/Gear/DrawGear";
 import { calculateGears } from "./components/Gear/Gear";
-import { defaultHandsSettings } from "./components/Gear/Gearsets";
+import {
+  defaultHandsSettings,
+  defaultSettings,
+} from "./components/Gear/Gearsets";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
 import clsx from "clsx";
@@ -9,7 +12,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ZoomIn from "./components/Icons/ZoomIn";
 import ZoomOut from "./components/Icons/ZoomOut";
 import ZoomReset from "./components/Icons/ZoomReset";
-import { HandsProps } from "./components/Menu/Menu";
+import { HandsProps } from "./components/Gear/Gearsets";
 import HandHours from "./components/Hands/HandHours";
 import HandMinutes from "./components/Hands/HandMinutes";
 import HandSeconds from "./components/Hands/HandSeconds";
@@ -22,28 +25,21 @@ const canvasHeight = canvasWidth * canvasRatio;
 
 export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
 
-const defaultValues = {
-  globalRpm: 1,
-  globalHertz: 0.5,
-  isPaused: false,
-  tolerance: 10,
-};
-
 function App() {
   const [gears, setGears] = useState<any[]>([]);
-  const [globalRpm, setGlobalRpm] = React.useState(defaultValues.globalRpm);
+  const [globalRpm, setGlobalRpm] = React.useState(defaultSettings.globalRpm);
   const [globalHertz, setGlobalHertz] = React.useState(
-    defaultValues.globalHertz
+    defaultSettings.globalHertz
   );
-  const [isPaused, setIsPaused] = React.useState(defaultValues.isPaused);
+  const [isPaused, setIsPaused] = React.useState(defaultSettings.isPaused);
   const [selectedGear, setSelectedGear] = useState<number | undefined>(
     undefined
   );
-  const [isPendulum, setIsPendulum] = useState(false);
+  const [isPendulum, setIsPendulum] = useState(defaultSettings.isPendulum);
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
-
-  const [tolerance, setTolerance] = useState(defaultValues.tolerance);
+  const [tolerance, setTolerance] = useState(defaultSettings.tolerance);
+  const [halfStep, setHalfStep] = useState(false);
 
   const handleGearClick = useCallback(
     (index: number) => {
@@ -117,8 +113,6 @@ function App() {
     ]
   );
 
-  const [halfStep, setHalfStep] = useState(false);
-
   useEffect(() => {
     if (isPendulum && !isPaused) {
       const intervalDelay = 1000 / globalHertz / 2;
@@ -170,7 +164,6 @@ function App() {
           style={{
             transform: `rotate(${rotateTo}deg)`,
             transitionDuration: `${1 / globalHertz / 2}s`,
-            // transitionDelay: `${(1 / globalHertz / 2) * 0.5}s`,
           }}
         >
           <div className="pendulum__assembly__bar" />

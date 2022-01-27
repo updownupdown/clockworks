@@ -12,12 +12,6 @@ import { SaveLoad } from "./SaveLoad";
 import clsx from "clsx";
 import "./Menu.scss";
 
-export interface HandsProps {
-  seconds: number | undefined;
-  minutes: number | undefined;
-  hours: number | undefined;
-}
-
 interface MenuSectionProps {
   children: React.ReactNode;
 }

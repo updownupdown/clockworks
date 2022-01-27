@@ -3,7 +3,7 @@ import { ClockworksContext } from "../context/context";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
-import { HandsProps } from "./Menu";
+import { HandsProps } from "../Gear/Gearsets";
 import clsx from "clsx";
 import "./GearMenu.scss";
 
