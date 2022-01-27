@@ -121,6 +121,10 @@ export const gearSets: GearSetProps[] = [
         teeth: 20,
         orientation: 20,
       },
+      {
+        teeth: 20,
+        orientation: -80,
+      },
     ],
   },
   {
