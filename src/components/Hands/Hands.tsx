@@ -6,7 +6,7 @@ import { getGearWrapStyles, getGearStyles } from "../Gear/GearUtils";
 import { ClockworksContext } from "../context/context";
 
 export const DrawHands = () => {
-  const { gears, globalHertz, isPendulum, pendulumIncrement, hands } =
+  const { gears, settings, pendulumIncrement, hands } =
     useContext(ClockworksContext);
 
   let handsOutput: HTMLElement | any = [];
@@ -17,12 +17,7 @@ export const DrawHands = () => {
     handsOutput.push(
       <span
         className="clock-hand"
-        style={getGearWrapStyles(
-          gears[index],
-          pendulumIncrement,
-          isPendulum,
-          globalHertz
-        )}
+        style={getGearWrapStyles(gears[index], pendulumIncrement, settings)}
       >
         <div
           className="hand"

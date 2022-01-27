@@ -55,21 +55,8 @@ export const exportGearset = async ({
 };
 
 export const SaveLoad = () => {
-  const {
-    gears,
-    setGears,
-    globalRpm,
-    globalHertz,
-    isPendulum,
-    tolerance,
-    hands,
-    setHands,
-    setGlobalRpm,
-    setGlobalHertz,
-    setIsPaused,
-    setIsPendulum,
-    setTolerance,
-  } = useContext(ClockworksContext);
+  const { gears, setGears, hands, setHands, settings, setSettings } =
+    useContext(ClockworksContext);
 
   function resetHands() {
     setHands(defaultHandsSettings);
@@ -81,17 +68,11 @@ export const SaveLoad = () => {
     const gearsetGears = gearset?.gears ? gearset.gears : [];
     setGears(gearsetGears);
 
-    const gearsetHands =
-      gearset?.hands !== undefined ? gearset.hands : defaultHandsSettings;
+    const gearsetHands = gearset?.hands ?? defaultHandsSettings;
     setHands(gearsetHands);
 
-    const settings = gearset?.settings ?? undefined;
-
-    setGlobalRpm(settings?.globalRpm ?? defaultSettings.globalRpm);
-    setGlobalHertz(settings?.globalHertz ?? defaultSettings.globalHertz);
-    setIsPaused(settings?.isPaused ?? defaultSettings.isPaused);
-    setIsPendulum(settings?.isPendulum ?? defaultSettings.isPendulum);
-    setTolerance(settings?.tolerance ?? defaultSettings.tolerance);
+    const importedSettings = gearset?.settings ?? defaultSettings;
+    setSettings(importedSettings);
   }
 
   function resetGears() {
@@ -162,11 +143,7 @@ export const SaveLoad = () => {
             importedSettings.isPendulum = file.settings.isPendulum;
           }
 
-          setTolerance(importedSettings.tolerance);
-          setIsPaused(importedSettings.isPaused);
-          setGlobalRpm(importedSettings.globalRpm);
-          setGlobalHertz(importedSettings.globalHertz);
-          setIsPendulum(importedSettings.isPendulum);
+          setSettings(importedSettings);
         }
       } else {
         alert("Invalid JSON file!");
@@ -229,12 +206,7 @@ export const SaveLoad = () => {
               name: "gearset",
               gears,
               hands,
-              settings: {
-                isPendulum,
-                globalRpm,
-                globalHertz,
-                tolerance,
-              },
+              settings,
             })
           }
         >

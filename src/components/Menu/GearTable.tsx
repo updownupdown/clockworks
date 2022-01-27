@@ -7,8 +7,7 @@ import { ClockworksContext } from "../context/context";
 import "./GearTable.scss";
 
 export const GearTable = () => {
-  const { gears, selectedGear, setSelectedGear } =
-    useContext(ClockworksContext);
+  const { gears, settings, setSettings } = useContext(ClockworksContext);
 
   const [showColumn, setShowColumn] = useState("RPM");
 
@@ -28,12 +27,13 @@ export const GearTable = () => {
         key={index}
         className={clsx(
           "gear-table__row",
-          index === selectedGear && "gear-table__row--current",
+          index === settings.selectedGear && "gear-table__row--current",
           gear.fixed ? "gear-table__row--locked" : "gear-table__row--unlocked"
         )}
         onClick={() => {
-          const gearToSelect = selectedGear === index ? undefined : index;
-          setSelectedGear(gearToSelect);
+          const gearToSelect =
+            settings.selectedGear === index ? undefined : index;
+          setSettings({ ...settings, selectedGear: gearToSelect });
         }}
       >
         <td className="cell-gear-fixed">

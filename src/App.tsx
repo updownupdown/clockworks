@@ -4,6 +4,7 @@ import { calculateGears } from "./components/Gear/Gear";
 import {
   defaultHandsSettings,
   defaultSettings,
+  SettingsProps,
 } from "./components/Gear/Gearsets";
 import Escapement from "./components/Gear/Escapement";
 import { Menu } from "./components/Menu/Menu";
@@ -27,51 +28,43 @@ export const firstGearOrigin = { x: canvasWidth / 2, y: canvasHeight / 3 };
 
 function App() {
   const [gears, setGears] = useState<any[]>([]);
-  const [globalRpm, setGlobalRpm] = React.useState(defaultSettings.globalRpm);
-  const [globalHertz, setGlobalHertz] = React.useState(
-    defaultSettings.globalHertz
-  );
-  const [isPaused, setIsPaused] = React.useState(defaultSettings.isPaused);
-  const [selectedGear, setSelectedGear] = useState<number | undefined>(
-    undefined
-  );
-  const [isPendulum, setIsPendulum] = useState(defaultSettings.isPendulum);
-  const [pendulumIncrement, setPendulumIncrement] = useState(0);
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
-  const [tolerance, setTolerance] = useState(defaultSettings.tolerance);
+  const [settings, setSettings] = useState<SettingsProps>(defaultSettings);
+
+  const [pendulumIncrement, setPendulumIncrement] = useState(0);
   const [halfStep, setHalfStep] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
   const handleGearClick = useCallback(
     (index: number) => {
-      if (selectedGear === index) {
+      if (settings.selectedGear === index) {
         if (
           gears[index - 1] !== undefined &&
           Object.entries(gears[index].positionOffset).toString() ===
             Object.entries(gears[index - 1].positionOffset).toString()
         ) {
-          setSelectedGear(index - 1);
+          setSettings({ ...settings, selectedGear: index - 1 });
         } else if (
           gears[index + 1] !== undefined &&
           Object.entries(gears[index].positionOffset).toString() ===
             Object.entries(gears[index + 1].positionOffset).toString()
         ) {
-          setSelectedGear(index + 1);
+          setSettings({ ...settings, selectedGear: index + 1 });
         }
       } else {
-        setSelectedGear(index);
+        setSettings({ ...settings, selectedGear: index });
       }
     },
-    [gears, selectedGear]
+    [gears, settings]
   );
 
   const DrawGears = useCallback(
     (globalRpm: number) => {
-      calculateGears(gears, globalRpm, globalHertz, isPendulum);
+      calculateGears(gears, settings);
 
       // Prevent transitions when editing gears in smooth mode
       // Need solution for pendulum mode
-      if (!isPendulum) {
+      if (!settings.isPendulum) {
         document.body.classList.add("disable-animations");
         setTimeout(() => {
           document.body.classList.remove("disable-animations");
@@ -79,7 +72,7 @@ function App() {
       }
 
       return gears.map((gear, index) => {
-        const isSelected = index === selectedGear;
+        const isSelected = index === settings.selectedGear;
 
         return (
           <span
@@ -88,35 +81,22 @@ function App() {
               `gear-wrap gear-wrap-${index}`,
               isSelected && "gear-wrap--selected"
             )}
-            style={getGearWrapStyles(
-              gear,
-              pendulumIncrement,
-              isPendulum,
-              globalHertz
-            )}
+            style={getGearWrapStyles(gear, pendulumIncrement, settings)}
             onClick={() => {
               handleGearClick(index);
             }}
           >
-            {DrawGear(gear, index, isSelected, isPendulum)}
+            {DrawGear(gear, index, isSelected, settings)}
           </span>
         );
       });
     },
-    [
-      gears,
-      globalHertz,
-      handleGearClick,
-      hands,
-      isPendulum,
-      pendulumIncrement,
-      selectedGear,
-    ]
+    [gears, settings, hands, handleGearClick, pendulumIncrement]
   );
 
   useEffect(() => {
-    if (isPendulum && !isPaused) {
-      const intervalDelay = 1000 / globalHertz / 2;
+    if (settings.isPendulum && !settings.isPaused) {
+      const intervalDelay = 1000 / settings.globalHertz / 2;
 
       const tick = setInterval(() => {
         if (!halfStep) {
@@ -130,18 +110,11 @@ function App() {
         clearInterval(tick);
       };
     }
-  }, [
-    DrawGears,
-    isPendulum,
-    globalHertz,
-    isPaused,
-    halfStep,
-    pendulumIncrement,
-  ]);
+  }, [DrawGears, settings, halfStep, pendulumIncrement]);
 
   const memoedGears = useMemo(
-    () => DrawGears(globalRpm),
-    [globalRpm, DrawGears]
+    () => DrawGears(settings.globalRpm),
+    [settings, DrawGears]
   );
 
   // Pendulum
@@ -164,7 +137,7 @@ function App() {
           className="pendulum__assembly"
           style={{
             transform: `rotate(${rotateTo}deg)`,
-            transitionDuration: `${1 / globalHertz / 2}s`,
+            transitionDuration: `${1 / settings.globalHertz / 2}s`,
           }}
         >
           <div className="pendulum__assembly__bar" />
@@ -184,12 +157,7 @@ function App() {
       handsOutput.push(
         <span
           className="clock-hand"
-          style={getGearWrapStyles(
-            gears[index],
-            pendulumIncrement,
-            isPendulum,
-            globalHertz
-          )}
+          style={getGearWrapStyles(gears[index], pendulumIncrement, settings)}
         >
           <div
             className="hand"
@@ -225,21 +193,11 @@ function App() {
       value={{
         gears,
         setGears,
-        selectedGear,
-        setSelectedGear,
-        globalRpm,
-        setGlobalRpm,
-        globalHertz,
-        setGlobalHertz,
-        isPaused,
-        setIsPaused,
-        isPendulum,
-        setIsPendulum,
         pendulumIncrement,
         hands,
         setHands,
-        tolerance,
-        setTolerance,
+        settings,
+        setSettings,
       }}
     >
       <button className="menu-trigger" onClick={() => setShowMenu(!showMenu)}>
@@ -278,8 +236,10 @@ function App() {
                     <div
                       className={clsx(
                         "canvas",
-                        isPaused && "canvas--paused",
-                        !isPendulum ? "canvas--smooth" : "canvas--pendulum"
+                        settings.isPaused && "canvas--paused",
+                        !settings.isPendulum
+                          ? "canvas--smooth"
+                          : "canvas--pendulum"
                       )}
                       style={{
                         width: `${canvasWidth}px`,
@@ -288,7 +248,7 @@ function App() {
                     >
                       {memoedGears}
                       {memoedHands}
-                      {isPendulum && DrawPendulum()}
+                      {settings.isPendulum && DrawPendulum()}
                     </div>
                   </div>
                 </TransformComponent>

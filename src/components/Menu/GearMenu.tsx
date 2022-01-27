@@ -8,35 +8,36 @@ import clsx from "clsx";
 import "./GearMenu.scss";
 
 export const GearMenu = () => {
-  const {
-    gears,
-    setGears,
-    selectedGear,
-    setSelectedGear,
-    isPendulum,
-    hands,
-    setHands,
-  } = useContext(ClockworksContext);
+  const { gears, setGears, settings, setSettings, hands, setHands } =
+    useContext(ClockworksContext);
 
-  const handleTeethChange = (index: number, value: number) => {
+  const handleTeethChange = (index: number | undefined, value: number) => {
+    if (!index) return;
+
     const newGears = [...gears];
     newGears[index].teeth = value;
     setGears(newGears);
   };
 
-  const handleOffsetChange = (index: number, value: number) => {
+  const handleOffsetChange = (index: number | undefined, value: number) => {
+    if (!index) return;
+
     const newGears = [...gears];
     newGears[index].orientation = value;
     setGears(newGears);
   };
 
-  function handleFixChange(index: number, fixed: boolean) {
+  function handleFixChange(index: number | undefined, fixed: boolean) {
+    if (!index) return;
+
     const newGears = [...gears];
     newGears[index].fixed = !fixed;
     setGears(newGears);
   }
 
-  function removeGear(gear: number) {
+  function removeGear(gear: number | undefined) {
+    if (!gear) return;
+
     const newHands: HandsProps = { ...hands };
 
     // unassign hands from gears
@@ -84,42 +85,44 @@ export const GearMenu = () => {
     }
 
     setGears(newGears);
-    setSelectedGear(newSelectedGear);
+    setSettings({ ...settings, selectedGear: newSelectedGear });
   }
 
-  const handleShiftGear = (index: number, shiftDown: boolean) => {
+  const handleShiftGear = (index: number | undefined, shiftDown: boolean) => {
+    if (!index) return;
     const newGears = [...gears];
     const newPos = shiftDown ? index - 1 : index + 1;
 
     newGears.splice(newPos, 0, newGears.splice(index, 1)[0]);
 
     setGears(newGears);
-    setSelectedGear(newPos);
+    setSettings({ ...settings, selectedGear: newPos });
   };
 
-  if (selectedGear === undefined || gears.length === 0) return <span />;
+  if (settings.selectedGear === undefined || gears.length === 0)
+    return <span />;
 
-  const gear = gears[selectedGear];
-  const isEscapementGear = isPendulum && selectedGear === 1;
+  const gear = gears[settings.selectedGear];
+  const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
 
   return (
     <div className="gear-menu">
       <div className="gear-menu__header">
         <button
           className={clsx("ci-button", gear.fixed && "ci-button--selected")}
-          onClick={() => handleFixChange(selectedGear, gear.fixed!)}
-          disabled={selectedGear === 0 || isEscapementGear}
+          onClick={() => handleFixChange(settings.selectedGear, gear.fixed!)}
+          disabled={settings.selectedGear === 0 || isEscapementGear}
         >
           {gear.fixed ? <Locked /> : <Unlocked />}
         </button>
 
         <span className="gear-menu__header__title">
-          Gear {selectedGear + 1}
+          Gear {settings.selectedGear + 1}
         </span>
 
         <button
           className="ci-button"
-          onClick={() => removeGear(selectedGear)}
+          onClick={() => removeGear(settings.selectedGear)}
           disabled={gears.length === 1}
         >
           <Delete />
@@ -136,9 +139,9 @@ export const GearMenu = () => {
           step="1"
           value={gear.teeth}
           onChange={(e) =>
-            handleTeethChange(selectedGear, Number(e.target.value))
+            handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={isPendulum && selectedGear === 0}
+          disabled={settings.isPendulum && settings.selectedGear === 0}
         />
 
         <input
@@ -148,9 +151,9 @@ export const GearMenu = () => {
           step="1"
           value={gear.teeth}
           onChange={(e) =>
-            handleTeethChange(selectedGear, Number(e.target.value))
+            handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={isPendulum && selectedGear === 0}
+          disabled={settings.isPendulum && settings.selectedGear === 0}
         />
       </div>
 
@@ -164,7 +167,7 @@ export const GearMenu = () => {
           step="1"
           value={gear.orientation}
           onChange={(e) =>
-            handleOffsetChange(selectedGear, Number(e.target.value))
+            handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }
           disabled={gear.fixed}
         />
@@ -176,7 +179,7 @@ export const GearMenu = () => {
           step="1"
           value={gear.orientation}
           onChange={(e) =>
-            handleOffsetChange(selectedGear, Number(e.target.value))
+            handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }
           disabled={gear.fixed}
         />
@@ -185,15 +188,15 @@ export const GearMenu = () => {
       <div className="gear-menu__shift">
         <button
           className="ci-button"
-          onClick={() => handleShiftGear(selectedGear, true)}
-          disabled={selectedGear === 0}
+          onClick={() => handleShiftGear(settings.selectedGear, true)}
+          disabled={settings.selectedGear === 0}
         >
           Move Up
         </button>
         <button
           className="ci-button"
-          onClick={() => handleShiftGear(selectedGear, false)}
-          disabled={selectedGear === gears.length - 1}
+          onClick={() => handleShiftGear(settings.selectedGear, false)}
+          disabled={settings.selectedGear === gears.length - 1}
         >
           Move Down
         </button>

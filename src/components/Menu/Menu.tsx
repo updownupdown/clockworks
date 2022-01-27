@@ -21,22 +21,8 @@ const MenuSection = ({ children }: MenuSectionProps) => {
 };
 
 export const Menu = () => {
-  const {
-    gears,
-    setGears,
-    globalRpm,
-    setGlobalRpm,
-    globalHertz,
-    setGlobalHertz,
-    isPaused,
-    setIsPaused,
-    isPendulum,
-    setIsPendulum,
-    tolerance,
-    setTolerance,
-    hands,
-    setHands,
-  } = useContext(ClockworksContext);
+  const { gears, setGears, settings, setSettings, hands, setHands } =
+    useContext(ClockworksContext);
 
   function addGear() {
     const newGear = { ...newGearSettings };
@@ -72,7 +58,7 @@ export const Menu = () => {
             hand="Hours"
             unit="day"
             multiplier={60 * 24}
-            tolerance={tolerance}
+            tolerance={settings.tolerance}
             setHands={(value) => {
               setHands({
                 ...hands,
@@ -88,7 +74,7 @@ export const Menu = () => {
             hand="Minutes"
             unit="hr"
             multiplier={60}
-            tolerance={tolerance}
+            tolerance={settings.tolerance}
             setHands={(value) => {
               setHands({
                 ...hands,
@@ -104,7 +90,7 @@ export const Menu = () => {
             hand="Seconds"
             unit="min"
             multiplier={1}
-            tolerance={tolerance}
+            tolerance={settings.tolerance}
             setHands={(value) => {
               setHands({
                 ...hands,
@@ -122,9 +108,12 @@ export const Menu = () => {
             min="0"
             max="100"
             step="1"
-            value={tolerance}
+            value={settings.tolerance}
             onChange={(e) => {
-              setTolerance(Number(e.target.value));
+              setSettings({
+                ...settings,
+                tolerance: Number(e.target.value),
+              });
             }}
           />
 
@@ -133,9 +122,12 @@ export const Menu = () => {
             min="0"
             max="100"
             step="1"
-            value={tolerance}
+            value={settings.tolerance}
             onChange={(e) => {
-              setTolerance(Number(e.target.value));
+              setSettings({
+                ...settings,
+                tolerance: Number(e.target.value),
+              });
             }}
           />
         </div>
@@ -145,47 +137,57 @@ export const Menu = () => {
         <div className="menu__speed">
           <button
             className="ci-button ci-button--icon"
-            onClick={() => setIsPaused(!isPaused)}
+            onClick={() =>
+              setSettings({ ...settings, isPaused: !settings.isPaused })
+            }
           >
-            {isPaused ? <Play /> : <Pause />}
+            {settings.isPaused ? <Play /> : <Pause />}
           </button>
 
           <div className="menu__speed__rpm">
             <input
               type="number"
-              min={isPendulum ? 0.25 : 1}
-              max={isPendulum ? 5 : 20}
-              step={isPendulum ? 0.25 : 1}
-              value={isPendulum ? globalHertz : globalRpm}
+              min={settings.isPendulum ? 0.25 : 1}
+              max={settings.isPendulum ? 5 : 20}
+              step={settings.isPendulum ? 0.25 : 1}
+              value={
+                settings.isPendulum ? settings.globalHertz : settings.globalRpm
+              }
               onChange={(e) => {
-                if (isPendulum) {
-                  setGlobalHertz(Number(e.target.value));
+                if (settings.isPendulum) {
+                  setSettings({
+                    ...settings,
+                    globalHertz: Number(e.target.value),
+                  });
                 } else {
-                  setGlobalRpm(Number(e.target.value));
+                  setSettings({
+                    ...settings,
+                    globalRpm: Number(e.target.value),
+                  });
                 }
               }}
             />
-            <span>{isPendulum ? "Hz" : "RPM"}</span>
+            <span>{settings.isPendulum ? "Hz" : "RPM"}</span>
           </div>
 
           <div className="menu__speed__type">
             <button
               className={clsx(
                 "ci-button ci-button--icon",
-                !isPendulum && "ci-button--selected"
+                !settings.isPendulum && "ci-button--selected"
               )}
-              onClick={() => setIsPendulum(false)}
-              disabled={!isPendulum}
+              onClick={() => setSettings({ ...settings, isPendulum: false })}
+              disabled={!settings.isPendulum}
             >
               <Battery />
             </button>
             <button
               className={clsx(
                 "ci-button ci-button--icon",
-                isPendulum && "ci-button--selected"
+                settings.isPendulum && "ci-button--selected"
               )}
-              onClick={() => setIsPendulum(true)}
-              disabled={isPendulum}
+              onClick={() => setSettings({ ...settings, isPendulum: true })}
+              disabled={settings.isPendulum}
             >
               <Pendulum />
             </button>

@@ -1,26 +1,14 @@
 import { degrees_to_radians, iang } from "./utils";
 import { firstGearOrigin } from "../../App";
-import { GearProps } from "./Gearsets";
+import { GearProps, SettingsProps } from "./Gearsets";
 import "./Gear.scss";
 
 // Calculate all gears
-export function calculateGears(
-  gears: GearProps[],
-  globalRpm: number,
-  globalHertz: number,
-  isPendulum: boolean
-) {
+export function calculateGears(gears: GearProps[], settings: SettingsProps) {
   let newGears: GearProps[] = [];
 
   for (let i = 0; i < gears.length; i++) {
-    const gear = calculateGear(
-      i,
-      gears,
-      gears[i],
-      globalRpm,
-      globalHertz,
-      isPendulum
-    );
+    const gear = calculateGear(i, gears, gears[i], settings);
 
     newGears.push(gear);
   }
@@ -31,12 +19,10 @@ export function calculateGear(
   index: number,
   gears: GearProps[],
   gear: GearProps,
-  globalRpm: number,
-  globalHertz: number,
-  isPendulum: boolean
+  settings: SettingsProps
 ) {
   const isFirstGear = index === 0;
-  const isEscapementGear = isPendulum && isFirstGear;
+  const isEscapementGear = settings.isPendulum && isFirstGear;
   if (isEscapementGear) gear.teeth = 30;
 
   // Parent gear
@@ -53,7 +39,7 @@ export function calculateGear(
   const parentGear = gears[gear.parent ?? 0];
 
   // Fixed
-  if (isPendulum && index === 1) gear.fixed = true;
+  if (settings.isPendulum && index === 1) gear.fixed = true;
 
   // Shape parameters
   const toothSize = 28;
@@ -104,12 +90,10 @@ export function calculateGear(
   gear.totalRatio = totalRatio;
 
   // RPM
-
-  // RPM
-  if (isPendulum) {
-    gear.rpm = globalHertz * totalRatio * 2;
+  if (settings.isPendulum) {
+    gear.rpm = settings.globalHertz * totalRatio * 2;
   } else {
-    gear.rpm = globalRpm * totalRatio;
+    gear.rpm = settings.globalRpm * totalRatio;
   }
 
   // Rotation offset

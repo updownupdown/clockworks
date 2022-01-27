@@ -1,4 +1,4 @@
-import { GearProps } from "./Gearsets";
+import { GearProps, SettingsProps } from "./Gearsets";
 import { polar, rotate, q7, ratioDisplay } from "./utils";
 import clsx from "clsx";
 import { getGearStyles } from "./GearUtils";
@@ -7,7 +7,7 @@ export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
   isSelected: boolean,
-  isPendulum: boolean
+  settings: SettingsProps
 ) => {
   if (
     rpm === undefined ||
@@ -22,7 +22,7 @@ export const DrawGear = (
     return <span />;
 
   let points = [];
-  const isEscapementGear = isPendulum && index === 0;
+  const isEscapementGear = settings.isPendulum && index === 0;
 
   if (isEscapementGear) {
     // single tooth, escapement gear

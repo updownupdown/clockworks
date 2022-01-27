@@ -1,11 +1,10 @@
 import React from "react";
-import { GearProps } from "./Gearsets";
+import { GearProps, SettingsProps } from "./Gearsets";
 
 export function getGearWrapStyles(
   currentGear: GearProps,
   pendulumIncrement: number,
-  isPendulum: boolean,
-  globalHertz: number
+  settings: SettingsProps
 ) {
   if (
     currentGear.positionOffset === undefined ||
@@ -14,7 +13,7 @@ export function getGearWrapStyles(
   )
     return {};
 
-  const pendulumAngleIncrement = !isPendulum
+  const pendulumAngleIncrement = !settings.isPendulum
     ? 0
     : currentGear.pendulumAngleIncrement;
 
@@ -24,7 +23,7 @@ export function getGearWrapStyles(
     transform: `translateX(-50%) translateY(-50%) rotate(${
       currentGear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
     }deg)`,
-    transitionDuration: `${1 / globalHertz}s`,
+    transitionDuration: `${1 / settings.globalHertz}s`,
   };
 }
 

@@ -42,12 +42,13 @@ export interface HandsProps {
   hours: number | undefined;
 }
 
-interface SettingsProps {
-  globalRpm?: number;
-  globalHertz?: number;
-  isPaused?: boolean;
-  isPendulum?: boolean;
-  tolerance?: number;
+export interface SettingsProps {
+  globalRpm: number;
+  globalHertz: number;
+  isPaused: boolean;
+  isPendulum: boolean;
+  tolerance: number;
+  selectedGear: number | undefined;
 }
 export interface GearSetProps {
   name: string;
@@ -203,6 +204,7 @@ export const defaultSettings = {
   isPaused: false,
   tolerance: 10,
   isPendulum: false,
+  selectedGear: undefined,
 };
 
 export function getGearsetGears(gearsetName: string) {
