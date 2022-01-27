@@ -40,6 +40,7 @@ function App() {
   const [hands, setHands] = useState<HandsProps>(defaultHandsSettings);
   const [tolerance, setTolerance] = useState(defaultSettings.tolerance);
   const [halfStep, setHalfStep] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const handleGearClick = useCallback(
     (index: number) => {
@@ -211,6 +212,14 @@ function App() {
 
   const memoedHands = useMemo(() => DrawHands(), [DrawGears, hands]);
 
+  useEffect(() => {
+    if (showMenu) {
+      document.body.classList.add("show-menu");
+    } else {
+      document.body.classList.remove("show-menu");
+    }
+  }, [showMenu]);
+
   return (
     <ClockworksContext.Provider
       value={{
@@ -233,6 +242,10 @@ function App() {
         setTolerance,
       }}
     >
+      <button className="menu-trigger" onClick={() => setShowMenu(!showMenu)}>
+        Show Menu
+      </button>
+
       <div className="layout">
         <div className="layout__menu">
           <Menu />

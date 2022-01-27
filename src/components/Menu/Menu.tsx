@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ClockworksContext } from "../context/context";
 import { newGearSettings } from "../Gear/Gearsets";
 import Play from "../Icons/Play";
@@ -172,23 +172,22 @@ export const Menu = () => {
             <button
               className={clsx(
                 "ci-button ci-button--icon",
-                isPendulum && "ci-button--selected"
-              )}
-              onClick={() => setIsPendulum(true)}
-              disabled={isPendulum}
-            >
-              <Pendulum />
-            </button>
-
-            <button
-              className={clsx(
-                "ci-button ci-button--icon",
                 !isPendulum && "ci-button--selected"
               )}
               onClick={() => setIsPendulum(false)}
               disabled={!isPendulum}
             >
               <Battery />
+            </button>
+            <button
+              className={clsx(
+                "ci-button ci-button--icon",
+                isPendulum && "ci-button--selected"
+              )}
+              onClick={() => setIsPendulum(true)}
+              disabled={isPendulum}
+            >
+              <Pendulum />
             </button>
           </div>
         </div>

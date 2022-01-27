@@ -65,18 +65,11 @@ export const defaultGearsetName = "Large Set";
 
 export const gearSets: GearSetProps[] = [
   {
-    name: "Load settings test",
+    name: "Simple set",
     hands: {
-      hours: 4,
-      minutes: 3,
-      seconds: 2,
-    },
-    settings: {
-      globalRpm: 5,
-      globalHertz: 2,
-      isPaused: true,
-      isPendulum: true,
-      tolerance: 60,
+      hours: undefined,
+      minutes: 2,
+      seconds: 0,
     },
     gears: [
       {
@@ -86,21 +79,6 @@ export const gearSets: GearSetProps[] = [
       {
         teeth: 10,
         orientation: 45,
-      },
-      {
-        teeth: 20,
-        orientation: 0,
-        fixed: true,
-      },
-      {
-        teeth: 20,
-        orientation: 0,
-        fixed: true,
-      },
-      {
-        teeth: 20,
-        orientation: 0,
-        fixed: true,
       },
       {
         teeth: 20,
