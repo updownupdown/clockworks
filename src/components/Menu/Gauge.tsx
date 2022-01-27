@@ -8,7 +8,7 @@ interface Props {
   hand: string;
   multiplier: number;
   tolerance: number;
-  setHands: (value: number) => void;
+  setHands: (value: number | undefined) => void;
   numGears: number;
   assignedGear: number | undefined;
 }
@@ -70,7 +70,9 @@ export const Gauge = ({
       <select
         value={assignedGear ?? "none"}
         onChange={(e) => {
-          setHands(Number(e.target.value));
+          setHands(
+            e.target.value === "none" ? undefined : Number(e.target.value)
+          );
         }}
       >
         {options}

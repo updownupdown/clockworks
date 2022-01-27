@@ -62,9 +62,56 @@ export const newGearSettings: GearProps = {
   orientation: 0,
 };
 
-export const defaultGearsetName = "Large Set";
+export const defaultGearsetName = "Simple forking gears";
 
 export const gearSets: GearSetProps[] = [
+  {
+    name: "Simple forking gears",
+    gears: [
+      {
+        teeth: 20,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 20,
+        orientation: 0,
+      },
+      {
+        teeth: 30,
+        orientation: 0,
+      },
+      {
+        teeth: 20,
+        orientation: 90,
+        parent: 3,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 20,
+        orientation: -90,
+        parent: 3,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+    ],
+  },
   {
     name: "Simple set",
     hands: {

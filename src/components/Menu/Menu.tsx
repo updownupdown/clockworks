@@ -54,12 +54,12 @@ export const Menu = () => {
         <div className="menu__gauges">
           <Gauge
             assignedGear={hands.hours}
-            gear={hands.hours ? gears[hands.hours] : undefined}
+            gear={hands.hours !== undefined ? gears[hands.hours] : undefined}
             hand="Hours"
             unit="day"
             multiplier={60 * 24}
             tolerance={settings.tolerance}
-            setHands={(value) => {
+            setHands={(value: number | undefined) => {
               setHands({
                 ...hands,
                 hours: value,
@@ -70,12 +70,14 @@ export const Menu = () => {
 
           <Gauge
             assignedGear={hands.minutes}
-            gear={hands.minutes ? gears[hands.minutes] : undefined}
+            gear={
+              hands.minutes !== undefined ? gears[hands.minutes] : undefined
+            }
             hand="Minutes"
             unit="hr"
             multiplier={60}
             tolerance={settings.tolerance}
-            setHands={(value) => {
+            setHands={(value: number | undefined) => {
               setHands({
                 ...hands,
                 minutes: value,
@@ -86,12 +88,14 @@ export const Menu = () => {
 
           <Gauge
             assignedGear={hands.seconds}
-            gear={hands.seconds ? gears[hands.seconds] : undefined}
+            gear={
+              hands.seconds !== undefined ? gears[hands.seconds] : undefined
+            }
             hand="Seconds"
             unit="min"
             multiplier={1}
             tolerance={settings.tolerance}
-            setHands={(value) => {
+            setHands={(value: number | undefined) => {
               setHands({
                 ...hands,
                 seconds: value,
