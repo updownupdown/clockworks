@@ -8,7 +8,8 @@ This is a hobby project to mess around with spinning gears, gear ratios, pendulu
 
 - Ability to adjust initial rotation of hands
 - Dials for hands
-- Save to localstorage
+- Save to localstorage (persist state on reload)
+- Improve tolerance math, UI
 
 ## Bugs
 

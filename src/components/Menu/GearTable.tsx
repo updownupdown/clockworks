@@ -50,7 +50,7 @@ export const GearTable = () => {
   return (
     <div className="gear-table-wrap">
       <div className="table-select">
-        <span>Show rot. per: </span>
+        <span>Show rotation per: </span>
         <button
           className={clsx(
             "ci-button ci-button--small",

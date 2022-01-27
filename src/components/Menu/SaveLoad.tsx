@@ -5,10 +5,12 @@ import {
   defaultHandsSettings,
   defaultSettings,
   gearsetNames,
-  gearSets,
   getGearset,
 } from "../Gear/Gearsets";
 import { GearSetProps } from "../Gear/Gearsets";
+import Download from "../Icons/Download";
+import Export from "../Icons/Export";
+import Reset from "../Icons/Reset";
 
 function datetimestamp() {
   var now = new Date();
@@ -27,7 +29,6 @@ export const exportGearset = async ({
   hands,
   settings,
 }: GearSetProps) => {
-  console.log("clicked");
   let exportData: any = {
     hands,
     settings,
@@ -98,8 +99,6 @@ export const SaveLoad = () => {
   const browseInput = useRef<HTMLInputElement | null>(null);
 
   function importGears() {
-    console.log("Importing gears...");
-
     // Trigger browse by clicking hidden input
     browseInput!.current!.click();
   }
@@ -182,42 +181,49 @@ export const SaveLoad = () => {
         value=""
       >
         <option value="" disabled>
-          Load gearset...
+          Presets...
         </option>
         {gearsetList()}
       </select>
 
-      <div className="save-load__buttons">
-        <button className="ci-button" onClick={() => importGears()}>
-          Import
-        </button>
-        <input
-          type="file"
-          id="file"
-          ref={browseInput}
-          style={{ display: "none" }}
-          onChange={handleBrowseChange}
-          accept="application/json"
-        />
+      <button
+        className="ci-button ci-button--icon"
+        onClick={() => importGears()}
+        title="Import"
+      >
+        <Download />
+      </button>
+      <input
+        type="file"
+        id="file"
+        ref={browseInput}
+        style={{ display: "none" }}
+        onChange={handleBrowseChange}
+        accept="application/json"
+      />
 
-        <button
-          className="ci-button"
-          onClick={() =>
-            exportGearset({
-              name: "gearset",
-              gears,
-              hands,
-              settings,
-            })
-          }
-        >
-          Export
-        </button>
+      <button
+        className="ci-button ci-button--icon"
+        onClick={() =>
+          exportGearset({
+            name: "gearset",
+            gears,
+            hands,
+            settings,
+          })
+        }
+        title="Export"
+      >
+        <Export />
+      </button>
 
-        <button className="ci-button" onClick={() => resetGears()}>
-          Reset
-        </button>
-      </div>
+      <button
+        className="ci-button ci-button--icon"
+        onClick={() => resetGears()}
+        title="Reset"
+      >
+        <Reset />
+      </button>
     </div>
   );
 };

@@ -98,24 +98,10 @@ export const GearMenu = () => {
     setGears(newGears);
   }
 
-  const handleShiftGear = (
-    gearIndex: number | undefined,
-    shiftDown: boolean
-  ) => {
-    if (!gearIndex) return;
-    const newGears = [...gears];
-    const newPos = shiftDown ? gearIndex - 1 : gearIndex + 1;
-
-    newGears.splice(newPos, 0, newGears.splice(gearIndex, 1)[0]);
-
-    setGears(newGears);
-    setSettings({ ...settings, selectedGear: newPos });
-  };
-
-  if (settings.selectedGear === undefined || gears.length === 0)
-    return <span />;
-
-  const gear = gears[settings.selectedGear];
+  const gear =
+    settings.selectedGear === undefined
+      ? undefined
+      : gears[settings.selectedGear];
   const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
 
   const isRemovable = () => {
@@ -149,17 +135,30 @@ export const GearMenu = () => {
   return (
     <div className="gear-menu">
       <div className="gear-menu__header">
-        <button
-          className={clsx("ci-button", gear.fixed && "ci-button--selected")}
-          onClick={() => handleFixChange(settings.selectedGear, gear.fixed!)}
-          disabled={settings.selectedGear === 0 || isEscapementGear}
+        <span
+          className={clsx(
+            "gear-menu__header__title",
+            gear === undefined && "gear-menu__header__title--no-selection"
+          )}
         >
-          {gear.fixed ? <Locked /> : <Unlocked />}
-        </button>
-
-        <span className="gear-menu__header__title">
-          Gear {settings.selectedGear + 1}
+          {settings.selectedGear === undefined
+            ? "No gear selected"
+            : `Gear ${settings.selectedGear! + 1}`}
         </span>
+
+        <button
+          className={clsx(
+            "ci-button",
+            gear !== undefined && gear.fixed && "ci-button--selected"
+          )}
+          onClick={() => {
+            gear !== undefined &&
+              handleFixChange(settings.selectedGear, gear.fixed!);
+          }}
+          disabled={gear === undefined || isEscapementGear}
+        >
+          {gear !== undefined && gear.fixed ? <Locked /> : <Unlocked />}
+        </button>
 
         <button
           className="ci-button"
@@ -181,11 +180,14 @@ export const GearMenu = () => {
           min="5"
           max="100"
           step="1"
-          value={gear.teeth}
+          value={gear === undefined ? 0 : gear.teeth}
           onChange={(e) =>
             handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={settings.isPendulum && settings.selectedGear === 0}
+          disabled={
+            settings.selectedGear === undefined ||
+            (settings.isPendulum && settings.selectedGear === 0)
+          }
         />
 
         <input
@@ -193,11 +195,14 @@ export const GearMenu = () => {
           min="5"
           max="100"
           step="1"
-          value={gear.teeth}
+          value={gear === undefined ? 0 : gear.teeth}
           onChange={(e) =>
             handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={settings.isPendulum && settings.selectedGear === 0}
+          disabled={
+            settings.selectedGear === undefined ||
+            (settings.isPendulum && settings.selectedGear === 0)
+          }
         />
       </div>
 
@@ -209,11 +214,11 @@ export const GearMenu = () => {
           min="-180"
           max="180"
           step="1"
-          value={gear.orientation}
+          value={gear === undefined ? 0 : gear.orientation}
           onChange={(e) =>
             handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={gear.fixed}
+          disabled={gear === undefined || gear.fixed}
         />
 
         <input
@@ -221,29 +226,12 @@ export const GearMenu = () => {
           min="-180"
           max="180"
           step="1"
-          value={gear.orientation}
+          value={gear === undefined ? 0 : gear.orientation}
           onChange={(e) =>
             handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={gear.fixed}
+          disabled={gear === undefined || gear.fixed}
         />
-      </div>
-
-      <div className="gear-menu__shift">
-        <button
-          className="ci-button"
-          onClick={() => handleShiftGear(settings.selectedGear, true)}
-          disabled={settings.selectedGear === 0}
-        >
-          Move Up
-        </button>
-        <button
-          className="ci-button"
-          onClick={() => handleShiftGear(settings.selectedGear, false)}
-          disabled={settings.selectedGear === gears.length - 1}
-        >
-          Move Down
-        </button>
       </div>
     </div>
   );
