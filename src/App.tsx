@@ -58,41 +58,36 @@ function App() {
     [gears, settings]
   );
 
-  const DrawGears = useCallback(
-    (globalRpm: number) => {
-      calculateGears(gears, settings);
+  const DrawGears = useCallback(() => {
+    calculateGears(gears, settings);
 
-      // Prevent transitions when editing gears in smooth mode
-      // Need solution for pendulum mode
-      if (!settings.isPendulum) {
-        document.body.classList.add("disable-animations");
-        setTimeout(() => {
-          document.body.classList.remove("disable-animations");
-        }, 0);
-      }
+    // Prevent transitions when editing gears in smooth mode
+    // Need solution for pendulum mode
+    if (!settings.isPendulum) {
+      document.body.classList.add("disable-animations");
+      setTimeout(() => {
+        document.body.classList.remove("disable-animations");
+      }, 0);
+    }
 
-      return gears.map((gear, index) => {
-        const isSelected = index === settings.selectedGear;
-
-        return (
-          <span
-            key={index}
-            className={clsx(
-              `gear-wrap gear-wrap-${index}`,
-              isSelected && "gear-wrap--selected"
-            )}
-            style={getGearWrapStyles(gear, pendulumIncrement, settings)}
-            onClick={() => {
-              handleGearClick(index);
-            }}
-          >
-            {DrawGear(gear, index, isSelected, settings)}
-          </span>
-        );
-      });
-    },
-    [gears, settings, hands, handleGearClick, pendulumIncrement]
-  );
+    return gears.map((gear, index) => {
+      return (
+        <span
+          key={index}
+          className={clsx(
+            `gear-wrap gear-wrap-${index}`,
+            index === settings.selectedGear && "gear-wrap--selected"
+          )}
+          style={getGearWrapStyles(gear, pendulumIncrement, settings)}
+          onClick={() => {
+            handleGearClick(index);
+          }}
+        >
+          {DrawGear(gear, index, settings)}
+        </span>
+      );
+    });
+  }, [gears, settings, hands, handleGearClick, pendulumIncrement]);
 
   useEffect(() => {
     if (settings.isPendulum && !settings.isPaused) {
@@ -112,10 +107,7 @@ function App() {
     }
   }, [DrawGears, settings, halfStep, pendulumIncrement]);
 
-  const memoedGears = useMemo(
-    () => DrawGears(settings.globalRpm),
-    [settings, DrawGears]
-  );
+  const memoedGears = useMemo(() => DrawGears(), [settings, DrawGears]);
 
   // Pendulum
   const DrawPendulum = () => {

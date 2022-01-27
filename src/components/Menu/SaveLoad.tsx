@@ -4,6 +4,7 @@ import {
   defaultGearsetName,
   defaultHandsSettings,
   defaultSettings,
+  gearsetNames,
   gearSets,
   getGearset,
 } from "../Gear/Gearsets";
@@ -85,10 +86,10 @@ export const SaveLoad = () => {
   }, []);
 
   const gearsetList = () => {
-    return gearSets.map((gearset) => {
+    return Object.entries(gearsetNames).map(([key, value]) => {
       return (
-        <option key={gearset.name} value={gearset.name}>
-          {gearset.name}
+        <option key={key} value={value}>
+          {value}
         </option>
       );
     });

@@ -6,7 +6,6 @@ import { getGearStyles } from "./GearUtils";
 export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,
   index: number,
-  isSelected: boolean,
   settings: SettingsProps
 ) => {
   if (
@@ -75,8 +74,10 @@ export const DrawGear = (
   if (!isEscapementGear) {
     displayText += `#${index + 1}: ${teeth} - ${displayRatio}`;
     displayText += `- RPM: ${Math.round(rpm * 10) / 10}`;
-    displayText += `- P: ${parent ?? 0}`;
+    displayText += `- P: ${parent !== undefined ? parent + 1 : "N/A"}`;
   }
+
+  const isSelected = settings.selectedGear === index;
 
   return (
     <div

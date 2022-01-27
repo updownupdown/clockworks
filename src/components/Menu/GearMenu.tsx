@@ -35,65 +35,78 @@ export const GearMenu = () => {
     setGears(newGears);
   }
 
-  function removeGear(gear: number | undefined) {
+  function removeGear(gearIndex: number) {
     if (!gear) return;
 
     const newHands: HandsProps = { ...hands };
 
     // unassign hands from gears
     if (
-      hands.hours === gear ||
+      hands.hours === gearIndex ||
       (hands.hours !== undefined && hands.hours === gears.length - 1)
     ) {
       newHands.hours = undefined;
     }
     if (
-      hands.minutes === gear ||
+      hands.minutes === gearIndex ||
       (hands.minutes !== undefined && hands.minutes === gears.length - 1)
     ) {
       newHands.minutes = undefined;
     }
     if (
-      hands.seconds === gear ||
+      hands.seconds === gearIndex ||
       (hands.seconds !== undefined && hands.seconds === gears.length - 1)
     ) {
       newHands.seconds = undefined;
     }
 
-    // shift gears if needed
-    if (hands.hours !== undefined && gear < hands.hours) {
+    // shift hands to new gears if needed
+    if (hands.hours !== undefined && gearIndex < hands.hours) {
       newHands.hours = hands.hours - 1;
     }
-    if (hands.minutes !== undefined && gear < hands.minutes) {
+    if (hands.minutes !== undefined && gearIndex < hands.minutes) {
       newHands.minutes = hands.minutes - 1;
     }
-    if (hands.seconds !== undefined && gear < hands.seconds) {
+    if (hands.seconds !== undefined && gearIndex < hands.seconds) {
       newHands.seconds = hands.seconds - 1;
     }
 
     setHands(newHands);
 
     // remove gear
-    const newGears = gears.filter((element, index) => index !== gear);
+    const newGears = gears.filter((gear, index) => index !== gearIndex);
 
     // change selected gear
     let newSelectedGear = undefined;
-    if (gear + 1 < gears.length) {
-      newSelectedGear = gear;
-    } else if (gear > 1) {
-      newSelectedGear = gear - 1;
+    const deletedGearParent = gears[gearIndex].parent;
+
+    if (
+      deletedGearParent !== undefined &&
+      deletedGearParent < newGears.length
+    ) {
+      // Select gear's parent;
+      newSelectedGear = deletedGearParent;
+    } else if (gearIndex + 1 < gears.length) {
+      // Select next gear
+      newSelectedGear = gearIndex;
+    } else if (gearIndex > 1) {
+      // Select previous gear;
+      newSelectedGear = gearIndex - 1;
     }
 
-    setGears(newGears);
     setSettings({ ...settings, selectedGear: newSelectedGear });
+    setGears(newGears);
   }
 
-  const handleShiftGear = (index: number | undefined, shiftDown: boolean) => {
-    if (!index) return;
+  const handleShiftGear = (
+    gearIndex: number | undefined,
+    shiftDown: boolean
+  ) => {
+    if (!gearIndex) return;
     const newGears = [...gears];
-    const newPos = shiftDown ? index - 1 : index + 1;
+    const newPos = shiftDown ? gearIndex - 1 : gearIndex + 1;
 
-    newGears.splice(newPos, 0, newGears.splice(index, 1)[0]);
+    newGears.splice(newPos, 0, newGears.splice(gearIndex, 1)[0]);
 
     setGears(newGears);
     setSettings({ ...settings, selectedGear: newPos });
@@ -104,6 +117,34 @@ export const GearMenu = () => {
 
   const gear = gears[settings.selectedGear];
   const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
+
+  const isRemovable = () => {
+    if (settings.selectedGear === undefined) return false;
+
+    // Don't delete if only one gear left
+    if (gears.length === 1) return false;
+
+    // Check for forks...
+    let lastParent = gears[settings.selectedGear].parent;
+    if (lastParent === undefined) return false;
+
+    // Don't delete if gear is a fork, unless it's the last gear
+    if (
+      settings.selectedGear !== lastParent + 1 &&
+      settings.selectedGear !== gears.length - 1
+    ) {
+      return false;
+    }
+
+    // Don't delete if gearset "forks" after the selected gear
+    for (let i = settings.selectedGear + 1; i < gears.length; i++) {
+      const gearParent = gears[i].parent ?? 0;
+      if (gearParent !== lastParent + 1) return false;
+      lastParent = gearParent;
+    }
+
+    return true;
+  };
 
   return (
     <div className="gear-menu">
@@ -122,8 +163,11 @@ export const GearMenu = () => {
 
         <button
           className="ci-button"
-          onClick={() => removeGear(settings.selectedGear)}
-          disabled={gears.length === 1}
+          onClick={() => {
+            settings.selectedGear !== undefined &&
+              removeGear(settings.selectedGear);
+          }}
+          disabled={!isRemovable()}
         >
           <Delete />
         </button>
