@@ -1,10 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ClockworksContext } from "../context/context";
 import { newGearSettings } from "../Gear/GearSets";
-import Play from "../Icons/Play";
-import Pause from "../Icons/Pause";
-import Pendulum from "../Icons/Pendulum";
-import Battery from "../Icons/Battery";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { Gauge } from "./Gauge";
@@ -15,10 +11,20 @@ import { SpeedMenu } from "./SpeedMenu";
 
 interface MenuSectionProps {
   children: React.ReactNode;
+  className?: string | undefined;
 }
 
-const MenuSection = ({ children }: MenuSectionProps) => {
-  return <div className="menu__section">{children}</div>;
+const MenuSection = ({ children, className }: MenuSectionProps) => {
+  return (
+    <div
+      className={clsx(
+        "menu__section",
+        className !== undefined && "menu__section--" + className
+      )}
+    >
+      {children}
+    </div>
+  );
 };
 
 export const Menu = () => {
@@ -55,7 +61,7 @@ export const Menu = () => {
         <SpeedMenu />
       </MenuSection>
 
-      <MenuSection>
+      <MenuSection className="no-top-border">
         <div className="menu__gauges">
           <Gauge
             assignedGear={hands.hours}

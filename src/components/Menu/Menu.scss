@@ -62,6 +62,11 @@
     .menu--hide & {
       display: none;
     }
+
+    &--no-top-border {
+      padding-top: 0;
+      border: 0;
+    }
   }
 
   .save-load {

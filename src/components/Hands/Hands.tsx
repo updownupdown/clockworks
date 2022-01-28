@@ -1,7 +1,7 @@
 import React from "react";
-import HandHours from "../Hands/HandHours";
-import HandMinutes from "../Hands/HandMinutes";
-import HandSeconds from "../Hands/HandSeconds";
+import HandHours from "../Icons/HandHours";
+import HandMinutes from "../Icons/HandMinutes";
+import HandSeconds from "../Icons/HandSeconds";
 import { getGearWrapStyles, getGearStyles } from "../Gear/GearUtils";
 import { GearProps, HandsProps, SettingsProps } from "../Gear/GearSets";
 
