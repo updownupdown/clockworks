@@ -66,10 +66,10 @@ export const gearsetNames = {
   Forks: "Forking gears",
   SimpleSet: "Simple set",
   MediumSet: "Medium set",
-  WorkingHands: "Working clock hands",
+  AccurateClock: "Accurate clock",
 } as const;
 
-export const defaultGearsetName = gearsetNames.WorkingHands;
+export const defaultGearsetName = gearsetNames.AccurateClock;
 
 export const gearSets: GearSetProps[] = [
   {
@@ -78,6 +78,14 @@ export const gearSets: GearSetProps[] = [
       hours: 6,
       minutes: 9,
       seconds: 0,
+    },
+    settings: {
+      tolerance: 0,
+      globalRpm: 1,
+      globalHertz: 0.5,
+      isPaused: false,
+      isPendulum: false,
+      selectedGear: undefined,
     },
     gears: [
       {
@@ -187,7 +195,7 @@ export const gearSets: GearSetProps[] = [
     ],
   },
   {
-    name: gearsetNames.WorkingHands,
+    name: gearsetNames.AccurateClock,
     hands: {
       hours: 12,
       minutes: 6,
@@ -204,7 +212,7 @@ export const gearSets: GearSetProps[] = [
         fixed: true,
       },
       {
-        teeth: 40,
+        teeth: 33,
         orientation: 120,
       },
       {
@@ -213,7 +221,7 @@ export const gearSets: GearSetProps[] = [
         fixed: true,
       },
       {
-        teeth: 40,
+        teeth: 50,
         orientation: 30,
       },
       {
@@ -230,7 +238,7 @@ export const gearSets: GearSetProps[] = [
         orientation: -90,
       },
       {
-        teeth: 40,
+        teeth: 39,
         orientation: -75,
       },
       {

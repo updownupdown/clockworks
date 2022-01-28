@@ -3,7 +3,7 @@ import { ClockworksContext } from "../context/context";
 import { newGearSettings } from "../Gear/GearSets";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
-import { Gauge } from "./Gauge";
+import { Gauge, GaugeTypes } from "./Gauge";
 import { SaveLoad } from "./SaveLoad";
 import clsx from "clsx";
 import "./Menu.scss";
@@ -66,7 +66,7 @@ export const Menu = () => {
           <Gauge
             assignedGear={hands.hours}
             gear={hands.hours !== undefined ? gears[hands.hours] : undefined}
-            hand="Hours"
+            hand={GaugeTypes.Hours}
             unit="day"
             multiplier={60 * 24}
             tolerance={settings.tolerance}
@@ -84,7 +84,7 @@ export const Menu = () => {
             gear={
               hands.minutes !== undefined ? gears[hands.minutes] : undefined
             }
-            hand="Minutes"
+            hand={GaugeTypes.Minutes}
             unit="hr"
             multiplier={60}
             tolerance={settings.tolerance}
@@ -102,7 +102,7 @@ export const Menu = () => {
             gear={
               hands.seconds !== undefined ? gears[hands.seconds] : undefined
             }
-            hand="Seconds"
+            hand={GaugeTypes.Seconds}
             unit="min"
             multiplier={1}
             tolerance={settings.tolerance}

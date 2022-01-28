@@ -13,6 +13,12 @@ interface Props {
   assignedGear: number | undefined;
 }
 
+export const GaugeTypes = {
+  Hours: "Hours",
+  Minutes: "Minutes",
+  Seconds: "Seconds",
+} as const;
+
 export const Gauge = ({
   gear,
   unit,
@@ -29,23 +35,33 @@ export const Gauge = ({
   let indicatorPosition = 0;
   let speed = 0;
 
+  // 10   12       20
+  // 12 - 10 / (20-10)
+
   if (hasAssignedGear) {
     speed = Math.round(gear.rpm! * multiplier * 100) / 100;
-    const range = hand === "Hours" ? 2 : 1;
-    const gaugePosition = speed / range;
+    const gaugeMiddle = hand === GaugeTypes.Hours ? 2 : 1;
+    const gaugeLow = gaugeMiddle * 0.5;
+    const gaugeHigh = gaugeMiddle * 1.5;
+    const gaugeRange = gaugeHigh - gaugeLow;
 
-    indicatorPosition = gaugePosition / 2;
-    if (indicatorPosition < 0) indicatorPosition = 0;
-    if (indicatorPosition > 1) indicatorPosition = 1;
+    indicatorPosition = (speed - gaugeLow) / gaugeRange;
 
-    isInRange =
-      indicatorPosition < 0.5 + tolerance / 100 / 2 &&
-      indicatorPosition > 0.5 - tolerance / 100 / 2;
+    const toleranceRange = (gaugeMiddle * tolerance) / 100 / 2;
+
+    const rangeLow = gaugeMiddle - toleranceRange;
+    const rangeHigh = gaugeMiddle + toleranceRange;
+
+    // keep gauge within bar
+    if (speed < gaugeLow) indicatorPosition = 0;
+    if (speed > gaugeHigh) indicatorPosition = 1;
+
+    isInRange = speed >= rangeLow && speed <= rangeHigh;
   }
 
   const options = [
     <option value={"none"} key="undefined">
-      --
+      -
     </option>,
   ];
   for (let i = 0; i < numGears; i++) {
@@ -82,7 +98,7 @@ export const Gauge = ({
         <span className="gauge__bar__range" />
         <span
           className="gauge__bar__tolerance"
-          style={{ width: `${tolerance}%` }}
+          style={{ width: `${tolerance}%`, left: `${0.5 * 100}%` }}
         />
         {hasAssignedGear && (
           <span
