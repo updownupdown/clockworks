@@ -3,7 +3,7 @@ import { ClockworksContext } from "../context/context";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
 import Delete from "../Icons/Delete";
-import { HandsProps } from "../Gear/Gearsets";
+import { HandsProps } from "../Gear/GearSets";
 import clsx from "clsx";
 import "./GearMenu.scss";
 
@@ -11,32 +11,32 @@ export const GearMenu = () => {
   const { gears, setGears, settings, setSettings, hands, setHands } =
     useContext(ClockworksContext);
 
-  const handleTeethChange = (index: number | undefined, value: number) => {
-    if (!index) return;
+  const handleTeethChange = (gearIndex: number | undefined, value: number) => {
+    if (gearIndex === undefined) return;
 
     const newGears = [...gears];
-    newGears[index].teeth = value;
+    newGears[gearIndex].teeth = value;
     setGears(newGears);
   };
 
-  const handleOffsetChange = (index: number | undefined, value: number) => {
-    if (!index) return;
+  const handleOffsetChange = (gearIndex: number | undefined, value: number) => {
+    if (gearIndex === undefined) return;
 
     const newGears = [...gears];
-    newGears[index].orientation = value;
+    newGears[gearIndex].orientation = value;
     setGears(newGears);
   };
 
-  function handleFixChange(index: number | undefined, fixed: boolean) {
-    if (!index) return;
+  function handleFixChange(gearIndex: number | undefined, fixed: boolean) {
+    if (gearIndex === undefined) return;
 
     const newGears = [...gears];
-    newGears[index].fixed = !fixed;
+    newGears[gearIndex].fixed = !fixed;
     setGears(newGears);
   }
 
   function removeGear(gearIndex: number) {
-    if (!gear) return;
+    if (gearIndex === undefined) return;
 
     const newHands: HandsProps = { ...hands };
 
@@ -105,7 +105,7 @@ export const GearMenu = () => {
   const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
 
   const isRemovable = () => {
-    if (settings.selectedGear === undefined) return false;
+    if (settings.selectedGear === undefined || gears.length === 0) return false;
 
     // Don't delete if only one gear left
     if (gears.length === 1) return false;

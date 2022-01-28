@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { ClockworksContext } from "../context/context";
-import { newGearSettings } from "../Gear/Gearsets";
+import { newGearSettings } from "../Gear/GearSets";
 import Play from "../Icons/Play";
 import Pause from "../Icons/Pause";
 import Pendulum from "../Icons/Pendulum";
@@ -11,6 +11,7 @@ import { Gauge } from "./Gauge";
 import { SaveLoad } from "./SaveLoad";
 import clsx from "clsx";
 import "./Menu.scss";
+import { SpeedMenu } from "./SpeedMenu";
 
 interface MenuSectionProps {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export const Menu = () => {
 
   return (
     <div className="menu">
-      <div className="menu__section">
+      <MenuSection>
         <div className="menu-title">
           <div className="menu-title__text">
             <h1>Clockworks</h1>
@@ -44,72 +45,14 @@ export const Menu = () => {
             </a>
           </div>
         </div>
-      </div>
+      </MenuSection>
 
       <MenuSection>
         <SaveLoad />
       </MenuSection>
 
       <MenuSection>
-        <div className="menu__speed">
-          <button
-            className="ci-button ci-button--icon"
-            onClick={() =>
-              setSettings({ ...settings, isPaused: !settings.isPaused })
-            }
-          >
-            {settings.isPaused ? <Play /> : <Pause />}
-          </button>
-
-          <div className="menu__speed__rpm">
-            <input
-              type="number"
-              min={settings.isPendulum ? 0.25 : 1}
-              max={settings.isPendulum ? 5 : 20}
-              step={settings.isPendulum ? 0.25 : 1}
-              value={
-                settings.isPendulum ? settings.globalHertz : settings.globalRpm
-              }
-              onChange={(e) => {
-                if (settings.isPendulum) {
-                  setSettings({
-                    ...settings,
-                    globalHertz: Number(e.target.value),
-                  });
-                } else {
-                  setSettings({
-                    ...settings,
-                    globalRpm: Number(e.target.value),
-                  });
-                }
-              }}
-            />
-            <span>{settings.isPendulum ? "Hz" : "RPM"}</span>
-          </div>
-
-          <div className="menu__speed__type">
-            <button
-              className={clsx(
-                "ci-button ci-button--icon",
-                !settings.isPendulum && "ci-button--selected"
-              )}
-              onClick={() => setSettings({ ...settings, isPendulum: false })}
-              disabled={!settings.isPendulum}
-            >
-              <Battery />
-            </button>
-            <button
-              className={clsx(
-                "ci-button ci-button--icon",
-                settings.isPendulum && "ci-button--selected"
-              )}
-              onClick={() => setSettings({ ...settings, isPendulum: true })}
-              disabled={settings.isPendulum}
-            >
-              <Pendulum />
-            </button>
-          </div>
-        </div>
+        <SpeedMenu />
       </MenuSection>
 
       <MenuSection>

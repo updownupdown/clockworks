@@ -1,7 +1,8 @@
-import { GearProps, SettingsProps } from "./Gearsets";
-import { polar, rotate, q7, ratioDisplay } from "./utils";
-import clsx from "clsx";
+import { GearProps, SettingsProps } from "./GearSets";
+import { polar, rotate, q7, ratioDisplay } from "./GearMath";
 import { getGearStyles } from "./GearUtils";
+import clsx from "clsx";
+import "./DrawGear.scss";
 
 export const DrawGear = (
   { teeth, p, c, b, r, t, k, ratio, rpm, clockwise, parent }: GearProps,

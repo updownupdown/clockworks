@@ -1,3 +1,5 @@
+@import "../../css//media.scss";
+
 .menu {
   overflow-y: auto;
   z-index: 10;
@@ -8,6 +10,10 @@
 
   display: flex;
   flex-direction: column;
+
+  @media #{$query-max-md} {
+    height: auto;
+  }
 
   // Title
   .menu-title {
@@ -90,39 +96,6 @@
       font-weight: 600;
       color: var(--K800);
       text-align: center;
-    }
-  }
-
-  // Speed controls
-  &__speed {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    &__type {
-      display: flex;
-
-      button:first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-      button:last-child {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
-    }
-
-    // RPM
-    &__rpm {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-
-      span {
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--K800);
-      }
     }
   }
 }

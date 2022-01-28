@@ -1,14 +1,23 @@
-import React, { useContext } from "react";
+import React from "react";
 import HandHours from "../Hands/HandHours";
 import HandMinutes from "../Hands/HandMinutes";
 import HandSeconds from "../Hands/HandSeconds";
 import { getGearWrapStyles, getGearStyles } from "../Gear/GearUtils";
-import { ClockworksContext } from "../context/context";
+import { GearProps, HandsProps, SettingsProps } from "../Gear/GearSets";
 
-export const DrawHands = () => {
-  const { gears, settings, pendulumIncrement, hands } =
-    useContext(ClockworksContext);
+interface Props {
+  gears: GearProps[];
+  hands: HandsProps;
+  settings: SettingsProps;
+  pendulumIncrement: number;
+}
 
+export const DrawHands = ({
+  gears,
+  settings,
+  pendulumIncrement,
+  hands,
+}: Props) => {
   let handsOutput: HTMLElement | any = [];
 
   function drawHand(index: number | undefined, hand: React.ReactNode) {

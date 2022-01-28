@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
-import { ratioDisplay } from "../Gear/utils";
+import { ratioDisplay } from "../Gear/GearMath";
 import clsx from "clsx";
 import { ClockworksContext } from "../context/context";
 import "./GearTable.scss";
@@ -12,6 +12,8 @@ export const GearTable = () => {
   const [showColumn, setShowColumn] = useState("RPM");
 
   const gearList = gears.map((gear, index) => {
+    if (gear.rpm === undefined) return <tr key={index} />;
+
     const displayRatio =
       index === 0 || gear.fixed ? "-" : ratioDisplay(gear.ratio!);
 

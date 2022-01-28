@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { GearProps } from "../Gear/Gearsets";
+import { GearProps } from "../Gear/GearSets";
 import "./Gauge.scss";
 
 interface Props {

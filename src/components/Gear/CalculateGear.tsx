@@ -1,17 +1,17 @@
-import { degrees_to_radians, iang } from "./utils";
-import { firstGearOrigin } from "../../App";
-import { GearProps, SettingsProps } from "./Gearsets";
-import "./Gear.scss";
+import { degrees_to_radians, iang } from "./GearMath";
+import { canvasSettings } from "../Canvas/Canvas";
+import { GearProps, SettingsProps } from "./GearSets";
 
 // Calculate all gears
 export function calculateGears(gears: GearProps[], settings: SettingsProps) {
-  let newGears: GearProps[] = [];
+  let calculatedGears: GearProps[] = [];
 
   for (let i = 0; i < gears.length; i++) {
     const gear = calculateGear(i, gears, gears[i], settings);
-
-    newGears.push(gear);
+    calculatedGears.push(gear);
   }
+
+  return calculatedGears;
 }
 
 // Calculate single gear
@@ -22,8 +22,6 @@ export function calculateGear(
   settings: SettingsProps
 ) {
   const isFirstGear = index === 0;
-  const isEscapementGear = settings.isPendulum && isFirstGear;
-  if (isEscapementGear) gear.teeth = 30;
 
   // Parent gear
   if (gear.parent === undefined) {
@@ -63,7 +61,7 @@ export function calculateGear(
 
   // Position offset
   if (isFirstGear) {
-    gear.positionOffset = firstGearOrigin;
+    gear.positionOffset = canvasSettings.firstGearOrigin;
   } else {
     const r = gear.p + parentGear.p!;
 

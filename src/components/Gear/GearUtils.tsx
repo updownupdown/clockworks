@@ -1,10 +1,11 @@
 import React from "react";
-import { GearProps, SettingsProps } from "./Gearsets";
+import { GearProps, SettingsProps } from "./GearSets";
 
 export function getGearWrapStyles(
   currentGear: GearProps,
   pendulumIncrement: number,
-  settings: SettingsProps
+  settings: SettingsProps,
+  isClockface?: boolean
 ) {
   if (
     currentGear.positionOffset === undefined ||
@@ -18,8 +19,8 @@ export function getGearWrapStyles(
     : currentGear.pendulumAngleIncrement;
 
   return {
-    left: `${currentGear.positionOffset.x}px`,
-    top: `${currentGear.positionOffset.y}px`,
+    top: isClockface ? "0px" : `${currentGear.positionOffset.y}px`,
+    left: isClockface ? "0px" : `${currentGear.positionOffset.x}px`,
     transform: `translateX(-50%) translateY(-50%) rotate(${
       currentGear.rotationOffset + pendulumAngleIncrement * pendulumIncrement
     }deg)`,

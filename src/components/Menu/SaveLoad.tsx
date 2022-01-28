@@ -6,8 +6,9 @@ import {
   defaultSettings,
   gearsetNames,
   getGearset,
-} from "../Gear/Gearsets";
-import { GearSetProps } from "../Gear/Gearsets";
+  newGearSettings,
+} from "../Gear/GearSets";
+import { GearSetProps } from "../Gear/GearSets";
 import Download from "../Icons/Download";
 import Export from "../Icons/Export";
 import Reset from "../Icons/Reset";
@@ -64,7 +65,7 @@ export const SaveLoad = () => {
     setHands(defaultHandsSettings);
   }
 
-  function loadSettings(gearsetName: string) {
+  function loadPreset(gearsetName: string) {
     const gearset = getGearset(gearsetName);
 
     const gearsetGears = gearset?.gears ? gearset.gears : [];
@@ -78,13 +79,10 @@ export const SaveLoad = () => {
   }
 
   function resetGears() {
-    if (window.confirm("Are you sure you want to delete all gears?"))
-      setGears([]);
+    if (window.confirm("Are you sure you want to delete all gears?")) {
+      setGears([newGearSettings]);
+    }
   }
-
-  useEffect(() => {
-    loadSettings(defaultGearsetName);
-  }, []);
 
   const gearsetList = () => {
     return Object.entries(gearsetNames).map(([key, value]) => {
@@ -175,7 +173,7 @@ export const SaveLoad = () => {
         onChange={(e) => {
           if (window.confirm("Are you sure you want to update all gears?")) {
             resetHands();
-            loadSettings(e.target.value);
+            loadPreset(e.target.value);
           }
         }}
         value=""

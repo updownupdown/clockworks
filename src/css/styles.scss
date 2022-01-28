@@ -130,6 +130,7 @@ button {
       display: none;
       top: 60px;
       left: 50%;
+      width: auto;
       transform: translateX(-50%);
       max-width: calc(100vw - 40px);
       max-height: calc(100vh - 80px);
@@ -180,88 +181,6 @@ button {
   }
 }
 
-.canvas-wrap {
-  width: 100vw;
-  height: 100vh;
-}
-
-.canvas {
-  cursor: grab;
-  // overflow: hidden;
-
-  border: 30px solid var(--B300);
-  box-shadow: 1px 2px 12px rgba(0, 0, 0, 0.15), 2px 4px 40px rgba(0, 0, 0, 0.15);
-
-  $gridUnit: 10px;
-  $lines: rgba(255, 255, 255, 0.08);
-  $linesLarge: rgba(255, 255, 255, 0.11);
-
-  background-color: var(--B300);
-
-  // vertical lines, horizontal lines; large vertical lines, large horizontal lines
-  background-image: linear-gradient(to right, $lines 1px, transparent 1px),
-    linear-gradient(to bottom, $lines 1px, transparent 1px),
-    linear-gradient(to right, $linesLarge 1px, transparent 1px),
-    linear-gradient(to bottom, $linesLarge 1px, transparent 1px);
-
-  background-size: $gridUnit $gridUnit, $gridUnit $gridUnit,
-    $gridUnit * 10 $gridUnit * 10, $gridUnit * 10 $gridUnit * 10;
-}
-
-.canvas-actions {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  flex-direction: row;
-  padding: 0 12px 12px 0;
-
-  &:before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    pointer-events: none;
-    bottom: 0;
-    right: 0;
-    width: 700px;
-    height: 250px;
-
-    border-radius: 50%;
-
-    background: radial-gradient(
-      rgba(var(--B500-rgb), 0.4) 0%,
-      rgba(var(--B500-rgb), 0) 60%
-    );
-
-    transform: translateX(50%) translateY(50%);
-  }
-
-  button {
-    transition: 0.2s ease background;
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-
-    border-radius: 6px;
-
-    svg {
-      width: 32px;
-      height: 32px;
-      path {
-        fill: var(--white);
-      }
-    }
-
-    &:hover {
-      background: rgba(var(--white-rgb), 0.2);
-    }
-  }
-}
-
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -308,19 +227,19 @@ button {
     animation-iteration-count: infinite;
 
     .canvas--smooth & {
-      animation-name: spin-hand;
+      animation-name: spin;
       animation-timing-function: linear;
     }
     .disable-animations &,
     .canvas--paused.canvas--smooth & {
       animation-play-state: paused;
     }
+  }
+}
 
-    @keyframes spin-hand {
-      to {
-        transform: rotate(360deg);
-      }
-    }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
