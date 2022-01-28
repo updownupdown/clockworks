@@ -8,26 +8,11 @@
 .table-select {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 
-  span {
-    margin-right: auto;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  button {
-    &:first-of-type {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-    &:last-of-type {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-    &:not(:first-of-type):not(:last-of-type) {
-      border-radius: 0;
-    }
+  label {
+    margin-left: auto;
+    margin-right: 8px;
   }
 }
 
@@ -59,10 +44,12 @@
   .cell-gear-fixed {
     width: 24px;
   }
-  .cell-gear-num {
+  .cell-gear-num,
+  .cell-gear-hand {
     font-weight: 700;
   }
   .cell-gear-num,
+  .cell-gear-hand,
   .cell-gear-teeth,
   .cell-gear-ratio {
     text-align: center;

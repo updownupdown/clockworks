@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { ClockworksContext } from "../context/context";
 import Locked from "../Icons/Locked";
 import Unlocked from "../Icons/Unlocked";
@@ -10,6 +10,43 @@ import "./GearMenu.scss";
 export const GearMenu = () => {
   const { gears, setGears, settings, setSettings, hands, setHands } =
     useContext(ClockworksContext);
+
+  const gear =
+    settings.selectedGear === undefined
+      ? undefined
+      : gears[settings.selectedGear];
+  const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
+
+  const isRemovable = () => {
+    if (settings.selectedGear === undefined || gears.length === 0) return false;
+
+    // Don't delete if only one gear left
+    if (gears.length === 1) return false;
+
+    // Check for forks...
+    let lastParent = gears[settings.selectedGear].parent;
+    if (lastParent === undefined) return false;
+
+    // Don't delete if gear is a fork, unless it's the last gear
+    if (
+      settings.selectedGear !== lastParent + 1 &&
+      settings.selectedGear !== gears.length - 1
+    ) {
+      return false;
+    }
+
+    // Don't delete if gearset "forks" after the selected gear
+    for (let i = settings.selectedGear + 1; i < gears.length; i++) {
+      const gearParent = gears[i].parent ?? 0;
+      if (gearParent !== lastParent + 1) return false;
+      lastParent = gearParent;
+    }
+
+    return true;
+  };
+
+  const gearHasAssignedHand =
+    Object.values(hands).indexOf(settings.selectedGear) > -1;
 
   const handleTeethChange = (gearIndex: number | undefined, value: number) => {
     if (gearIndex === undefined) return;
@@ -98,39 +135,26 @@ export const GearMenu = () => {
     setGears(newGears);
   }
 
-  const gear =
-    settings.selectedGear === undefined
-      ? undefined
-      : gears[settings.selectedGear];
-  const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
+  function assignHand(type: string) {
+    let newHands = { ...hands };
 
-  const isRemovable = () => {
-    if (settings.selectedGear === undefined || gears.length === 0) return false;
+    // unassigned from other hands
+    if (newHands.hours === settings.selectedGear) newHands.hours = undefined;
+    if (newHands.minutes === settings.selectedGear)
+      newHands.minutes = undefined;
+    if (newHands.seconds === settings.selectedGear)
+      newHands.seconds = undefined;
 
-    // Don't delete if only one gear left
-    if (gears.length === 1) return false;
-
-    // Check for forks...
-    let lastParent = gears[settings.selectedGear].parent;
-    if (lastParent === undefined) return false;
-
-    // Don't delete if gear is a fork, unless it's the last gear
-    if (
-      settings.selectedGear !== lastParent + 1 &&
-      settings.selectedGear !== gears.length - 1
-    ) {
-      return false;
+    if (type === "hours") {
+      newHands.hours = settings.selectedGear;
+    } else if (type === "minutes") {
+      newHands.minutes = settings.selectedGear;
+    } else if (type === "seconds") {
+      newHands.seconds = settings.selectedGear;
     }
 
-    // Don't delete if gearset "forks" after the selected gear
-    for (let i = settings.selectedGear + 1; i < gears.length; i++) {
-      const gearParent = gears[i].parent ?? 0;
-      if (gearParent !== lastParent + 1) return false;
-      lastParent = gearParent;
-    }
-
-    return true;
-  };
+    setHands(newHands);
+  }
 
   return (
     <div className="gear-menu">
@@ -141,7 +165,7 @@ export const GearMenu = () => {
             gear === undefined && "gear-menu__header__title--no-selection"
           )}
         >
-          {settings.selectedGear === undefined
+          {gear === undefined
             ? "No gear selected"
             : `Gear ${settings.selectedGear! + 1}`}
         </span>
@@ -173,7 +197,7 @@ export const GearMenu = () => {
       </div>
 
       <div className="gear-menu__setting">
-        <span>Teeth</span>
+        <label className="side-label">Teeth</label>
 
         <input
           type="range"
@@ -207,7 +231,7 @@ export const GearMenu = () => {
       </div>
 
       <div className="gear-menu__setting">
-        <span>Orientation</span>
+        <label className="side-label">Orientation</label>
 
         <input
           type="range"
@@ -232,6 +256,79 @@ export const GearMenu = () => {
           }
           disabled={gear === undefined || gear.fixed}
         />
+      </div>
+
+      <div className="gear-menu__hands">
+        <label className="side-label">Hand</label>
+
+        <div
+          className={clsx(
+            "ci-button-group",
+            settings.selectedGear === undefined && "ci-button-group--disabled"
+          )}
+        >
+          <button
+            className={clsx(
+              "ci-button ci-button--small",
+              settings.selectedGear !== undefined &&
+                !gearHasAssignedHand &&
+                "ci-button--selected"
+            )}
+            onClick={() => {
+              assignHand("none");
+            }}
+            disabled={
+              settings.selectedGear === undefined || !gearHasAssignedHand
+            }
+          >
+            None
+          </button>
+          <button
+            className={clsx(
+              "ci-button ci-button--small",
+              hands.hours === settings.selectedGear && "ci-button--selected"
+            )}
+            onClick={() => {
+              assignHand("hours");
+            }}
+            disabled={
+              settings.selectedGear === undefined ||
+              hands.hours === settings.selectedGear
+            }
+          >
+            Hr
+          </button>
+          <button
+            className={clsx(
+              "ci-button ci-button--small",
+              hands.minutes === settings.selectedGear && "ci-button--selected"
+            )}
+            onClick={() => {
+              assignHand("minutes");
+            }}
+            disabled={
+              settings.selectedGear === undefined ||
+              hands.minutes === settings.selectedGear
+            }
+          >
+            Min
+          </button>
+          <button
+            className={clsx(
+              "ci-button ci-button--small",
+              hands.seconds === settings.selectedGear && "ci-button--selected"
+            )}
+            onClick={() => {
+              assignHand("seconds");
+            }}
+            disabled={
+              settings.selectedGear === undefined ||
+              hands.seconds === settings.selectedGear
+            }
+          >
+            Sec
+          </button>
+        </div>
       </div>
     </div>
   );

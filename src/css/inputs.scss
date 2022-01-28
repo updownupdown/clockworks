@@ -24,6 +24,21 @@
   }
 }
 
+label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--K800);
+
+  &.side-label {
+    width: 90px;
+  }
+  &.small-label {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--K500);
+  }
+}
+
 // Number
 input[type="number"] {
   @include inputProps;
@@ -36,7 +51,7 @@ input[type="number"] {
 
   &:disabled {
     color: var(--K400);
-    border: 1px solid var(--K200);
+    border: 1px solid var(--K150);
     background: var(--K100);
   }
 }
@@ -59,6 +74,31 @@ select {
 }
 
 // Button
+.ci-button-group {
+  display: flex;
+  gap: 1px;
+
+  border-radius: 6px;
+  background: var(--K300);
+
+  &--disabled {
+    background: var(--K150);
+  }
+
+  button {
+    &:first-of-type {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &:last-of-type {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    &:not(:first-of-type):not(:last-of-type) {
+      border-radius: 0;
+    }
+  }
+}
 .ci-button {
   $iconSize: 24px;
   $paddingSize: 8px;
@@ -75,7 +115,7 @@ select {
   font-weight: 600;
 
   &--small {
-    padding: 4px 10;
+    padding: 5px 8px;
     font-size: 14px;
     font-weight: 500;
   }
@@ -88,6 +128,7 @@ select {
   }
 
   svg {
+    display: block;
     width: $iconSize;
     height: $iconSize;
 
@@ -134,16 +175,16 @@ input[type="range"] {
   height: 6px;
   margin: 14px 0;
 
-  border-radius: 2px;
-  border: 1px solid var(--K300);
+  border-radius: 3px;
+  border: 1px solid var(--K200);
   background: var(--K200);
 
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover {
-      border-color: var(--K500);
-      background: var(--K200);
+      border-color: var(--K400);
+      background: var(--K300);
     }
   }
 

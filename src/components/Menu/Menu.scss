@@ -77,32 +77,6 @@
       min-width: 20px;
     }
   }
-
-  // Hands Guages
-  &__gauges {
-    display: flex;
-
-    input[type="number"] {
-      width: 80px;
-    }
-  }
-
-  // Tolerance
-  &__tolerance {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-    gap: 12px;
-    margin-top: 20px;
-
-    span {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--K800);
-      text-align: center;
-    }
-  }
 }
 
 .gear-actions {

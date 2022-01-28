@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ClockworksContext } from "../context/context";
 import { newGearSettings } from "../Gear/GearSets";
 import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
-import { Gauge, GaugeTypes } from "./Gauge";
+import { GaugeMenu } from "./GaugeMenu";
 import { SaveLoad } from "./SaveLoad";
 import clsx from "clsx";
 import "./Menu.scss";
@@ -62,90 +62,7 @@ export const Menu = () => {
       </MenuSection>
 
       <MenuSection className="no-top-border">
-        <div className="menu__gauges">
-          <Gauge
-            assignedGear={hands.hours}
-            gear={hands.hours !== undefined ? gears[hands.hours] : undefined}
-            hand={GaugeTypes.Hours}
-            unit="day"
-            multiplier={60 * 24}
-            tolerance={settings.tolerance}
-            setHands={(value: number | undefined) => {
-              setHands({
-                ...hands,
-                hours: value,
-              });
-            }}
-            numGears={gears.length}
-          />
-
-          <Gauge
-            assignedGear={hands.minutes}
-            gear={
-              hands.minutes !== undefined ? gears[hands.minutes] : undefined
-            }
-            hand={GaugeTypes.Minutes}
-            unit="hr"
-            multiplier={60}
-            tolerance={settings.tolerance}
-            setHands={(value: number | undefined) => {
-              setHands({
-                ...hands,
-                minutes: value,
-              });
-            }}
-            numGears={gears.length}
-          />
-
-          <Gauge
-            assignedGear={hands.seconds}
-            gear={
-              hands.seconds !== undefined ? gears[hands.seconds] : undefined
-            }
-            hand={GaugeTypes.Seconds}
-            unit="min"
-            multiplier={1}
-            tolerance={settings.tolerance}
-            setHands={(value: number | undefined) => {
-              setHands({
-                ...hands,
-                seconds: value,
-              });
-            }}
-            numGears={gears.length}
-          />
-        </div>
-
-        <div className="menu__tolerance">
-          <span>Tolerance (%)</span>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            value={settings.tolerance}
-            onChange={(e) => {
-              setSettings({
-                ...settings,
-                tolerance: Number(e.target.value),
-              });
-            }}
-          />
-
-          <input
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            value={settings.tolerance}
-            onChange={(e) => {
-              setSettings({
-                ...settings,
-                tolerance: Number(e.target.value),
-              });
-            }}
-          />
-        </div>
+        <GaugeMenu />
       </MenuSection>
 
       <MenuSection>

@@ -13,6 +13,7 @@ This is a hobby project to mess around with spinning gears, gear ratios, pendulu
 - Ability to adjust initial rotation of hands
 - If no local storage, show brief tutorial, or allow selection from preset, start from scratch, etc.
 - Help modal
+- Ability to set gear parent
 
 ## Bugs
 

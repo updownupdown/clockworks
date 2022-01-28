@@ -120,7 +120,7 @@ export const SpeedMenu = () => {
               }
             }}
           />
-          <span>{settings.isPendulum ? "Hz" : "RPM"}</span>
+          <label>{settings.isPendulum ? "Hz" : "RPM"}</label>
         </div>
 
         <div className="speed-menu__right__buttons">
@@ -133,26 +133,28 @@ export const SpeedMenu = () => {
             {settings.isPaused ? <Play /> : <Pause />}
           </button>
 
-          <button
-            className={clsx(
-              "ci-button ci-button--icon",
-              !settings.isPendulum && "ci-button--selected"
-            )}
-            onClick={() => setSettings({ ...settings, isPendulum: false })}
-            disabled={!settings.isPendulum}
-          >
-            <Battery />
-          </button>
-          <button
-            className={clsx(
-              "ci-button ci-button--icon",
-              settings.isPendulum && "ci-button--selected"
-            )}
-            onClick={() => setSettings({ ...settings, isPendulum: true })}
-            disabled={settings.isPendulum}
-          >
-            <Pendulum />
-          </button>
+          <div className="ci-button-group">
+            <button
+              className={clsx(
+                "ci-button ci-button--icon",
+                !settings.isPendulum && "ci-button--selected"
+              )}
+              onClick={() => setSettings({ ...settings, isPendulum: false })}
+              disabled={!settings.isPendulum}
+            >
+              <Battery />
+            </button>
+            <button
+              className={clsx(
+                "ci-button ci-button--icon",
+                settings.isPendulum && "ci-button--selected"
+              )}
+              onClick={() => setSettings({ ...settings, isPendulum: true })}
+              disabled={settings.isPendulum}
+            >
+              <Pendulum />
+            </button>
+          </div>
         </div>
       </div>
     </div>

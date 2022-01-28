@@ -79,14 +79,6 @@ export const gearSets: GearSetProps[] = [
       minutes: 9,
       seconds: 0,
     },
-    settings: {
-      tolerance: 0,
-      globalRpm: 1,
-      globalHertz: 0.5,
-      isPaused: false,
-      isPendulum: false,
-      selectedGear: undefined,
-    },
     gears: [
       {
         teeth: 20,
@@ -200,6 +192,14 @@ export const gearSets: GearSetProps[] = [
       hours: 12,
       minutes: 6,
       seconds: 1,
+    },
+    settings: {
+      tolerance: 0,
+      globalRpm: 1,
+      globalHertz: 0.5,
+      isPaused: false,
+      isPendulum: false,
+      selectedGear: undefined,
     },
     gears: [
       {

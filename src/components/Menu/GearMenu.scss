@@ -2,19 +2,17 @@
 .gear-menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 
   &__header {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding-bottom: 20px;
 
     &__title {
       margin-right: auto;
       font-size: 20px;
       font-weight: 700;
-      color: var(--K800);
 
       &--no-selection {
         font-size: 16px;
@@ -29,14 +27,14 @@
     align-items: center;
     gap: 12px;
 
-    span {
-      width: 90px;
-      color: K800;
-      font-weight: 600;
-    }
-
     input[type="range"] {
       flex: 1;
     }
+  }
+
+  &__hands {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
