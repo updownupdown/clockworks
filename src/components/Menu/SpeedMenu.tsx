@@ -93,7 +93,7 @@ export const SpeedMenu = () => {
 
         <Clockhand units="hours" drawing={<HandHours />} />
         <Clockhand units="minutes" drawing={<HandMinutes />} />
-        <Clockhand units="seconds" drawing={<HandSeconds />} />
+        {/* <Clockhand units="seconds" drawing={<HandSeconds />} /> */}
       </div>
 
       <div className="speed-menu__right">
@@ -125,6 +125,7 @@ export const SpeedMenu = () => {
 
         <div className="speed-menu__right__buttons">
           <button
+            data-tip="Play/Pause"
             className="ci-button ci-button--icon"
             onClick={() =>
               setSettings({ ...settings, isPaused: !settings.isPaused })
@@ -135,6 +136,7 @@ export const SpeedMenu = () => {
 
           <div className="ci-button-group">
             <button
+              data-tip="Smooth movement"
               className={clsx(
                 "ci-button ci-button--icon",
                 !settings.isPendulum && "ci-button--selected"
@@ -145,6 +147,7 @@ export const SpeedMenu = () => {
               <Battery />
             </button>
             <button
+              data-tip="Pendulum movement"
               className={clsx(
                 "ci-button ci-button--icon",
                 settings.isPendulum && "ci-button--selected"

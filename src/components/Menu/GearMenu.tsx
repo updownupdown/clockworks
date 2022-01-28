@@ -171,6 +171,7 @@ export const GearMenu = () => {
         </span>
 
         <button
+          data-tip="Toggle fix to parent"
           className={clsx(
             "ci-button",
             gear !== undefined && gear.fixed && "ci-button--selected"
@@ -185,6 +186,7 @@ export const GearMenu = () => {
         </button>
 
         <button
+          data-tip="Delete gear"
           className="ci-button"
           onClick={() => {
             settings.selectedGear !== undefined &&

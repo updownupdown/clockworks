@@ -16,6 +16,7 @@ import { HandsProps } from "./components/Gear/GearSets";
 import { ClockworksContext } from "./components/context/context";
 import { Canvas, canvasSettings } from "./components/Canvas/Canvas";
 import { calculateGears } from "./components/Gear/CalculateGear";
+import ReactTooltip from "react-tooltip";
 
 function App() {
   // Load gears from localStorage, or defaults
@@ -110,6 +111,8 @@ function App() {
           </TransformWrapper>
         </div>
       </div>
+
+      <ReactTooltip effect="solid" className="tooltip-theme" delayShow={350} />
     </ClockworksContext.Provider>
   );
 }

@@ -243,4 +243,17 @@ button {
   }
 }
 
+body .tooltip-theme {
+  $tooltip-color: rgba(40, 40, 40);
+
+  padding: 8px 10px;
+  font-size: 14px;
+
+  background: $tooltip-color;
+
+  &:after {
+    border-top-color: $tooltip-color !important;
+  }
+}
+
 @import "./inputs.scss";

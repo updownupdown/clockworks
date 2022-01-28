@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { ClockworksContext } from "../context/context";
 import {
-  defaultGearsetName,
   defaultHandsSettings,
   defaultSettings,
   gearsetNames,
@@ -9,7 +8,7 @@ import {
   newGearSettings,
 } from "../Gear/GearSets";
 import { GearSetProps } from "../Gear/GearSets";
-import Download from "../Icons/Download";
+import Download from "../Icons/Import";
 import Export from "../Icons/Export";
 import Reset from "../Icons/Reset";
 
@@ -185,9 +184,9 @@ export const SaveLoad = () => {
       </select>
 
       <button
+        data-tip="Import"
         className="ci-button ci-button--icon"
         onClick={() => importGears()}
-        title="Import"
       >
         <Download />
       </button>
@@ -201,6 +200,7 @@ export const SaveLoad = () => {
       />
 
       <button
+        data-tip="Export"
         className="ci-button ci-button--icon"
         onClick={() =>
           exportGearset({
@@ -216,6 +216,7 @@ export const SaveLoad = () => {
       </button>
 
       <button
+        data-tip="Reset"
         className="ci-button ci-button--icon"
         onClick={() => resetGears()}
         title="Reset"
