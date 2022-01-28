@@ -28,8 +28,7 @@ const MenuSection = ({ children, className }: MenuSectionProps) => {
 };
 
 export const Menu = () => {
-  const { gears, setGears, settings, setSettings, hands, setHands } =
-    useContext(ClockworksContext);
+  const { gears, setGears } = useContext(ClockworksContext);
 
   function addGear() {
     const newGear = { ...newGearSettings };
@@ -53,7 +52,7 @@ export const Menu = () => {
         </div>
       </MenuSection>
 
-      <MenuSection>
+      <MenuSection className="no-top-border">
         <SaveLoad />
       </MenuSection>
 

@@ -25,6 +25,7 @@
 }
 
 label {
+  transition: 0.2s ease color;
   font-size: 16px;
   font-weight: 700;
   color: var(--K800);
@@ -103,7 +104,7 @@ select {
   $iconSize: 24px;
   $paddingSize: 8px;
 
-  transition: 0.2s ease background;
+  transition: 0.2s ease all;
 
   padding: $paddingSize;
 
@@ -147,6 +148,7 @@ select {
     background: var(--K100);
 
     svg path {
+      transition: 0.2s ease fill;
       fill: var(--K300);
     }
   }

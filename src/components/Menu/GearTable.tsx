@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
-import Locked from "../Icons/Locked";
-import Unlocked from "../Icons/Unlocked";
+import GearFixed from "../Icons/GearFixed";
+import GearUnfixed from "../Icons/GearUnfixed";
 import { ratioDisplay } from "../Gear/GearMath";
 import clsx from "clsx";
 import { ClockworksContext } from "../context/context";
@@ -25,9 +25,9 @@ export const GearTable = () => {
       Math.round(gear.rpm! * 100 * displaySpeedMultiplier) / 100;
 
     const gearHand = () => {
-      if (hands.hours === index) return "Hr";
-      if (hands.minutes === index) return "Min";
-      if (hands.seconds === index) return "Sec";
+      if (hands.hours === index) return "H";
+      if (hands.minutes === index) return "M";
+      if (hands.seconds === index) return "S";
       return "";
     };
 
@@ -45,11 +45,11 @@ export const GearTable = () => {
           setSettings({ ...settings, selectedGear: gearToSelect });
         }}
       >
+        <td className="cell-gear-hand">{gearHand()}</td>
         <td className="cell-gear-fixed">
-          {gear.fixed ? <Locked /> : <Unlocked />}
+          {gear.fixed ? <GearFixed /> : <GearUnfixed />}
         </td>
         <td className="cell-gear-num">{index + 1}</td>
-        <td className="cell-gear-hand">{gearHand()}</td>
         <td className="cell-gear-teeth">{gear.teeth}</td>
         <td className="cell-gear-ratio">{displayRatio}</td>
         <td className="cell-gear-speed">{displaySpeed}</td>
@@ -99,9 +99,9 @@ export const GearTable = () => {
       <table className="gear-table">
         <thead>
           <tr>
+            <th className="cell-gear-hand">&nbsp;</th>
             <th className="cell-gear-fixed">&nbsp;</th>
             <th className="cell-gear-num">#</th>
-            <th className="cell-gear-hand">Hand</th>
             <th className="cell-gear-teeth">Teeth</th>
             <th className="cell-gear-ratio">Ratio</th>
             <th className="cell-gear-speed">{showColumn}</th>

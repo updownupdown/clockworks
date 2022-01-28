@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { ClockworksContext } from "../context/context";
-import Locked from "../Icons/Locked";
-import Unlocked from "../Icons/Unlocked";
+import GearFixed from "../Icons/GearFixed";
+import GearUnfixed from "../Icons/GearUnfixed";
 import Delete from "../Icons/Delete";
 import { HandsProps } from "../Gear/GearSets";
 import clsx from "clsx";
@@ -157,33 +157,54 @@ export const GearMenu = () => {
   }
 
   return (
-    <div className="gear-menu">
+    <div
+      className={clsx(
+        "gear-menu",
+        gear === undefined && "gear-menu--no-selection"
+      )}
+    >
       <div className="gear-menu__header">
-        <span
-          className={clsx(
-            "gear-menu__header__title",
-            gear === undefined && "gear-menu__header__title--no-selection"
-          )}
-        >
+        <span className="gear-menu__header__title">
           {gear === undefined
             ? "No gear selected"
-            : `Gear ${settings.selectedGear! + 1}`}
+            : `Gear #${settings.selectedGear! + 1}`}
         </span>
 
-        <button
-          data-tip="Toggle fix to parent"
+        <div
           className={clsx(
-            "ci-button",
-            gear !== undefined && gear.fixed && "ci-button--selected"
+            "ci-button-group",
+            gear === undefined && "ci-button-group--disabled"
           )}
-          onClick={() => {
-            gear !== undefined &&
-              handleFixChange(settings.selectedGear, gear.fixed!);
-          }}
-          disabled={gear === undefined || isEscapementGear}
         >
-          {gear !== undefined && gear.fixed ? <Locked /> : <Unlocked />}
-        </button>
+          <button
+            data-tip="Toggle fix to parent"
+            className={clsx(
+              "ci-button",
+              gear !== undefined && gear.fixed && "ci-button--selected"
+            )}
+            onClick={() => {
+              gear !== undefined &&
+                handleFixChange(settings.selectedGear, false);
+            }}
+            disabled={gear === undefined || isEscapementGear || gear.fixed}
+          >
+            <GearFixed />
+          </button>
+          <button
+            data-tip="Toggle fix to parent"
+            className={clsx(
+              "ci-button",
+              gear !== undefined && !gear.fixed && "ci-button--selected"
+            )}
+            onClick={() => {
+              gear !== undefined &&
+                handleFixChange(settings.selectedGear, true);
+            }}
+            disabled={gear === undefined || isEscapementGear || !gear.fixed}
+          >
+            <GearUnfixed />
+          </button>
+        </div>
 
         <button
           data-tip="Delete gear"
@@ -298,7 +319,7 @@ export const GearMenu = () => {
               hands.hours === settings.selectedGear
             }
           >
-            Hr
+            H
           </button>
           <button
             className={clsx(
@@ -313,7 +334,7 @@ export const GearMenu = () => {
               hands.minutes === settings.selectedGear
             }
           >
-            Min
+            M
           </button>
           <button
             className={clsx(
@@ -328,7 +349,7 @@ export const GearMenu = () => {
               hands.seconds === settings.selectedGear
             }
           >
-            Sec
+            S
           </button>
         </div>
       </div>

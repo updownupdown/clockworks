@@ -4,6 +4,10 @@
   flex-direction: column;
   gap: 16px;
 
+  &--no-selection label {
+    color: var(--K400);
+  }
+
   &__header {
     display: flex;
     align-items: center;
@@ -14,8 +18,8 @@
       font-size: 20px;
       font-weight: 700;
 
-      &--no-selection {
-        font-size: 16px;
+      .gear-menu--no-selection & {
+        font-size: 14px;
         font-weight: 600;
         color: var(--K400);
       }

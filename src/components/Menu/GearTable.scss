@@ -27,7 +27,7 @@
   th {
     padding: 6px;
     font-size: 14px;
-    color: K800;
+    color: var(--K800);
 
     &:first-child {
       padding-left: 12px;
@@ -43,6 +43,9 @@
 
   .cell-gear-fixed {
     width: 24px;
+  }
+  .cell-gear-hand {
+    width: 12px;
   }
   .cell-gear-num,
   .cell-gear-hand {
@@ -80,7 +83,7 @@
       height: 16px;
 
       path {
-        fill: K800;
+        fill: var(--K800);
       }
     }
 

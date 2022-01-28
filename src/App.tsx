@@ -112,7 +112,7 @@ function App() {
         </div>
       </div>
 
-      <ReactTooltip effect="solid" className="tooltip-theme" delayShow={350} />
+      <ReactTooltip effect="solid" className="tooltip-theme" delayShow={300} />
     </ClockworksContext.Provider>
   );
 }
