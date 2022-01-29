@@ -325,7 +325,9 @@ export const GearMenu = () => {
           <button
             className={clsx(
               "ci-button ci-button--small",
-              hands.hours === settings.selectedGear && "ci-button--selected"
+              settings.selectedGear !== undefined &&
+                hands.hours === settings.selectedGear &&
+                "ci-button--selected"
             )}
             onClick={() => {
               assignHand("hours");
@@ -340,7 +342,9 @@ export const GearMenu = () => {
           <button
             className={clsx(
               "ci-button ci-button--small",
-              hands.minutes === settings.selectedGear && "ci-button--selected"
+              settings.selectedGear !== undefined &&
+                hands.minutes === settings.selectedGear &&
+                "ci-button--selected"
             )}
             onClick={() => {
               assignHand("minutes");
@@ -355,7 +359,9 @@ export const GearMenu = () => {
           <button
             className={clsx(
               "ci-button ci-button--small",
-              hands.seconds === settings.selectedGear && "ci-button--selected"
+              settings.selectedGear !== undefined &&
+                hands.seconds === settings.selectedGear &&
+                "ci-button--selected"
             )}
             onClick={() => {
               assignHand("seconds");
