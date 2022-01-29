@@ -29,10 +29,6 @@ function App() {
   const loadGears = storedGears.length !== 0 ? storedGears : [];
   const [gears, _setGears] = useState<any[]>(loadGears);
 
-  const setGears = (gears: GearProps[]) => {
-    _setGears(calculateGears(gears, settings));
-  };
-
   // Load hands from localStorage, or defaults
   const storedHands = JSON.parse(localStorage.getItem("hands") || "{}");
   const loadHands =
@@ -52,6 +48,14 @@ function App() {
       setGears(gears);
     }
   }, []);
+
+  const setGears = (gears: GearProps[]) => {
+    _setGears(calculateGears(gears, settings));
+  };
+
+  useEffect(() => {
+    _setGears(calculateGears(gears, settings));
+  }, [settings]);
 
   const [showHelp, setShowHelp] = useState(false);
 
