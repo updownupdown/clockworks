@@ -49,14 +49,6 @@ function App() {
     }
   }, []);
 
-  const setGears = (gears: GearProps[]) => {
-    _setGears(calculateGears(gears, settings));
-  };
-
-  useEffect(() => {
-    _setGears(calculateGears(gears, settings));
-  }, [settings]);
-
   const [showHelp, setShowHelp] = useState(false);
 
   // Handle show/hide menu for mobile
@@ -72,6 +64,31 @@ function App() {
 
   // Pendulum increment for pendulum mode
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
+  const [wasPendulum, setWasPendulum] = useState(loadSettings.isPendulum);
+
+  function temporarilyDisableAnimations() {
+    document.body.classList.add("disable-animations");
+    setTimeout(() => {
+      document.body.classList.remove("disable-animations");
+    }, 0);
+  }
+
+  const setGears = (gears: GearProps[]) => {
+    // Prevent transitions when editing gears
+    temporarilyDisableAnimations();
+
+    _setGears(calculateGears(gears, settings));
+  };
+
+  useEffect(() => {
+    // Disable animations when switching between modes
+    if (wasPendulum !== settings.isPendulum) {
+      setWasPendulum(settings.isPendulum);
+      temporarilyDisableAnimations();
+    }
+
+    _setGears(calculateGears(gears, settings));
+  }, [settings, pendulumIncrement]);
 
   return (
     <ClockworksContext.Provider

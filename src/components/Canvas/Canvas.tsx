@@ -65,15 +65,6 @@ export const Canvas = () => {
     localStorage.setItem("hands", JSON.stringify(hands));
     localStorage.setItem("settings", JSON.stringify(settings));
 
-    // Prevent transitions when editing gears in smooth mode
-    // Need solution for pendulum mode
-    if (!settings.isPendulum) {
-      document.body.classList.add("disable-animations");
-      setTimeout(() => {
-        document.body.classList.remove("disable-animations");
-      }, 0);
-    }
-
     return gears.map((gear, index) => {
       return (
         <span
