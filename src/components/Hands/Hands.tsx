@@ -4,6 +4,7 @@ import HandMinutes from "../Icons/HandMinutes";
 import HandSeconds from "../Icons/HandSeconds";
 import { getGearWrapStyles, getGearStyles } from "../Gear/GearUtils";
 import { GearProps, HandsProps, SettingsProps } from "../Gear/GearSets";
+import "./Hands.scss";
 
 interface Props {
   gears: GearProps[];

@@ -172,7 +172,7 @@ export const Help = ({ onClose }: Props) => {
           <a href="https://geargenerator.com/" target="_blank" rel="noreferrer">
             GearGenerator.com
           </a>
-          . You can this this project's code on{" "}
+          . You can view this project's code on{" "}
           <a
             href="https://github.com/updownupdown/clockworks"
             target="_blank"
