@@ -15,7 +15,7 @@ export const GearMenu = () => {
     settings.selectedGear === undefined
       ? undefined
       : gears[settings.selectedGear];
-  const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
+  // const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
 
   const isRemovable = () => {
     if (settings.selectedGear === undefined || gears.length === 0) return false;
@@ -195,7 +195,8 @@ export const GearMenu = () => {
         <div
           className={clsx(
             "ci-button-group",
-            gear === undefined && "ci-button-group--disabled"
+            (gear === undefined || settings.selectedGear === 0) &&
+              "ci-button-group--disabled"
           )}
         >
           <button
@@ -208,7 +209,9 @@ export const GearMenu = () => {
               gear !== undefined &&
                 handleFixChange(settings.selectedGear, false);
             }}
-            disabled={gear === undefined || isEscapementGear || gear.fixed}
+            disabled={
+              gear === undefined || settings.selectedGear === 0 || gear.fixed
+            }
           >
             <GearFixed />
           </button>
@@ -216,13 +219,18 @@ export const GearMenu = () => {
             data-tip="Toggle fix to parent"
             className={clsx(
               "ci-button",
-              gear !== undefined && !gear.fixed && "ci-button--selected"
+              gear !== undefined &&
+                !gear.fixed &&
+                settings.selectedGear !== 0 &&
+                "ci-button--selected"
             )}
             onClick={() => {
               gear !== undefined &&
                 handleFixChange(settings.selectedGear, true);
             }}
-            disabled={gear === undefined || isEscapementGear || !gear.fixed}
+            disabled={
+              gear === undefined || settings.selectedGear === 0 || !gear.fixed
+            }
           >
             <GearUnfixed />
           </button>

@@ -47,7 +47,7 @@ export const GearTable = () => {
       >
         <td className="cell-gear-hand">{gearHand()}</td>
         <td className="cell-gear-fixed">
-          {gear.fixed ? <GearFixed /> : <GearUnfixed />}
+          {index !== 0 ? gear.fixed ? <GearFixed /> : <GearUnfixed /> : ""}
         </td>
         <td className="cell-gear-num">{index + 1}</td>
         <td className="cell-gear-teeth">{gear.teeth}</td>

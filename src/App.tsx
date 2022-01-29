@@ -4,14 +4,13 @@ import {
   defaultHandsSettings,
   defaultSettings,
   GearProps,
-  getGearset,
   SettingsProps,
 } from "./components/Gear/GearSets";
 import { Menu } from "./components/Menu/Menu";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ZoomIn from "./components/Icons/ZoomIn";
 import ZoomOut from "./components/Icons/ZoomOut";
-import ZoomReset from "./components/Icons/ZoomReset";
+import ResetPosition from "./components/Icons/ResetPosition";
 import { HandsProps } from "./components/Gear/GearSets";
 import { ClockworksContext } from "./components/context/context";
 import { Canvas, canvasSettings } from "./components/Canvas/Canvas";
@@ -90,6 +89,8 @@ function App() {
     _setGears(calculateGears(gears, settings));
   }, [settings, pendulumIncrement]);
 
+  const enableZoom = false;
+
   return (
     <ClockworksContext.Provider
       value={{
@@ -130,7 +131,8 @@ function App() {
         <div className="layout__canvas">
           <TransformWrapper
             initialScale={1}
-            minScale={0.2}
+            minScale={enableZoom ? 0.4 : 1}
+            maxScale={enableZoom ? 3 : 1}
             initialPositionX={
               -canvasSettings.width / 2 + window.innerWidth / 2 - 300
             }
@@ -143,14 +145,18 @@ function App() {
             {({ zoomIn, zoomOut, resetTransform }) => (
               <React.Fragment>
                 <div className="canvas-actions">
-                  <button onClick={() => zoomOut()}>
-                    <ZoomOut />
-                  </button>
-                  <button onClick={() => zoomIn()}>
-                    <ZoomIn />
-                  </button>
+                  {enableZoom && (
+                    <>
+                      <button onClick={() => zoomOut()}>
+                        <ZoomOut />
+                      </button>
+                      <button onClick={() => zoomIn()}>
+                        <ZoomIn />
+                      </button>
+                    </>
+                  )}
                   <button onClick={() => resetTransform()}>
-                    <ZoomReset />
+                    <ResetPosition />
                   </button>
                 </div>
 

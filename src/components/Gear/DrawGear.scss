@@ -1,11 +1,10 @@
 .gear-wrap {
   position: absolute;
-  z-index: 2;
   pointer-events: none;
   aspect-ratio: 1;
 
   &--selected {
-    z-index: 999;
+    // z-index: 999;
   }
 
   .canvas--pendulum & {
@@ -23,6 +22,10 @@
   z-index: 1;
   display: block;
   animation-iteration-count: infinite;
+
+  svg {
+    display: block;
+  }
 
   .canvas--smooth & {
     animation-name: spin;
@@ -49,23 +52,13 @@
 
   // selected
   &--selected .gear-shape {
-    stroke-width: 2;
     stroke: white;
     fill: rgba(var(--white-rgb), 0.3);
-  }
-
-  .gear-center {
-    pointer-events: none;
-    fill: none;
-    stroke: rgba(0, 0, 0, 0.2);
-    stroke-linejoin: round;
-    stroke-width: 1;
   }
 
   .gear-indicator {
     pointer-events: none;
     fill: rgba(255, 255, 255, 0.8);
-    stroke-linejoin: round;
     stroke-width: 1;
   }
 
@@ -80,15 +73,11 @@
     transform-origin: center center;
     font-family: var(--fontMono);
     font-weight: 300;
-    fill: rgba(255, 255, 255, 0.3);
+    fill: rgba(var(--black-rgb), 0.4);
   }
 
-  .gear-pitch {
-    pointer-events: none;
-    stroke: rgba(0, 0, 0, 0.2);
-  }
   &--escapement {
-    .gear-pitch,
+    .gear-indicator,
     .gear-center {
       display: none;
     }

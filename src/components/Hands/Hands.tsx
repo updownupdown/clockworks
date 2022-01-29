@@ -44,6 +44,6 @@ export const DrawHands = ({
   drawHand(hands.seconds, <HandSeconds />);
 
   return handsOutput.map((hand: HTMLElement, index: number) => (
-    <span key={index}>{hand}</span>
+    <React.Fragment key={index}>{hand}</React.Fragment>
   ));
 };

@@ -65,7 +65,6 @@ export const DrawGear = (
 
   const holeFactor = 0.5;
   const textSize = r * 0.2;
-  const holeSize = r * holeFactor;
   const textRad = r * (holeFactor + 1) * 0.5 - textSize / 4;
 
   const displayRatio = ratioDisplay(ratio);
@@ -101,23 +100,10 @@ export const DrawGear = (
         ></polygon>
 
         <circle
-          className="gear-center"
-          r={holeSize}
-          transform={`translate(${c}, ${c})`}
-        ></circle>
-
-        <circle
           className="gear-indicator"
           r="4"
           fill="none"
           transform={`translate(${c}, ${p * 2})`}
-        ></circle>
-
-        <circle
-          className="gear-pitch"
-          r={p}
-          fill="none"
-          transform={`translate(${c}, ${c})`}
         ></circle>
 
         <path

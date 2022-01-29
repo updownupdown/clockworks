@@ -36,14 +36,11 @@ export function calculateGear(
 
   const parentGear = gears[gear.parent ?? 0];
 
-  // Fixed
-  if (settings.isPendulum && index === 1) gear.fixed = true;
-
   // Shape parameters
   const toothSize = 28;
-  const pressure_angle = 25;
-  const backlash = 6;
-  const clearance = 4;
+  const pressure_angle = 24;
+  const backlash = 0;
+  const clearance = 0;
 
   gear.p = (toothSize * gear.teeth) / Math.PI / 2;
   gear.c = gear.p + toothSize / Math.PI - clearance;
