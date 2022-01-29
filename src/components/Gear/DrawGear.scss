@@ -1,3 +1,5 @@
+@import "../../css/mixins.scss";
+
 .gear-wrap {
   position: absolute;
   pointer-events: none;
@@ -5,7 +7,7 @@
 
   .canvas--pendulum & {
     transition-property: transform;
-    transition-timing-function: cubic-bezier(0.4, 0.2, 0.2, 1.2);
+    @include pendulumTiming;
   }
 
   .disable-animations & {

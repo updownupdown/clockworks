@@ -1,3 +1,5 @@
+@import "../../css/mixins.scss";
+
 .clock-hand {
   pointer-events: none;
   position: absolute;
@@ -16,10 +18,10 @@
 
   .canvas--pendulum & {
     transition-property: transform;
-    transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
+    @include pendulumTiming;
   }
 
-  body:not(.disable-animations) &,
+  body.disable-animations &,
   .disable-animations & {
     transition-property: none;
   }

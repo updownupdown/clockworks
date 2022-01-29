@@ -53,8 +53,8 @@ export interface SettingsProps {
 export interface GearSetProps {
   name: string;
   gears: GearProps[];
-  hands?: HandsProps;
-  settings?: SettingsProps;
+  hands: HandsProps;
+  settings: SettingsProps;
 }
 
 export const newGearSettings: GearProps = {
@@ -70,6 +70,21 @@ export const gearsetNames = {
 
 export const defaultGearsetName = gearsetNames.Demo;
 
+export const defaultHandsSettings = {
+  hours: undefined,
+  minutes: undefined,
+  seconds: undefined,
+};
+
+export const defaultSettings = {
+  globalRpm: 1,
+  globalHertz: 0.5,
+  isPaused: false,
+  tolerance: 10,
+  isPendulum: false,
+  selectedGear: undefined,
+};
+
 export const gearSets: GearSetProps[] = [
   {
     name: gearsetNames.Demo,
@@ -78,6 +93,7 @@ export const gearSets: GearSetProps[] = [
       minutes: 7,
       seconds: 0,
     },
+    settings: defaultSettings,
     gears: [
       {
         teeth: 30,
@@ -171,21 +187,6 @@ export const gearSets: GearSetProps[] = [
     ],
   },
 ];
-
-export const defaultHandsSettings = {
-  hours: undefined,
-  minutes: undefined,
-  seconds: undefined,
-};
-
-export const defaultSettings = {
-  globalRpm: 1,
-  globalHertz: 0.5,
-  isPaused: false,
-  tolerance: 10,
-  isPendulum: false,
-  selectedGear: undefined,
-};
 
 export function getGearsetGears(gearsetName: string) {
   const set = gearSets.find(({ name }) => name === gearsetName);

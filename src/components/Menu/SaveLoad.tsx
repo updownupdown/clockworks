@@ -7,7 +7,6 @@ import {
   gearsetNames,
   getGearset,
   HandsProps,
-  newGearSettings,
   SettingsProps,
 } from "../Gear/GearSets";
 import { GearSetProps } from "../Gear/GearSets";
@@ -68,6 +67,7 @@ export function loadPreset(
   const preset = getGearset(gearsetName);
 
   const gearsetGears = preset?.gears ? preset.gears : [];
+
   setGears(gearsetGears);
 
   const gearsetHands = preset?.hands ?? defaultHandsSettings;

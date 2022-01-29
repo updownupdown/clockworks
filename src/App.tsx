@@ -4,6 +4,7 @@ import {
   defaultHandsSettings,
   defaultSettings,
   GearProps,
+  getGearset,
   SettingsProps,
 } from "./components/Gear/GearSets";
 import { Menu } from "./components/Menu/Menu";
@@ -23,43 +24,56 @@ import clsx from "clsx";
 import Hamburger from "./components/Icons/Hamburger";
 
 function App() {
+  const isNewUser = localStorage.getItem("newUser") !== "false";
+  const [showWelcome, _setShowWelcome] = useState(isNewUser);
+
+  const setShowWelcome = (show: boolean) => {
+    localStorage.setItem("newUser", "false");
+    _setShowWelcome(show);
+  };
+
+  // Handle show/hide menu for mobile
+  const [showMenu, setShowMenu] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+
   // Load gears from localStorage, or defaults
+  const demoGearset = getGearset(defaultGearsetName);
+
   const storedGears = JSON.parse(localStorage.getItem("gears") || "[]");
-  const loadGears = storedGears.length !== 0 ? storedGears : [];
+  const loadGearsFallback =
+    isNewUser && demoGearset !== undefined ? demoGearset.gears : [];
+  const loadGears = storedGears.length !== 0 ? storedGears : loadGearsFallback;
   const [gears, _setGears] = useState<any[]>(loadGears);
 
   // Load hands from localStorage, or defaults
   const storedHands = JSON.parse(localStorage.getItem("hands") || "{}");
+  const loadHandsFallback =
+    isNewUser && demoGearset !== undefined
+      ? demoGearset.hands
+      : defaultHandsSettings;
   const loadHands =
-    Object.keys(storedHands).length !== 0 ? storedHands : defaultHandsSettings;
+    Object.keys(storedHands).length !== 0 ? storedHands : loadHandsFallback;
   const [hands, setHands] = useState<HandsProps>(loadHands);
 
   // Load settings from localStorage, or defaults
   const storedSettings = JSON.parse(localStorage.getItem("settings") || "{}");
+  const loadSettingsFallback =
+    isNewUser && demoGearset !== undefined
+      ? demoGearset.settings
+      : defaultSettings;
   const loadSettings =
-    Object.keys(storedSettings).length !== 0 ? storedSettings : defaultSettings;
+    Object.keys(storedSettings).length !== 0
+      ? storedSettings
+      : loadSettingsFallback;
   const [settings, setSettings] = useState<SettingsProps>(loadSettings);
 
   useEffect(() => {
-    if (loadGears.length === 0) {
+    if (gears.length === 0) {
       loadPreset(defaultGearsetName, setGears, setHands, setSettings);
     } else {
       setGears(gears);
     }
   }, []);
-
-  const [showHelp, setShowHelp] = useState(false);
-
-  // Handle show/hide menu for mobile
-  const [showMenu, setShowMenu] = useState(false);
-
-  const showWelcomeOnLoad = localStorage.getItem("showWelcome") !== "true";
-  const [showWelcome, _setShowWelcome] = useState(showWelcomeOnLoad);
-
-  const setShowWelcome = (show: boolean) => {
-    localStorage.setItem("showWelcome", "true");
-    _setShowWelcome(show);
-  };
 
   // Pendulum increment for pendulum mode
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
@@ -72,11 +86,18 @@ function App() {
     }, 0);
   }
 
-  const setGears = (newGears: GearProps[]) => {
+  const setGears = (gears: GearProps[]) => {
     // Prevent transitions when editing gears
     temporarilyDisableAnimations();
 
-    _setGears(calculateGears(newGears, settings));
+    const gearElements = document.getElementsByClassName("gear");
+
+    for (var i = 0; i < gearElements.length; i++) {
+      gearElements[i].classList.remove("animate");
+      gearElements[i].classList.add("animate");
+    }
+
+    _setGears(calculateGears(gears, settings));
   };
 
   useEffect(() => {
