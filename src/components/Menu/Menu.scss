@@ -23,12 +23,16 @@
     align-items: center;
     gap: 14px;
     line-height: 1.1;
+    margin: -4px 0;
 
-    h1 {
+    svg {
       margin-right: auto;
-      font-size: 22px;
-      color: var(--B300);
-      font-weight: 700;
+      width: 170px;
+      height: auto;
+
+      path {
+        fill: var(--B300);
+      }
     }
 
     button {

@@ -10,6 +10,7 @@ import clsx from "clsx";
 import "./Menu.scss";
 import Help from "../Icons/Help";
 import Close from "../Icons/Close";
+import Logo from "../Icons/Logo";
 
 interface MenuSectionProps {
   children: React.ReactNode;
@@ -43,7 +44,7 @@ export const Menu = ({ setShowMenu, setShowHelp }: Props) => {
     <div className="menu">
       <MenuSection>
         <div className="menu-title">
-          <h1>Clockworks</h1>
+          <Logo />
 
           <button data-tip="Show Help" onClick={() => setShowHelp()}>
             <Help />
