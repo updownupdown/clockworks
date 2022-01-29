@@ -220,7 +220,16 @@ export const GearMenu = () => {
       </div>
 
       <div className="gear-menu__setting">
-        <label className="side-label">Teeth</label>
+        <label
+          className={clsx(
+            "side-label",
+            (settings.selectedGear === undefined ||
+              (settings.isPendulum && settings.selectedGear === 0)) &&
+              "disabled-label"
+          )}
+        >
+          Teeth
+        </label>
 
         <input
           type="range"
@@ -254,14 +263,21 @@ export const GearMenu = () => {
       </div>
 
       <div className="gear-menu__setting">
-        <label className="side-label">Orientation</label>
+        <label
+          className={clsx(
+            "side-label",
+            (gear === undefined || gear.fixed) && "disabled-label"
+          )}
+        >
+          Orientation
+        </label>
 
         <input
           type="range"
           min="-180"
           max="180"
           step="1"
-          value={gear === undefined ? 0 : gear.orientation}
+          value={gear === undefined || gear.fixed ? 0 : gear.orientation}
           onChange={(e) =>
             handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }
@@ -273,7 +289,7 @@ export const GearMenu = () => {
           min="-180"
           max="180"
           step="1"
-          value={gear === undefined ? 0 : gear.orientation}
+          value={gear === undefined || gear.fixed ? 0 : gear.orientation}
           onChange={(e) =>
             handleOffsetChange(settings.selectedGear, Number(e.target.value))
           }

@@ -1,0 +1,59 @@
+@import "../../css/mixins.scss";
+@import "../../css/media.scss";
+
+.welcome {
+  position: absolute;
+  z-index: 20;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  padding: 20px;
+  width: 600px;
+  max-width: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 6px;
+  background: var(--white);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.15), 2px 4px 24px rgba(0, 0, 0, 0.15);
+
+  @media #{$query-max-md} {
+    position: fixed;
+  }
+
+  h2 {
+    margin-bottom: 12px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .learn-more,
+  p {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .learn-more {
+    transition: 0.2s ease color;
+    display: inline;
+
+    font-weight: 700;
+    color: var(--B300);
+
+    &:hover {
+      color: var(--B600);
+    }
+  }
+
+  .close-button {
+    @include closeButton;
+    top: 16px;
+    right: 16px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

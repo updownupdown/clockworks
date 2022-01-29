@@ -6,14 +6,10 @@ This is a hobby project to mess around with spinning gears, gear ratios, pendulu
 
 ## To-do
 
-- Improve tolerance math, UI
-- Add actual vs. gear time
-- Tooltips for buttons
 - Dials for hands
-- Ability to adjust initial rotation of hands
-- If no local storage, show brief tutorial, or allow selection from preset, start from scratch, etc.
-- Help modal
 - Ability to set gear parent
+- Add actual vs. gear time
+- Ability to adjust initial rotation of hands
 
 ## Bugs
 

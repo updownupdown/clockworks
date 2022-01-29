@@ -63,126 +63,56 @@ export const newGearSettings: GearProps = {
 };
 
 export const gearsetNames = {
+  Demo: "Demo",
   Forks: "Forking gears",
-  SimpleSet: "Simple set",
-  MediumSet: "Medium set",
   AccurateClock: "Accurate clock",
 } as const;
 
-export const defaultGearsetName = gearsetNames.AccurateClock;
+export const defaultGearsetName = gearsetNames.Demo;
 
 export const gearSets: GearSetProps[] = [
   {
-    name: gearsetNames.Forks,
+    name: gearsetNames.Demo,
     hands: {
-      hours: 6,
-      minutes: 9,
+      hours: undefined,
+      minutes: 7,
       seconds: 0,
     },
     gears: [
       {
-        teeth: 20,
+        teeth: 30,
         orientation: 0,
       },
       {
-        teeth: 10,
-        orientation: 0,
+        teeth: 16,
+        orientation: 45,
+      },
+      {
+        teeth: 62,
+        orientation: 45,
       },
       {
         teeth: 8,
         orientation: 0,
+        fixed: true,
       },
       {
-        teeth: 30,
-        orientation: 0,
-      },
-      {
-        teeth: 20,
-        orientation: 90,
-        parent: 3,
+        teeth: 60,
+        orientation: -60,
       },
       {
         teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 20,
         orientation: -90,
-        parent: 3,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-    ],
-  },
-  {
-    name: gearsetNames.SimpleSet,
-    hands: {
-      hours: undefined,
-      minutes: 2,
-      seconds: 0,
-    },
-    gears: [
-      {
-        teeth: 30,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 45,
-      },
-      {
-        teeth: 20,
-        orientation: 0,
-        fixed: true,
-      },
-    ],
-  },
-  {
-    name: gearsetNames.MediumSet,
-    hands: {
-      hours: undefined,
-      minutes: 5,
-      seconds: 0,
-    },
-    gears: [
-      {
-        teeth: 30,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 45,
-      },
-      {
-        teeth: 20,
-        orientation: 0,
         fixed: true,
       },
       {
-        teeth: 30,
-        orientation: -70,
+        teeth: 40,
+        orientation: -125,
       },
       {
-        teeth: 20,
-        orientation: 20,
-      },
-      {
-        teeth: 20,
-        orientation: -80,
+        teeth: 10,
+        orientation: 0,
+        fixed: true,
       },
     ],
   },
@@ -258,6 +188,58 @@ export const gearSets: GearSetProps[] = [
       {
         teeth: 12,
         orientation: 90,
+      },
+    ],
+  },
+  {
+    name: gearsetNames.Forks,
+    hands: {
+      hours: 6,
+      minutes: 9,
+      seconds: 0,
+    },
+    gears: [
+      {
+        teeth: 20,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 8,
+        orientation: 0,
+      },
+      {
+        teeth: 30,
+        orientation: 0,
+      },
+      {
+        teeth: 20,
+        orientation: 90,
+        parent: 3,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 20,
+        orientation: -90,
+        parent: 3,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
+      },
+      {
+        teeth: 10,
+        orientation: 0,
       },
     ],
   },

@@ -1,0 +1,20 @@
+@mixin closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  svg {
+    display: block;
+    width: 30px;
+    height: 30px;
+
+    path {
+      transition: 0.2s ease fill;
+      fill: var(--K400);
+    }
+  }
+
+  &:hover svg path {
+    fill: var(--status-red);
+  }
+}

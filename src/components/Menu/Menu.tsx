@@ -5,9 +5,10 @@ import { GearTable } from "./GearTable";
 import { GearMenu } from "./GearMenu";
 import { GaugeMenu } from "./GaugeMenu";
 import { SaveLoad } from "./SaveLoad";
+import { SpeedMenu } from "./SpeedMenu";
 import clsx from "clsx";
 import "./Menu.scss";
-import { SpeedMenu } from "./SpeedMenu";
+import Help from "../Icons/Help";
 
 interface MenuSectionProps {
   children: React.ReactNode;
@@ -17,17 +18,18 @@ interface MenuSectionProps {
 const MenuSection = ({ children, className }: MenuSectionProps) => {
   return (
     <div
-      className={clsx(
-        "menu__section",
-        className !== undefined && "menu__section--" + className
-      )}
+      className={clsx("menu__section", className !== undefined && className)}
     >
       {children}
     </div>
   );
 };
 
-export const Menu = () => {
+interface Props {
+  setShowHelp: () => void;
+}
+
+export const Menu = ({ setShowHelp }: Props) => {
   const { gears, setGears } = useContext(ClockworksContext);
 
   function addGear() {
@@ -39,16 +41,11 @@ export const Menu = () => {
     <div className="menu">
       <MenuSection>
         <div className="menu-title">
-          <div className="menu-title__text">
-            <h1>Clockworks</h1>
-            <a
-              href="https://github.com/updownupdown/clockworks"
-              target="_blank"
-              rel="noreferrer"
-            >
-              About
-            </a>
-          </div>
+          <h1>Clockworks</h1>
+
+          <button onClick={() => setShowHelp()}>
+            <Help />
+          </button>
         </div>
       </MenuSection>
 

@@ -17,14 +17,14 @@ import { ClockworksContext } from "./components/context/context";
 import { Canvas, canvasSettings } from "./components/Canvas/Canvas";
 import { calculateGears } from "./components/Gear/CalculateGear";
 import ReactTooltip from "react-tooltip";
+import { Help } from "./components/Modals/Help";
+import { Welcome } from "./components/Modals/Welcome";
+import { loadPreset } from "./components/Menu/SaveLoad";
 
 function App() {
   // Load gears from localStorage, or defaults
   const storedGears = JSON.parse(localStorage.getItem("gears") || "[]");
-  const loadGears =
-    storedGears.length !== 0
-      ? storedGears
-      : getGearset(defaultGearsetName)!.gears;
+  const loadGears = storedGears.length !== 0 ? storedGears : [];
   const [gears, _setGears] = useState<any[]>(loadGears);
 
   const setGears = (gears: GearProps[]) => {
@@ -43,6 +43,14 @@ function App() {
     Object.keys(storedSettings).length !== 0 ? storedSettings : defaultSettings;
   const [settings, setSettings] = useState<SettingsProps>(loadSettings);
 
+  useEffect(() => {
+    if (loadGears.length === 0) {
+      loadPreset(defaultGearsetName, setGears, setHands, setSettings);
+    } else {
+      setGears(gears);
+    }
+  }, []);
+
   // Handle show/hide menu for mobile
   const [showMenu, setShowMenu] = useState(false);
   useEffect(() => {
@@ -52,6 +60,16 @@ function App() {
       document.body.classList.remove("show-menu");
     }
   }, [showMenu]);
+
+  const [showHelp, setShowHelp] = useState(false);
+
+  const showWelcomeOnLoad = localStorage.getItem("showWelcome") !== "true";
+  const [showWelcome, _setShowWelcome] = useState(showWelcomeOnLoad);
+
+  const setShowWelcome = (show: boolean) => {
+    localStorage.setItem("showWelcome", "true");
+    _setShowWelcome(show);
+  };
 
   // Pendulum increment for pendulum mode
   const [pendulumIncrement, setPendulumIncrement] = useState(0);
@@ -69,22 +87,32 @@ function App() {
         setPendulumIncrement,
       }}
     >
+      {showHelp && <Help onClose={() => setShowHelp(false)} />}
+      {showWelcome && (
+        <Welcome
+          onClose={() => setShowWelcome(false)}
+          setShowHelp={() => setShowHelp(true)}
+        />
+      )}
+
       <button className="menu-trigger" onClick={() => setShowMenu(!showMenu)}>
         {showMenu ? "Hide" : "Show"} Menu
       </button>
 
       <div className="layout">
         <div className="layout__menu">
-          <Menu />
+          <Menu setShowHelp={() => setShowHelp(true)} />
         </div>
 
         <div className="layout__canvas">
           <TransformWrapper
             initialScale={1}
             minScale={0.2}
-            initialPositionX={-canvasSettings.width / 2 + window.innerWidth / 2}
+            initialPositionX={
+              -canvasSettings.width / 2 + window.innerWidth / 2 - 300
+            }
             initialPositionY={
-              -canvasSettings.height / 3 + window.innerHeight / 2 - 200
+              -canvasSettings.height / 3 + window.innerHeight / 2 - 300
             }
             limitToBounds={false}
             doubleClick={{ disabled: true }}

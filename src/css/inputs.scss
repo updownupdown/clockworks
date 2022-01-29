@@ -38,6 +38,9 @@ label {
     font-size: 14px;
     color: var(--K500);
   }
+  &.disabled-label {
+    color: var(--K400);
+  }
 }
 
 // Number
@@ -120,6 +123,11 @@ select {
     font-size: 14px;
     font-weight: 500;
   }
+  &--large {
+    padding: 16px 20px;
+    font-size: 20px;
+    font-weight: 700;
+  }
 
   &--icon {
     display: flex;
@@ -140,6 +148,19 @@ select {
 
   &:hover {
     background: var(--K300);
+  }
+
+  &--blue {
+    background: var(--B300);
+    color: var(--white);
+
+    svg path {
+      fill: var(--white);
+    }
+
+    &:hover {
+      background: var(--B600);
+    }
   }
 
   &:disabled {

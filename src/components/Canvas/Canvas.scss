@@ -4,6 +4,8 @@
 }
 
 .canvas {
+  position: relative;
+  z-index: 1;
   cursor: grab;
 
   border: 30px solid var(--B300);
@@ -27,7 +29,7 @@
 
 .canvas-actions {
   position: fixed;
-  z-index: 10;
+  z-index: 2;
   bottom: 0;
   right: 0;
   display: flex;

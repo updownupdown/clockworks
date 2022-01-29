@@ -3,9 +3,12 @@ import { ClockworksContext } from "../context/context";
 import {
   defaultHandsSettings,
   defaultSettings,
+  GearProps,
   gearsetNames,
   getGearset,
+  HandsProps,
   newGearSettings,
+  SettingsProps,
 } from "../Gear/GearSets";
 import { GearSetProps } from "../Gear/GearSets";
 import Download from "../Icons/Import";
@@ -56,6 +59,24 @@ export const exportGearset = async ({
   document.body.removeChild(link);
 };
 
+export function loadPreset(
+  gearsetName: string,
+  setGears: (gears: GearProps[]) => void,
+  setHands: (hands: HandsProps) => void,
+  setSettings: (settings: SettingsProps) => void
+) {
+  const preset = getGearset(gearsetName);
+
+  const gearsetGears = preset?.gears ? preset.gears : [];
+  setGears(gearsetGears);
+
+  const gearsetHands = preset?.hands ?? defaultHandsSettings;
+  setHands(gearsetHands);
+
+  const importedSettings = preset?.settings ?? defaultSettings;
+  setSettings(importedSettings);
+}
+
 export const SaveLoad = () => {
   const { gears, setGears, hands, setHands, settings, setSettings } =
     useContext(ClockworksContext);
@@ -64,22 +85,10 @@ export const SaveLoad = () => {
     setHands(defaultHandsSettings);
   }
 
-  function loadPreset(gearsetName: string) {
-    const gearset = getGearset(gearsetName);
-
-    const gearsetGears = gearset?.gears ? gearset.gears : [];
-    setGears(gearsetGears);
-
-    const gearsetHands = gearset?.hands ?? defaultHandsSettings;
-    setHands(gearsetHands);
-
-    const importedSettings = gearset?.settings ?? defaultSettings;
-    setSettings(importedSettings);
-  }
-
   function resetGears() {
     if (window.confirm("Are you sure you want to delete all gears?")) {
-      setGears([newGearSettings]);
+      // setGears([newGearSettings]);
+      setGears([]);
     }
   }
 
@@ -172,7 +181,7 @@ export const SaveLoad = () => {
         onChange={(e) => {
           if (window.confirm("Are you sure you want to update all gears?")) {
             resetHands();
-            loadPreset(e.target.value);
+            loadPreset(e.target.value, setGears, setHands, setSettings);
           }
         }}
         value=""
