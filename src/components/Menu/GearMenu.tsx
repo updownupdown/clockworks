@@ -156,6 +156,28 @@ export const GearMenu = () => {
     setHands(newHands);
   }
 
+  const parentGearOptions = () => {
+    return gears.map((value, index) => {
+      return (
+        <option
+          key={index}
+          value={index}
+          disabled={index === settings.selectedGear}
+        >
+          {index + 1}
+        </option>
+      );
+    });
+  };
+
+  const handleParentChange = (parentIndex: number) => {
+    if (settings.selectedGear === undefined) return;
+    const newGears = [...gears];
+    newGears[settings.selectedGear].parent = parentIndex;
+
+    setGears(newGears);
+  };
+
   return (
     <div
       className={clsx(
@@ -374,6 +396,20 @@ export const GearMenu = () => {
             S
           </button>
         </div>
+      </div>
+
+      <div className="gear-menu__hands">
+        <label>Parent Gear</label>
+
+        <select
+          value={
+            gear !== undefined && gear.parent !== undefined ? gear.parent : 0
+          }
+          onChange={(e) => handleParentChange(Number(e.target.value))}
+          disabled={!isRemovable()}
+        >
+          {parentGearOptions()}
+        </select>
       </div>
     </div>
   );

@@ -22,6 +22,12 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(var(--B500-rgb), 0.3);
   }
+
+  &:disabled {
+    color: var(--K600);
+    border: 1px solid var(--K150);
+    background: var(--K100);
+  }
 }
 
 label {
@@ -52,12 +58,6 @@ input[type="number"] {
   padding: 0 10px;
 
   text-align: center;
-
-  &:disabled {
-    color: var(--K400);
-    border: 1px solid var(--K150);
-    background: var(--K100);
-  }
 }
 
 // Select
