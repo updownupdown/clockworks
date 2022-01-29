@@ -15,4 +15,4 @@ You can also load a preset from the sidebar to help you visualize the end goal. 
 - Add dials for hands
 - Fix/improve sidebar clock
 - Add ability to adjust initial rotation of hands
-- Add gear "cut-outs" (6 holes similar to read clock gears)
+- Add better presets

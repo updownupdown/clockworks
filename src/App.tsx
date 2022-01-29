@@ -72,11 +72,11 @@ function App() {
     }, 0);
   }
 
-  const setGears = (gears: GearProps[]) => {
+  const setGears = (newGears: GearProps[]) => {
     // Prevent transitions when editing gears
     temporarilyDisableAnimations();
 
-    _setGears(calculateGears(gears, settings));
+    _setGears(calculateGears(newGears, settings));
   };
 
   useEffect(() => {

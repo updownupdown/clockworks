@@ -18,7 +18,12 @@ export const GearMenu = () => {
   // const isEscapementGear = settings.isPendulum && settings.selectedGear === 1;
 
   const isRemovable = () => {
-    if (settings.selectedGear === undefined || gears.length === 0) return false;
+    if (
+      settings.selectedGear === undefined ||
+      gears.length === 0 ||
+      gears[settings.selectedGear] === undefined
+    )
+      return false;
 
     // Don't delete if only one gear left
     if (gears.length === 1) return false;
