@@ -20,6 +20,8 @@ import ReactTooltip from "react-tooltip";
 import { Help } from "./components/Modals/Help";
 import { Welcome } from "./components/Modals/Welcome";
 import { loadPreset } from "./components/Menu/SaveLoad";
+import clsx from "clsx";
+import Hamburger from "./components/Icons/Hamburger";
 
 function App() {
   // Load gears from localStorage, or defaults
@@ -51,17 +53,10 @@ function App() {
     }
   }, []);
 
+  const [showHelp, setShowHelp] = useState(false);
+
   // Handle show/hide menu for mobile
   const [showMenu, setShowMenu] = useState(false);
-  useEffect(() => {
-    if (showMenu) {
-      document.body.classList.add("show-menu");
-    } else {
-      document.body.classList.remove("show-menu");
-    }
-  }, [showMenu]);
-
-  const [showHelp, setShowHelp] = useState(false);
 
   const showWelcomeOnLoad = localStorage.getItem("showWelcome") !== "true";
   const [showWelcome, _setShowWelcome] = useState(showWelcomeOnLoad);
@@ -95,13 +90,20 @@ function App() {
         />
       )}
 
-      <button className="menu-trigger" onClick={() => setShowMenu(!showMenu)}>
-        {showMenu ? "Hide" : "Show"} Menu
-      </button>
+      {!showMenu && (
+        <button className="menu-trigger" onClick={() => setShowMenu(true)}>
+          <Hamburger />
+        </button>
+      )}
 
       <div className="layout">
-        <div className="layout__menu">
-          <Menu setShowHelp={() => setShowHelp(true)} />
+        <div
+          className={clsx("layout__menu", !showMenu && "layout__menu--hide")}
+        >
+          <Menu
+            setShowHelp={() => setShowHelp(true)}
+            setShowMenu={() => setShowMenu(false)}
+          />
         </div>
 
         <div className="layout__canvas">

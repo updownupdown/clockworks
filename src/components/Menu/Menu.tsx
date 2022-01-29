@@ -9,6 +9,7 @@ import { SpeedMenu } from "./SpeedMenu";
 import clsx from "clsx";
 import "./Menu.scss";
 import Help from "../Icons/Help";
+import Close from "../Icons/Close";
 
 interface MenuSectionProps {
   children: React.ReactNode;
@@ -26,10 +27,11 @@ const MenuSection = ({ children, className }: MenuSectionProps) => {
 };
 
 interface Props {
+  setShowMenu: () => void;
   setShowHelp: () => void;
 }
 
-export const Menu = ({ setShowHelp }: Props) => {
+export const Menu = ({ setShowMenu, setShowHelp }: Props) => {
   const { gears, setGears } = useContext(ClockworksContext);
 
   function addGear() {
@@ -43,8 +45,15 @@ export const Menu = ({ setShowHelp }: Props) => {
         <div className="menu-title">
           <h1>Clockworks</h1>
 
-          <button onClick={() => setShowHelp()}>
+          <button data-tip="Show Help" onClick={() => setShowHelp()}>
             <Help />
+          </button>
+          <button
+            className="close-menu-button"
+            data-tip="Toggle Menu"
+            onClick={() => setShowMenu()}
+          >
+            <Close />
           </button>
         </div>
       </MenuSection>
