@@ -23,7 +23,7 @@
     display: block;
   }
 
-  .canvas--smooth & {
+  body:not(.disable-animations) .canvas--smooth & {
     animation-name: spin;
     animation-timing-function: linear;
   }

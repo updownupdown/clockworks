@@ -19,6 +19,7 @@
     transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
   }
 
+  body:not(.disable-animations) &,
   .disable-animations & {
     transition-property: none;
   }

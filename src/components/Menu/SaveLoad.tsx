@@ -87,8 +87,9 @@ export const SaveLoad = () => {
 
   function resetGears() {
     if (window.confirm("Are you sure you want to delete all gears?")) {
-      // setGears([newGearSettings]);
       setGears([]);
+      setSettings(defaultSettings);
+      setHands(defaultHandsSettings);
     }
   }
 

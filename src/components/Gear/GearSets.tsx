@@ -63,9 +63,9 @@ export const newGearSettings: GearProps = {
 };
 
 export const gearsetNames = {
-  Demo: "Demo",
-  Forks: "Forking gears",
+  Demo: "Simple Demo",
   AccurateClock: "Accurate clock",
+  Forks: "Forking gears",
 } as const;
 
 export const defaultGearsetName = gearsetNames.Demo;
@@ -118,129 +118,56 @@ export const gearSets: GearSetProps[] = [
   },
   {
     name: gearsetNames.AccurateClock,
-    hands: {
-      hours: 12,
-      minutes: 6,
-      seconds: 1,
-    },
+    hands: { hours: 11, minutes: 6, seconds: 1 },
     settings: {
       tolerance: 0,
       globalRpm: 1,
       globalHertz: 0.5,
       isPaused: false,
       isPendulum: false,
-      selectedGear: undefined,
+      selectedGear: 11,
     },
     gears: [
-      {
-        teeth: 30,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-        fixed: true,
-      },
-      {
-        teeth: 33,
-        orientation: 120,
-      },
-      {
-        teeth: 10,
-        orientation: 120,
-        fixed: true,
-      },
-      {
-        teeth: 50,
-        orientation: 30,
-      },
-      {
-        teeth: 11,
-        orientation: 0,
-        fixed: true,
-      },
-      {
-        teeth: 40,
-        orientation: 0,
-      },
-      {
-        teeth: 8,
-        orientation: -90,
-      },
-      {
-        teeth: 39,
-        orientation: -75,
-      },
-      {
-        teeth: 6,
-        orientation: 0,
-        fixed: true,
-      },
-      {
-        teeth: 37,
-        orientation: -130,
-      },
-      {
-        teeth: 6,
-        orientation: 90,
-        fixed: true,
-      },
-      {
-        teeth: 12,
-        orientation: 90,
-      },
+      { teeth: 30, orientation: 0 },
+      { teeth: 10, orientation: 0, fixed: true, parent: 0 },
+      { teeth: 33, orientation: 45, parent: 1 },
+      { teeth: 10, orientation: 120, fixed: true, parent: 2 },
+      { teeth: 50, orientation: 19, parent: 3 },
+      { teeth: 11, orientation: 0, fixed: true, parent: 4 },
+      { teeth: 40, orientation: -99, parent: 5 },
+      { teeth: 39, orientation: -35, parent: 6 },
+      { teeth: 6, orientation: 0, fixed: true, parent: 7 },
+      { teeth: 37, orientation: 59, parent: 8 },
+      { teeth: 6, orientation: 90, fixed: true, parent: 9 },
+      { teeth: 12, orientation: 151, parent: 10 },
     ],
   },
   {
     name: gearsetNames.Forks,
-    hands: {
-      hours: 6,
-      minutes: 9,
-      seconds: 0,
+    hands: { hours: 5, minutes: 8, seconds: 0 },
+    settings: {
+      globalRpm: 1,
+      globalHertz: 0.5,
+      isPaused: false,
+      tolerance: 10,
+      isPendulum: false,
+      selectedGear: 8,
     },
     gears: [
-      {
-        teeth: 20,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 8,
-        orientation: 0,
-      },
-      {
-        teeth: 30,
-        orientation: 0,
-      },
-      {
-        teeth: 20,
-        orientation: 90,
-        parent: 3,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 20,
-        orientation: -90,
-        parent: 3,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
-      {
-        teeth: 10,
-        orientation: 0,
-      },
+      { teeth: 30, orientation: 0 },
+      { teeth: 19, orientation: 0, parent: 0 },
+      { teeth: 12, orientation: 0, fixed: true, parent: 1 },
+      { teeth: 10, orientation: -85, parent: 1 },
+      { teeth: 12, orientation: -60, parent: 3 },
+      { teeth: 10, orientation: 0, parent: 4 },
+      { teeth: 10, orientation: 85, parent: 1 },
+      { teeth: 12, orientation: 50, parent: 6 },
+      { teeth: 10, orientation: 0, parent: 7 },
+      { teeth: 19, orientation: 0, parent: 2 },
+      { teeth: 10, orientation: -35, parent: 9 },
+      { teeth: 10, orientation: 36, parent: 9 },
+      { teeth: 14, orientation: 0, parent: 11 },
+      { teeth: 14, orientation: 0, parent: 10 },
     ],
   },
 ];

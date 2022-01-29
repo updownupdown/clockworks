@@ -33,11 +33,13 @@ interface Props {
 }
 
 export const Menu = ({ setShowMenu, setShowHelp }: Props) => {
-  const { gears, setGears } = useContext(ClockworksContext);
+  const { gears, setGears, settings, setSettings } =
+    useContext(ClockworksContext);
 
   function addGear() {
     const newGear = { ...newGearSettings };
     setGears([...gears, newGear]);
+    setSettings({ ...settings, selectedGear: gears.length });
   }
 
   return (
