@@ -3,13 +3,9 @@
   pointer-events: none;
   aspect-ratio: 1;
 
-  &--selected {
-    // z-index: 999;
-  }
-
   .canvas--pendulum & {
     transition-property: transform;
-    transition-timing-function: cubic-bezier(0.68, -0.42, 0.76, 0.54);
+    transition-timing-function: cubic-bezier(0.4, 0.2, 0.2, 1.2);
   }
 
   .disable-animations & {
@@ -86,7 +82,6 @@
 
 .pendulum {
   position: absolute;
-  z-index: 1;
   $width: 600px;
   $height: 300px;
   $aspectRatio: $width/$height;

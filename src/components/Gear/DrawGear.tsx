@@ -26,8 +26,8 @@ export const DrawGear = (
 
   if (isEscapementGear) {
     // single tooth, escapement gear
-    const inset = r * 0.85;
-    const lean = -5;
+    const inset = r * 0.9;
+    const lean = -3;
 
     points = [
       polar(inset, -3.142 / teeth),

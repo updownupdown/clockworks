@@ -253,9 +253,7 @@ export const GearMenu = () => {
         <label
           className={clsx(
             "side-label",
-            (settings.selectedGear === undefined ||
-              (settings.isPendulum && settings.selectedGear === 0)) &&
-              "disabled-label"
+            settings.selectedGear === undefined && "disabled-label"
           )}
         >
           Teeth
@@ -270,10 +268,7 @@ export const GearMenu = () => {
           onChange={(e) =>
             handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={
-            settings.selectedGear === undefined ||
-            (settings.isPendulum && settings.selectedGear === 0)
-          }
+          disabled={settings.selectedGear === undefined}
         />
 
         <input
@@ -285,10 +280,7 @@ export const GearMenu = () => {
           onChange={(e) =>
             handleTeethChange(settings.selectedGear, Number(e.target.value))
           }
-          disabled={
-            settings.selectedGear === undefined ||
-            (settings.isPendulum && settings.selectedGear === 0)
-          }
+          disabled={settings.selectedGear === undefined}
         />
       </div>
 

@@ -112,7 +112,7 @@ export const Canvas = () => {
     if (gears[0] === undefined) return <span />;
 
     const firstGear = gears[0];
-    const rotateTo = (halfStep ? 1 : -1) * 5;
+    const rotateTo = (halfStep ? -1 : 1) * 8;
 
     if (firstGear.r === undefined) return <span />;
 
@@ -121,8 +121,8 @@ export const Canvas = () => {
         className="pendulum"
         style={{
           left: `${canvasSettings.firstGearOrigin.x}px`,
-          top: `${canvasSettings.firstGearOrigin.y - firstGear.r * 1.7}px`,
-          width: `${firstGear.r * 2}px`,
+          top: `${canvasSettings.firstGearOrigin.y - firstGear.r * 1.8}px`,
+          width: `${firstGear.r * 2.1}px`,
         }}
       >
         <div
@@ -165,9 +165,9 @@ export const Canvas = () => {
           height: `${canvasHeight}px`,
         }}
       >
+        {settings.isPendulum && DrawPendulum()}
         {memoedGears}
         {memoedHands}
-        {settings.isPendulum && DrawPendulum()}
       </div>
     </div>
   );
