@@ -46,8 +46,15 @@ const Gauge = ({ gear, unit, hand, multiplier, tolerance }: Props) => {
     if (speed < gaugeLow) indicatorPosition = 0;
     if (speed > gaugeHigh) indicatorPosition = 1;
 
-    isInRange = speed >= rangeLow && speed <= rangeHigh;
+    isInRange =
+      gear.clockwise === true && speed >= rangeLow && speed <= rangeHigh;
   }
+
+  const gaugeSpeedText = () => {
+    if (gear && gear.clockwise === false) return "Wrong dir.";
+
+    return hasAssignedGear ? `${speed} / ${unit}` : "N/A";
+  };
 
   return (
     <div
@@ -60,9 +67,7 @@ const Gauge = ({ gear, unit, hand, multiplier, tolerance }: Props) => {
     >
       <span className="gauge__unit">{hand}</span>
 
-      <span className="gauge__speed">
-        {hasAssignedGear ? `${speed} / ${unit}` : "N/A"}
-      </span>
+      <span className="gauge__speed">{gaugeSpeedText()}</span>
 
       <span className="gauge__bar">
         <span className="gauge__bar__range" />
